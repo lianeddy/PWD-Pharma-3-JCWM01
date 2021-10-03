@@ -12,8 +12,8 @@ app.get("/", (req, res) => {
   res.status(200).send("tes");
 });
 
-const { useRouter } = require("./routers");
-app.use("/users", useRouter);
+const { userRouter } = require("./routers");
+app.use("/users", userRouter);
 
 app.listen(PORT, () => {
   console.log("Hello");
