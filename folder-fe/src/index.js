@@ -4,10 +4,17 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+// Reduc Config
+import { Provider } from 'react-redux'; // untuk menghungkan antara action, reducer dan component
+import { createStore } from 'redux'; // untuk membuat global store untuk reducer
+import { Reducers } from './reducers'
+
+const storeReducer = createStore(Reducers)
+
 ReactDOM.render(
-  <React.StrictMode>
+  <Provider store={storeReducer}>
     <App />
-  </React.StrictMode>,
+  </Provider>,
   document.getElementById('root')
 );
 
