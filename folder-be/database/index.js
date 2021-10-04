@@ -1,6 +1,6 @@
 const mysql = require("mysql");
 
-const db = mysql.createConnection({
+const db = mysql.createPool({
   host: "us-cdbr-east-04.cleardb.com",
   user: "b8bece75271122",
   password: "7bfeb2aa",
@@ -9,7 +9,7 @@ const db = mysql.createConnection({
   multipleStatements: true,
 });
 
-db.connect((err) => {
+db.getConnection((err) => {
   if (err) {
     return console.error("error:" + err);
   }
