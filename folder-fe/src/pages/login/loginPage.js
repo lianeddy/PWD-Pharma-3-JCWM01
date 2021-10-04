@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import axios from 'axios';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
@@ -8,6 +9,7 @@ import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+
 
 
 
@@ -35,6 +37,11 @@ const useStyles = makeStyles((theme) => ({
 export default function SignIn() {
   const classes = useStyles();
 
+  const  [username, setUsername] = useState("");
+  const  [password, setPassword] = useState("");
+
+
+  
   return (
 
     <Container component="main" maxWidth="xs">
@@ -46,11 +53,14 @@ export default function SignIn() {
             margin="normal"
             required
             fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
+            id="username"
+            label="Username"
+            name="username"
+            autoComplete="username"
             autoFocus
+            onChange={(event)=>{
+                setUsername(event.target.value)
+            }}
           />
           <TextField
             variant="outlined"
@@ -62,6 +72,9 @@ export default function SignIn() {
             type="password"
             id="password"
             autoComplete="current-password"
+            onChange={(event)=>{
+                setPassword(event.target.value)
+            }}
           />
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
@@ -74,7 +87,13 @@ export default function SignIn() {
             color="secondary"
             className={classes.submit}
             onClick={()=>{
-                console.log("test")
+                console.log("test", username, password)
+                axios.post('http://localhost:3300/users/login', {
+                    username: username,
+                    password: password
+                }).then((res) => {
+                    console.log("sukses")
+                }).catch((err) => {console.log(err)})
             }}
           >
             Sign In
