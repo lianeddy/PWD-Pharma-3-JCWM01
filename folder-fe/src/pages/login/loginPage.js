@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import axios from 'axios';
 import Button from '@material-ui/core/Button';
@@ -14,19 +15,20 @@ import Container from '@material-ui/core/Container';
 
 
 
+
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(22),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
   },
   avatar: {
     margin: theme.spacing(1),
     backgroundColor: theme.palette.secondary.main,
   },
   form: {
-    width: '100%', // Fix IE 11 issue.
+    width: "100%", // Fix IE 11 issue.
     marginTop: theme.spacing(1),
   },
   submit: {
@@ -43,7 +45,6 @@ export default function SignIn() {
 
   
   return (
-
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
@@ -93,7 +94,7 @@ export default function SignIn() {
                     password: password
                 }).then((res) => {
                     console.log("sukses")
-                }).catch((err) => {console.log(err)})
+                }).catch((err) => {console.log(err)})  
             }}
           >
             Sign In
