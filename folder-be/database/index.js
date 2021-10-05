@@ -1,23 +1,13 @@
 const mysql = require("mysql");
 
-// const db = mysql.createConnection({
-//   host: "us-cdbr-east-04.cleardb.com",
-//   user: "b8bece75271122",
-//   password: "7bfeb2aa",
-//   database: "heroku_16bc33d7e5ed710",
-//   port: 3306,
-//   multipleStatements: true,
-// });
-const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: 'bziwvutr13',
-  database: 'dbshutter',
-  port: 3306,
-  multipleStatements: true
-})
+const db = mysql.createPool({
+  host: "us-cdbr-east-04.cleardb.com",
+  user: "b8bece75271122",
+  password: "7bfeb2aa",
+  multipleStatements: true,
+});
 
-db.connect((err) => {
+db.getConnection((err) => {
   if (err) {
     return console.error("error:" + err);
   }
@@ -25,6 +15,8 @@ db.connect((err) => {
 });
 
 module.exports = { db };
+
+
 
 
 
