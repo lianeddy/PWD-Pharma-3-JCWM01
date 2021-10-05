@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import axios from 'axios';
+import Axios from 'axios';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
@@ -89,7 +89,7 @@ export default function SignIn() {
             className={classes.submit}
             onClick={()=>{
                 console.log("test", username, password)
-                axios.post('http://localhost:3300/users/login', {
+                Axios.post('http://localhost:3306/users/username', {
                     username: username,
                     password: password
                 }).then((res) => {
