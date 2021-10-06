@@ -1,5 +1,5 @@
 const { db } = require("../../database");
-const getDate = require("./Feny/getdata");
+const getData = require("./Feny/getData");
 module.exports = {
-  getData: getDate,
+  getData: getData,
 };
