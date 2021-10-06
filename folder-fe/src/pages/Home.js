@@ -4,7 +4,7 @@ import {CssBaseline} from '@material-ui/core';
 
 //@material-ui/icon components
 import ArrowUpward from "@material-ui/icons/ArrowUpward";
-//import MedicationIcon from '@mui/icons-material/Medication';
+import MedicationIcon from '@mui/icons-material/Medication';
 import AccessTime from "@material-ui/icons/AccessTime";
 import CardMedia from '@mui/material/CardMedia';
 //@material-ui/core components
@@ -42,20 +42,20 @@ function Home() {
                      />
                     <CardBody>
                     <h4 className={classes.cardTitle}>Product Name</h4>
-                    <p className={classes.cardCategory}>
+                    {/* <p className={classes.cardCategory}>
                         <span className={classes.successText}>
                             
                         <ArrowUpward className={classes.upArrowCardCategory} /> 55%
                         </span>{" "}
                         increase in today sales.
-                    </p> 
-                    {/* <p className={""}>
+                    </p>  */}
+                    <p className={""}>
                         <span className={""}>
                             
                         <MedicationIcon className={""} /> 55%
                         </span>{" "}
                         increase in today sales.
-                    </p> */}
+                    </p>
                     </CardBody>
                     <CardFooter chart>
                     <div className={classes.stats}>
