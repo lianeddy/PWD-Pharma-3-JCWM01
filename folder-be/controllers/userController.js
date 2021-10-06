@@ -15,6 +15,7 @@ module.exports = {
 
     getUsername: (req, res) => {
         let scriptQuery = 'Select * from users;'
+        console.log(req.body)
         if(req.body.username) {
             scriptQuery = `Select * from users where username = ${db.escape(req.body.username)} and password = ${db.escape(req.body.password)} ;`
         }
@@ -32,8 +33,32 @@ module.exports = {
         })
       },
 
-      addData: (req, res) => {
+      login: (req, res) => {
+        let scriptQuery = `Select users.full_name, users.birthdate from users where username = ${db.escape(req.body.username)} and password = ${db.escape(req.body.password)};`
           console.log(req.body)
+          db.query(scriptQuery, (err, results) => {
+            if (err) res.status(500).send(err)
+            console.log(`=====`, results)
+            const data = results[0]
+            res.status(200).send(data);
+           
+          })
         //   let insertQuery = `Insert into users values ()`
-      }
+      },
+
+      register: (req, res) => {
+        console.log(req.body)
+        let {full_name, username, email, password} = req.body
+        let created = 'user';
+        let insertQuery = `Insert into users values (null, ${db.escape(full_name)}, ${db.escape(email)}, ${db.escape(username)}, ${db.escape(password)},
+        null, null, null, null, null, 2, ${db.escape(created)}, NOW(), ${db.escape(created)}, NOW());`
+        db.query(insertQuery, (err, results) => {
+          if (err) {
+              console.log(err)
+              res.status(500).send(err)
+          }
+          res.status(200).send(results);
+
+      })
+  }
 }

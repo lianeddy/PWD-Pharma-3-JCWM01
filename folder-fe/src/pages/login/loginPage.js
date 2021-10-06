@@ -89,7 +89,7 @@ export default function SignIn() {
             className={classes.submit}
             onClick={()=>{
                 console.log("test", username, password)
-                Axios.post('http://localhost:3306/users/username', {
+                Axios.post('http://localhost:3300/users/login', {
                     username: username,
                     password: password
                 }).then((res) => {
