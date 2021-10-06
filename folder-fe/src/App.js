@@ -14,10 +14,10 @@ function App() {
     <BrowserRouter>
       <Switch>
         
-        <Route path="/" component={User} exact />
         <Route component={LoginPage} path="/login" />
         <Route component={RegisterPage} path="/register" />
-        <Redirect from="/" to="/" />
+        <Route path="/" component={User}  />
+        
       </Switch>
     </BrowserRouter>
   );
