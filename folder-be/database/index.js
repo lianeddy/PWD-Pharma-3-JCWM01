@@ -4,6 +4,7 @@ const db = mysql.createPool({
   host: "us-cdbr-east-04.cleardb.com",
   user: "b8bece75271122",
   password: "7bfeb2aa",
+  database:"heroku_16bc33d7e5ed710",
   multipleStatements: true,
 });
 
@@ -15,3 +16,9 @@ db.getConnection((err) => {
 });
 
 module.exports = { db };
+
+
+
+
+
+

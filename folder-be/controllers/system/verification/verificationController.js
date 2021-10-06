@@ -1,5 +1,5 @@
-const NODEMAILER_CONFIG = require("../../helper/constants/nodemailer_config");
-const transporter = require("../../helper/nodemailer");
+const NODEMAILER_CONFIG = require("../../../helper/constants/nodemailer_config");
+const transporter = require("../../../helper/nodemailer");
 
 module.exports = {
   sendVerify: (userEmail, token) => {
