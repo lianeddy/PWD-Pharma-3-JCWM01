@@ -7,14 +7,28 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(bearerToken());
-const { userRouter, adminRouter } = require("./routers");
 
 app.get("/", (req, res) => {
   res.status(200).send("<h4>integreted mysql</h4>");
 });
+
+// app.get("/users", (req, res) => {
+//   let scriptQuery = 'Select * from users;'
+//   db.query(scriptQuery, (err, results) => {
+//     if (err) res.status(500).send(err)
+//     res.status(200).send(results)
+//   })
+// });
+
+app.post("/test", (req, res) => {
+  console.log(req.body)
+//   let insertQuery = `Insert into users values ()`
+});
+
+const { userRouter } = require("./routers");
+const { db } = require("./database");
 app.use("/users", userRouter);
-app.use("/admins", adminRouter);
 
 app.listen(PORT, () => {
-  console.log(`Server Runnin on PORT: ${PORT}`);
+  console.log("Hello");
 });
