@@ -103,32 +103,8 @@ function Home() {
             </GridContainer>
         </div>
     );
+
 }
-export default Home;
-// class Home extends React.Component {
-//     render(){
-//         return (
-//             <div>
-//                 <h1>hi</h1>
-//             </div>
-//         )
-//     }
-// }
-
-// export default Home;
-
-// const useStyles = makeStyles((theme)=>({
-//     root:{
-//         minheight:'100vh',
-//         backgroundImage:`url(${process.env.PUBLIC_URL+'../assets/img/anding-adam-niescioruk-hWzrJsS8gwI-unsplash.jpg'})`
-//     }
-// }))
-
-// export default function Home (){
-//     const classes = useStyles();
-//     return <div className={classes.root}>
-//         <CssBaseline/>
-//     </div>
-// }
+export default Home;  
 
 

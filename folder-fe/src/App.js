@@ -14,12 +14,9 @@ function App() {
   return (
     <BrowserRouter>
       <Switch>
-        {/* <Route path="/" component={Home} /> */}
-        <Route path="/" component={User} />
-        {/* <Route component={Home1} path="/home1" /> */}
         <Route component={LoginPage} path="/login" />
         <Route component={RegisterPage} path="/register" />
-        <Redirect from="/" to="/" />
+        <Route path="/" component={User}  />  
       </Switch>
     </BrowserRouter>
   );

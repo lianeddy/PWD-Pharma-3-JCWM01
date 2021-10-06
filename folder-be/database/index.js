@@ -1,15 +1,14 @@
 const mysql = require("mysql");
 
-const db = mysql.createConnection({
+const db = mysql.createPool({
   host: "us-cdbr-east-04.cleardb.com",
   user: "b8bece75271122",
   password: "7bfeb2aa",
-  database: "heroku_16bc33d7e5ed710",
-  port: 3306,
+  database:"heroku_16bc33d7e5ed710",
   multipleStatements: true,
 });
 
-db.connect((err) => {
+db.getConnection((err) => {
   if (err) {
     return console.error("error:" + err);
   }
@@ -18,8 +17,8 @@ db.connect((err) => {
 
 module.exports = { db };
 
-const mysql = require('mysql')
 
 
 
-module.exports = { db }
+
+
