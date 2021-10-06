@@ -9,4 +9,8 @@ routers.get('/users', userControllers.getData)
 routers.post('/login', userControllers.login)
 routers.post('/register', userControllers.register)
 
+// from taksu
+// routers.post("login", userControllers.getData);
+// routers.post("/testVerify", userControllers.testMail);
+
 module.exports = routers;
