@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import Axios from 'axios';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -33,107 +33,112 @@ const useStyles = makeStyles((theme) => ({
 export default function RegisterPage() {
   const classes = useStyles();
 
-  const  [full_name, setFullName] = useState("");
-  const  [username, setUsername] = useState("");
-  const  [email, setEmail] = useState("");
-  const  [password, setPassword] = useState("");
-  
-  
+  const [full_name, setFullName] = useState("");
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
-        
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <TextField
-                autoComplete="fname"
-                name="full_name"
-                variant="outlined"
-                required
-                fullWidth
-                id="full_name"
-                label="Full Name"
-                autoFocus
-                onChange={(event)=>{
-                  setFullName(event.target.value)
+
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <TextField
+              autoComplete="fname"
+              name="full_name"
+              variant="outlined"
+              required
+              fullWidth
+              id="full_name"
+              label="Full Name"
+              autoFocus
+              onChange={(event) => {
+                setFullName(event.target.value)
               }}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                autoComplete="uname"
-                name="username"
-                variant="outlined"
-                required
-                fullWidth
-                id="username"
-                label="Username"
-                autoFocus
-                onChange={(event)=>{
-                  setUsername(event.target.value)
-              }}
-              />
-            </Grid>
-        
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
-                onChange={(event)=>{
-                  setEmail(event.target.value)
-              }}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-                onChange={(event)=>{
-                  setPassword(event.target.value)
-              }}
-              />
-            </Grid>
+            />
           </Grid>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="secondary"
-            className={classes.submit}
-            onClick={()=>{
-              console.log("test", username, password, full_name, email)
+          <Grid item xs={12}>
+            <TextField
+              autoComplete="uname"
+              name="username"
+              variant="outlined"
+              required
+              fullWidth
+              id="username"
+              label="Username"
+              autoFocus
+              onChange={(event) => {
+                setUsername(event.target.value)
+              }}
+            />
+          </Grid>
+
+          <Grid item xs={12}>
+            <TextField
+              variant="outlined"
+              required
+              fullWidth
+              id="email"
+              label="Email Address"
+              name="email"
+              autoComplete="email"
+              onChange={(event) => {
+                setEmail(event.target.value)
+              }}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              variant="outlined"
+              required
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+              onChange={(event) => {
+                setPassword(event.target.value)
+              }}
+            />
+          </Grid>
+        </Grid>
+        <Button
+          type="submit"
+          fullWidth
+          variant="contained"
+          color="secondary"
+          className={classes.submit}
+          onClick={() => {
+            if (username === "" || email === "" || password === "") {
+              alert('Fill in all the form')
+            } else {
               Axios.post('http://localhost:3300/users/register', {
-                  full_name: full_name,
-                  username: username,
-                  password: password,
-                  email: email
+                full_name: full_name,
+                username: username,
+                password: password,
+                email: email
               }).then((res) => {
-                  console.log("sukses")
-              }).catch((err) => {console.log(err)})  
+                console.log("sukses")
+              }).catch((err) => { console.log(err) })
+            }
+            console.log("test", username, password, full_name, email)
+
           }}
-          >
-            Sign Up
-          </Button>
-          <Grid container justifyContent="flex-end">
-            <Grid item>
-              <Link href="#" variant="body2">
-                Already have an account? Sign in
-              </Link>
-            </Grid>
+        >
+          Sign Up
+        </Button>
+        <Grid container justifyContent="flex-end">
+          <Grid item>
+            <Link href="#" variant="body2">
+              Already have an account? Sign in
+            </Link>
           </Grid>
-       
+        </Grid>
+
       </div>
     </Container>
   );

@@ -1,14 +1,14 @@
-const nodemailer = require('nodemailer')
+// const nodemailer = require('nodemailer')
 
-const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        user: 'pramptrbgs@gmail.com',
-        pass: 'xdymlxczvzhmfzni'
-    },
-    tls: {
-        rejectUnauthorized: false
-    }
-})
+// const transporter = nodemailer.createTransport({
+//     service: 'gmail',
+//     auth: {
+//         user: 'pramptrbgs@gmail.com',
+//         pass: 'xdymlxczvzhmfzni'
+//     },
+//     tls: {
+//         rejectUnauthorized: false
+//     }
+// })
 
-module.exports = transporter
+// module.exports = transporter
