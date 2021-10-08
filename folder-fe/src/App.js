@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import LoginPage from "./pages/login/loginPage";
 import Home from "./pages/Home";
+import Home1 from "./pages/Home";
 import RegisterPage from "./pages/register/registerPage";
 import Admin from "layouts/Admin.js";
 import User from "layouts/User.js";
@@ -13,10 +14,9 @@ function App() {
   return (
     <BrowserRouter>
       <Switch>
-        <Route path="/" component={User} />
         <Route component={LoginPage} path="/login" />
         <Route component={RegisterPage} path="/register" />
-        <Redirect from="/" to="/" />
+        <Route path="/" component={User}  />  
       </Switch>
     </BrowserRouter>
   );

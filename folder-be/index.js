@@ -7,14 +7,14 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(bearerToken());
+const { userRouter, adminRouter } = require("./routers");
 
 app.get("/", (req, res) => {
-  res.status(200).send("tes");
+  res.status(200).send("<h4>integreted mysql</h4>");
 });
-
-const { userRouter } = require("./routers");
 app.use("/users", userRouter);
+app.use("/admins", adminRouter);
 
 app.listen(PORT, () => {
-  console.log("Hello");
+  console.log(`Server Runnin on PORT: ${PORT}`);
 });
