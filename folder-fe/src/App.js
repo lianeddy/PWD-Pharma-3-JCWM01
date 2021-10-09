@@ -5,6 +5,7 @@ import Home1 from "./pages/Home";
 import RegisterPage from "./pages/register/registerPage";
 import Admin from "layouts/Admin.js";
 import User from "layouts/User.js";
+import Authentication from "./pages/authentication";
 import { theme } from "./utils/color";
 import { ThemeProvider } from "@material-ui/styles";
 
@@ -16,7 +17,8 @@ function App() {
       <Switch>
         <Route component={LoginPage} path="/login" />
         <Route component={RegisterPage} path="/register" />
-        <Route path="/" component={User}  />  
+        <Route component={Authentication} path="/authentication/:test" />
+        <Route path="/" component={User} />
       </Switch>
     </BrowserRouter>
   );
