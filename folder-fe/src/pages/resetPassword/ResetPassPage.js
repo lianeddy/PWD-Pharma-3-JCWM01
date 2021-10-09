@@ -1,0 +1,217 @@
+import React, { useState } from "react";
+import { connect } from 'react-redux'
+import { useHistory, withRouter } from "react-router";
+import axios from "axios";
+
+import { makeStyles } from "@material-ui/core/styles";
+
+import Button from "@material-ui/core/Button";
+import Box from "@material-ui/core/Box";
+import Container from "@material-ui/core/Container";
+import Paper from "@material-ui/core/Paper";
+import TextField from "@material-ui/core/TextField";
+import Typography from "@material-ui/core/Typography";
+
+import Alert from '@material-ui/lab/Alert';
+
+import Snackbar from '@material-ui/core/Snackbar';
+
+import Logo from "../../assets/img/logo/Klinik.png";
+
+import { getUserdata } from 'redux/actions/userAction';
+
+const useStyles = makeStyles((theme) => ({
+  container: {
+    background: "#03989e",
+    height: "100vh",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  paper: {
+    padding: theme.spacing(3),
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  title: {
+    color: "#03989e",
+    fontSize: 24,
+  },
+  subtitle: {
+    color: "#6fbc97",
+  },
+  form: {
+    width: "100%",
+    marginTop: theme.spacing(1),
+  },
+  submit: {
+    borderRadius: 8,
+    backgroundColor: "#03989e",
+    margin: theme.spacing(3, 0, 2),
+    "&:hover": {
+      backgroundColor: "#03989e",
+    },
+  },
+}));
+
+const ResetPassword = (props) => {
+  const classes = useStyles();
+  const history = useHistory();
+
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  const [alertData, setAlertData] = useState({
+    isOpen: false,
+    message: '',
+    type: ''
+  });
+
+
+  const params = new URLSearchParams(props.location.search);
+  const token = params.get('token');
+  const userId = params.get('userId');
+
+  console.log('props', props)
+
+  // create function to handle button login
+  const handlerResetPassword = () => {
+
+    if(password === "" || confirmPassword === ""){
+      return setAlertData({
+        isOpen: true,
+        message: "Field tidak boleh kosong",
+        type: "error"
+
+      })
+    }
+
+    axios
+      .patch("http://localhost:3300/users/resetpassword", {
+        password,
+        confirmPassword,
+        userId
+      })
+      .then((res) => {
+       props.history.replace("/login")
+
+
+      }).catch((err) => {
+        
+          console.log("errorr")
+        
+      })
+
+  };
+
+  // const goToSignup = () => {
+  //   history.push("/register");
+
+  // }
+  // const goToForgetPassword = () => {
+  //   history.push("/forget");
+
+  // }
+
+  return (
+    <div className={classes.container}>
+      <Snackbar
+        open={alertData.isOpen}
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+        onClose={() => setAlertData({
+          isOpen: false,
+          message: '',
+          type: ''
+        })}>
+        <Alert severity={alertData.type}>{alertData.message}</Alert>
+      </Snackbar>
+      <Container component="main" maxWidth="xs">
+        <Paper elevation={3} className={classes.paper}>
+          {/* START OF LOGO SECTION */}
+          <Box p={2} textAlign="center">
+            <img src={Logo} width="125px" alt="logo" />
+            <Box mt={1}>
+              <Typography className={classes.title}>
+                <b>KLINIK-KU</b>
+              </Typography>
+              <Typography className={classes.subtitle}>
+                APOTEK ONLINE
+              </Typography>
+            </Box>
+          </Box>
+          {/* END OF LOGO SECTION */}
+
+          <div className={classes.form} noValidate>
+         
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="password"
+              label="Password"
+              name="password"
+              value={password}
+              autoComplete="password"
+              autoFocus
+              onChange={(event) => {
+                setPassword(event.target.value);
+              }}
+            />
+
+            {/* PASSWORD */}
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              name="confirmpassword"
+              value={confirmPassword}
+              label="Confirm password"
+              type="confirmpassword"
+              id="confirmpassword"
+              autoComplete="current-password"
+              onChange={(event) => {
+                setConfirmPassword(event.target.value);
+              }}
+            />
+     
+            <Button
+              fullWidth
+              type="submit"
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+              onClick={handlerResetPassword}
+            >
+              Konfirmasi
+            </Button>
+            <div>
+            </div>
+          </div>
+        </Paper>
+      </Container>
+    </div>
+  );
+};
+
+const mapStateToProps = (state) => {
+  console.log('===', state)
+return {
+  users: state.userReducer.userData
+}
+}
+
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getUserdata: (data) => dispatch(getUserdata(data))
+  }
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(ResetPassword))
