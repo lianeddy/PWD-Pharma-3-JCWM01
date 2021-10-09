@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { connect } from 'react-redux'
 import { useHistory } from "react-router";
 import axios from "axios";
 
@@ -12,7 +13,13 @@ import Paper from "@material-ui/core/Paper";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 
+import Alert from '@material-ui/lab/Alert';
+
+import Snackbar from '@material-ui/core/Snackbar';
+
 import Logo from "../../assets/img/logo/Klinik.png";
+
+import { getUserdata } from 'redux/actions/userAction';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -49,35 +56,88 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Signin() {
+const Signin = (props) => {
   const classes = useStyles();
   const history = useHistory();
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
+  const [alertData, setAlertData] = useState({
+    isOpen: false,
+    message: '',
+    type: ''
+  });
+
   // create function to handle button login
   const handleSignin = () => {
+
+    if(username === "" || password === ""){
+      return setAlertData({
+        isOpen: true,
+        message: "Username atau sandi tidak boleh kosong",
+        type: "error"
+
+      })
+    }
+
     axios
       .post("http://localhost:3300/users/login", {
         username: username,
         password: password,
       })
       .then((res) => {
+        localStorage.setItem("token", res.data.token)
+        const {dataLogin} = res.data
+        props.getUserdata(dataLogin)
+        localStorage.setItem('userId', dataLogin.user_id)
+        localStorage.setItem('roleId', dataLogin.role_id)
+        // IF ROLE ID = 1 (ADMIN) REDIRECT TO ADMIN PAGE
+        if(dataLogin.role_id === 1){
+          // TODO: ganti path sesuai page admin nanti
+         return history.push("/")
+        }
+        // IF ROLE ID = 2 (USER) REDIRECT TO USER PAGE
+        history.push("/temptlanding")
+        // this.setState({ redirect: true })
+        console.log('Login Success ✔')
         // kalo sukses redirect ke home
+
+
+      }).catch((err) => {
+        setAlertData({
+          isOpen: true,
+          message: "Incorrect username / password",
+          type: 'error'
+        })
       })
-      .catch((err) => {
-        // kalo error ngapain?
-      });
+
   };
 
   const goToSignup = () => {
     history.push("/register");
 
   }
+  const goToForgetPassword = () => {
+    history.push("/forgetpassword");
+
+  }
 
   return (
     <div className={classes.container}>
+      <Snackbar
+        open={alertData.isOpen}
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+        onClose={() => setAlertData({
+          isOpen: false,
+          message: '',
+          type: ''
+        })}>
+        <Alert severity={alertData.type}>{alertData.message}</Alert>
+      </Snackbar>
       <Container component="main" maxWidth="xs">
         <Paper elevation={3} className={classes.paper}>
           {/* START OF LOGO SECTION */}
@@ -126,6 +186,12 @@ export default function Signin() {
                 setPassword(event.target.value);
               }}
             />
+            {/*LUPA PASSWORD*/}
+            <Typography variant="body2">
+                <Link onClick={goToForgetPassword} variant="body2">
+                  Lupa Password
+                </Link>
+              </Typography>
             <Button
               fullWidth
               type="submit"
@@ -151,4 +217,19 @@ export default function Signin() {
   );
 };
 
+const mapStateToProps = (state) => {
+  console.log('===', state)
+return {
+  users: state.userReducer.userData
+}
+}
 
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getUserdata: (data) => dispatch(getUserdata(data))
+  }
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(Signin)
