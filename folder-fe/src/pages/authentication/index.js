@@ -31,7 +31,7 @@ const Authentication = (props) => {
         alert(res.data.message);
         setStatus(res.data.message);
       });
-  });
+  }, []);
   return (
     <div style={{ textAlign: "center" }}>
       <h2>{status}</h2>

@@ -10,6 +10,7 @@ import Language from "@material-ui/icons/Language";
 
 //Route to App
 import Home from "pages/Home";
+import Profile from "pages/profile";
 
 const dashboardRoutes = [
   {
@@ -18,6 +19,27 @@ const dashboardRoutes = [
     icon: Dashboard,
     component: Home,
     layout: "/user",
+  },
+  {
+    path: "/Profile",
+    name: "Profile",
+    icon: Person,
+    component: Profile,
+    layout: "/user",
+  },
+  {
+    path: "/Home",
+    name: "Admin-Home",
+    icon: Dashboard,
+    component: Home,
+    layout: "/admin",
+  },
+  {
+    path: "/Profile",
+    name: "Admin-Profile",
+    icon: Person,
+    component: Profile,
+    layout: "/admin",
   },
 ];
 

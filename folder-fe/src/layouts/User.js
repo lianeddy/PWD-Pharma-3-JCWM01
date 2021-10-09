@@ -120,7 +120,10 @@ export default function User({ ...rest }) {
           {...rest}
         />
 
-        <div style={{ padding: "0px 20px 0px 20px" }}>
+        <div
+          className={localStorage.getItem("role_id") ? classes.content : ""}
+          style={{ padding: "0px 20px 0px 20px" }}
+        >
           <div>{switchRoutes}</div>
         </div>
         {null}

@@ -2,17 +2,22 @@ import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-
+import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 // Reduc Config
 import { Provider } from "react-redux"; // untuk menghungkan antara action, reducer dan component
-import { createStore } from "redux"; // untuk membuat global store untuk reducer
+import { applyMiddleware, createStore } from "redux"; // untuk membuat global store untuk reducer
 import { Reducers } from "./redux/reducers";
+import ReduxThunk from "redux-thunk";
 
-const storeReducer = createStore(Reducers);
+import DateFnsUtils from "@date-io/date-fns";
+
+const storeReducer = createStore(Reducers, applyMiddleware(ReduxThunk));
 
 ReactDOM.render(
   <Provider store={storeReducer}>
-    <App />
+    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+      <App />
+    </MuiPickersUtilsProvider>
   </Provider>,
   document.getElementById("root")
 );
