@@ -23,10 +23,10 @@ module.exports = {
     let { user_id, username, email, role_id, auth, iat, exp } = req.user;
     let checkVerify = `select auth from users where user_id =${db.escape(
       user_id
-    )} && auth = 'verifadaied'`;
+    )} && auth = 'unverified'`;
     let updateVerify = `update users set auth = 'verified' where user_id = ${db.escape(
       user_id
-    )}`;
+    )}, modified_date = NOW()`;
 
     db.query(checkVerify, (err, result) => {
       err ? res.status(500).send(err) : null;
