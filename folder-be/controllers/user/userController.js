@@ -13,7 +13,7 @@ const getData = require("./Pram/getdata");
 const getUsername = require("./Pram/getusername");
 //---------------------
 //Taksu
-
+const verification = require("./Taksu/verification");
 //---------------------
 //Feny
 
@@ -24,4 +24,5 @@ module.exports = {
   getData: getData,
   login: login,
   register: register,
+  authentication: verification,
 };
