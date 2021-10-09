@@ -14,6 +14,10 @@ const getUsername = require("./Pram/getusername");
 //---------------------
 //Taksu
 const verification = require("./Taksu/verification");
+const {
+  getUserInfomation,
+  updateUserInformation,
+} = require("./Taksu/userInformation");
 //---------------------
 //Feny
 
@@ -24,5 +28,11 @@ module.exports = {
   getData: getData,
   login: login,
   register: register,
+
+  //Taksu
   authentication: verification,
+  getUserInfomation,
+  updateUserInformation,
+
+  //
 };

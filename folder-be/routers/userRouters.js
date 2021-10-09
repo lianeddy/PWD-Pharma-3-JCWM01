@@ -10,4 +10,10 @@ routers.get("/users", userControllers.getData);
 routers.post("/login", userControllers.login);
 routers.post("/register", userControllers.register);
 routers.patch("/authentication", auth, userControllers.authentication);
+routers.post("/getUserInfomation", auth, userControllers.getUserInfomation);
+routers.patch(
+  "/updateUserInformation",
+  auth,
+  userControllers.updateUserInformation
+);
 module.exports = routers;
