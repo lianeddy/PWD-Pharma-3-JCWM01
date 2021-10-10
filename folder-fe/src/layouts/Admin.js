@@ -93,10 +93,10 @@ export default function User({ ...rest }) {
   return (
     <div
       id="test"
-      className={localStorage.getItem("role_id") ? classes.wrapper : ""}
+      className={localStorage.getItem("roleId") ? classes.wrapper : ""}
       style={{ position: "relative", height: "100vh" }}
     >
-      {localStorage.getItem("role_id") ? (
+      {localStorage.getItem("roleId") ? (
         <Sidebar
           routes={routes}
           logoText={"Pharmacy group 3"}
@@ -110,7 +110,7 @@ export default function User({ ...rest }) {
       ) : null}
 
       <div
-        className={localStorage.getItem("role_id") ? classes.mainPanel : ""}
+        className={localStorage.getItem("roleId") ? classes.mainPanel : ""}
         ref={mainPanel}
         style={{ height: "100%" }}
       >
@@ -121,10 +121,10 @@ export default function User({ ...rest }) {
         />
 
         <div
-          className={localStorage.getItem("role_id") ? classes.content : ""}
+          className={localStorage.getItem("roleId") ? classes.content : ""}
           style={{ padding: "0px 20px 0px 20px" }}
         >
-          <div>{switchRoutes}</div>
+          <div>test{switchRoutes}</div>
         </div>
         {null}
       </div>

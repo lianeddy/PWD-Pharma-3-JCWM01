@@ -16,6 +16,7 @@ import ResetPassword from "./pages/resetPassword/ResetPassPage";
 import ChangePassword from "./pages/changePassword/ChangePassPage";
 import TemptLanding from "pages/tempLanding/TemptLanding";
 import ErrorPage from "pages/errorPage/ErrorPage";
+import Landing from "./pages/landing/";
 
 import "assets/css/material-dashboard-react.css?v=1.10.0";
 
@@ -68,16 +69,22 @@ function App(props) {
       role: [roles.Admin, roles.User],
     },
     {
-      component: TemptLanding,
+      component: Landing,
       path: "/temptlanding",
       needAuth: false,
       role: [roles.Admin, roles.User],
     },
     {
-      component: User,
+      component: Admin,
       needAuth: true,
       path: "/",
       role: [roles.Admin],
+    },
+    {
+      component: User,
+      needAuth: true,
+      path: "/",
+      role: [roles.User],
     },
   ];
   return (
@@ -99,6 +106,7 @@ function App(props) {
             const isAllowAccessPage = route.role.includes(roleId);
             // JIKA ROLE ID TIDAK DAPAT MENGAKSES HALAMAN, MAKA AKAN DI-DIRECT KE 404 PAGE
             if (!isAllowAccessPage) {
+              if (route.path == "/") return null;
               return <Redirect key={i} from={route.path} to="/error-404" />;
             }
           }

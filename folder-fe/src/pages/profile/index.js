@@ -39,11 +39,6 @@ const useStyles = makeStyles(styles);
 
 export default function UserProfile() {
   const [infoRes, setInfoRes] = useState([]);
-  localStorage.setItem(
-    "token",
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo1ODUsInVzZXJuYW1lIjoic3Vzc3kiLCJlbWFpbCI6InRha3N1d2lqYXlhMDdAZ21haWwuY29tIiwicm9sZV9pZCI6MiwiYXV0aCI6InVudmVyaWZpZWQiLCJpYXQiOjE2MzM4NTY4MTcsImV4cCI6MTYzMzkwMDAxN30.xEsoYtSuhGjiiF5z_6DQBtP1yMcIxqrGXs8urSoEqKo"
-  );
-
   const classes = useStyles();
   useEffect(() => {
     axios

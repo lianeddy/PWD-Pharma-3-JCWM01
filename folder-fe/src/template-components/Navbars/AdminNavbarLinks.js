@@ -87,12 +87,15 @@ export default function AdminNavbarLinks() {
               <Paper>
                 <ClickAwayListener onClickAway={handleCloseProfile}>
                   <MenuList role="menu">
-                    {localStorage.getItem("role_id") ? (
+                    {localStorage.getItem("roleId") ? (
                       <MenuItem
-                        onClick={(e) => {}}
+                        onClick={(e) => {
+                          localStorage.clear();
+                          document.location.reload();
+                        }}
                         className={classes.dropdownItem}
                       >
-                        Placeholder
+                        Logout
                       </MenuItem>
                     ) : (
                       <>
