@@ -10,7 +10,7 @@ import Navbar from "template-components/Navbars/Navbar.js";
 import Footer from "template-components/Footer/Footer.js";
 import Sidebar from "template-components/Sidebar/Sidebar.js";
 import FixedPlugin from "template-components/FixedPlugin/FixedPlugin.js";
-import Landing from "pages/landing";
+
 import routes from "routes.js";
 
 import styles from "assets/jss/material-dashboard-react/layouts/adminStyle.js";
@@ -34,13 +34,13 @@ const switchRoutes = (
       }
       return null;
     })}
-    <Route component={Landing} />
+    <Redirect from="/" to="/" />
   </Switch>
 );
 
 const useStyles = makeStyles(styles);
 
-export default function User({ ...rest }) {
+export default function Admin({ ...rest }) {
   // styles
   const classes = useStyles();
   // ref to help us initialize PerfectScrollbar on windows devices
@@ -66,7 +66,9 @@ export default function User({ ...rest }) {
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
-
+  const getRoute = () => {
+    return window.location.pathname !== "/admin/maps";
+  };
   const resizeFunction = () => {
     if (window.innerWidth >= 960) {
       setMobileOpen(false);
@@ -91,42 +93,40 @@ export default function User({ ...rest }) {
     };
   }, [mainPanel]);
   return (
-    <div
-      id="test"
-      className={localStorage.getItem("role_id") ? classes.wrapper : ""}
-      style={{ position: "relative", height: "100vh" }}
-    >
-      {localStorage.getItem("role_id") ? (
-        <Sidebar
-          routes={routes}
-          logoText={"Pharmacy group 3"}
-          logo={logo}
-          image={image}
-          handleDrawerToggle={handleDrawerToggle}
-          open={mobileOpen}
-          color={color}
-          {...rest}
-        />
-      ) : null}
-
-      <div
-        className={localStorage.getItem("role_id") ? classes.mainPanel : ""}
-        ref={mainPanel}
-        style={{ height: "100%" }}
-      >
+    <div className={classes.wrapper}>
+      <Sidebar
+        routes={routes}
+        logoText={"Pharmacy group 3"}
+        logo={logo}
+        image={image}
+        handleDrawerToggle={handleDrawerToggle}
+        open={mobileOpen}
+        color={color}
+        {...rest}
+      />
+      <div className={classes.mainPanel} ref={mainPanel}>
         <Navbar
           routes={routes}
           handleDrawerToggle={handleDrawerToggle}
           {...rest}
         />
-
-        <div
-          className={localStorage.getItem("role_id") ? classes.content : ""}
-          style={{ padding: "0px 20px 0px 20px" }}
-        >
-          <div>{switchRoutes}</div>
-        </div>
-        {null}
+        {/* On the /maps route we want the map to be on full screen - this is not possible if the content and conatiner classes are present because they have some paddings which would make the map smaller */}
+        {getRoute() ? (
+          <div className={classes.content}>
+            <div className={classes.container}>{switchRoutes}</div>
+          </div>
+        ) : (
+          <div className={classes.map}>{switchRoutes}</div>
+        )}
+        {getRoute() ? <Footer /> : null}
+        <FixedPlugin
+          handleImageClick={handleImageClick}
+          handleColorClick={handleColorClick}
+          bgColor={color}
+          bgImage={image}
+          handleFixedClick={handleFixedClick}
+          fixedClasses={fixedClasses}
+        />
       </div>
     </div>
   );

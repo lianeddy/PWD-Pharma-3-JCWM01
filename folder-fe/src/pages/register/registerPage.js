@@ -12,6 +12,9 @@ import Paper from "@material-ui/core/Paper";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 
+import Alert from "@material-ui/lab/Alert";
+import Snackbar from "@material-ui/core/Snackbar";
+
 import Logo from "../../assets/img/logo/Klinik.png";
 
 const useStyles = makeStyles((theme) => ({
@@ -58,8 +61,21 @@ export default function RegisterPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  // create function to handle button login
-  const handleSignup = () => {
+  const [alertData, setAlertData] = useState({
+    isOpen: false,
+    message: "",
+    type: "",
+  });
+
+  const handlerRegister = () => {
+    if (username === "" || password === "" || full_name === "" || email || "") {
+      return setAlertData({
+        isOpen: true,
+        message: "Field tidak boleh kosong",
+        type: "error",
+      });
+    }
+
     axios
       .post("http://localhost:3300/users/register", {
         full_name: full_name,
@@ -68,7 +84,17 @@ export default function RegisterPage() {
         email: email,
       })
       .then((res) => {
-        alert("You have registered!");
+        setFullName("");
+        setEmail("");
+        setPassword("");
+        setUsername("");
+
+        setAlertData({
+          isOpen: true,
+          message: "Register Success",
+          type: "success",
+        });
+
         console.log("sukses");
         history.push("/");
       })
@@ -83,9 +109,25 @@ export default function RegisterPage() {
 
   return (
     <div className={classes.wrapper}>
+      <Snackbar
+        open={alertData.isOpen}
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
+        onClose={() =>
+          setAlertData({
+            isOpen: false,
+            message: "",
+            type: "",
+          })
+        }
+      >
+        <Alert severity={alertData.type}>{alertData.message}</Alert>
+      </Snackbar>
+
       <Container component="main" maxWidth="xs">
         <Paper elevation={3} className={classes.paper}>
-          {/* START OF LOGO SECTION */}
           <Box p={2} textAlign="center">
             <img src={Logo} width="96px" alt="logo" />
             <Box mt={1}>
@@ -97,12 +139,12 @@ export default function RegisterPage() {
               </Typography>
             </Box>
           </Box>
-          {/* END OF LOGO SECTION */}
 
           <TextField
             margin="normal"
             autoComplete="fname"
             name="full_name"
+            value={full_name}
             variant="outlined"
             required
             fullWidth
@@ -117,6 +159,7 @@ export default function RegisterPage() {
             margin="normal"
             autoComplete="uname"
             name="username"
+            value={username}
             variant="outlined"
             required
             fullWidth
@@ -135,6 +178,7 @@ export default function RegisterPage() {
             id="email"
             label="Email Address"
             name="email"
+            value={email}
             autoComplete="email"
             onChange={(event) => {
               setEmail(event.target.value);
@@ -146,6 +190,7 @@ export default function RegisterPage() {
             required
             fullWidth
             name="password"
+            value={password}
             label="Password"
             type="password"
             id="password"
@@ -160,7 +205,7 @@ export default function RegisterPage() {
             variant="contained"
             color="secondary"
             className={classes.submit}
-            onClick={handleSignup}
+            onClick={handlerRegister}
           >
             Daftar
           </Button>
