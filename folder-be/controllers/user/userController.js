@@ -16,7 +16,11 @@ const resetPassword = require("./Pram/resetPassword");
 const changePassword = require("./Pram/changePassword")
 //---------------------
 //Taksu
-
+const verification = require("./Taksu/verification");
+const {
+  getUserInfomation,
+  updateUserInformation,
+} = require("./Taksu/userInformation");
 //---------------------
 //Feny
 
@@ -30,4 +34,11 @@ module.exports = {
   forgetPassword: forgetPassword,
   resetPassword: resetPassword,
   changePassword: changePassword,
+
+  //Taksu
+  authentication: verification,
+  getUserInfomation,
+  updateUserInformation,
+
+  //
 };

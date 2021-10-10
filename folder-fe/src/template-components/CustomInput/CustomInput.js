@@ -20,11 +20,13 @@ export default function CustomInput(props) {
     formControlProps,
     labelText,
     id,
+    name,
     labelProps,
     inputProps,
     error,
     success,
     rtlActive,
+    onChange,
   } = props;
 
   const labelClasses = classNames({
@@ -67,9 +69,11 @@ export default function CustomInput(props) {
           disabled: classes.disabled,
           underline: underlineClasses,
         }}
-        id={id}
+        id={id ? id : name ? name : ""}
+        name={name}
         {...inputProps}
         inputProps={newInputProps}
+        onChange={onChange}
       />
       {error ? (
         <Clear className={classes.feedback + " " + classes.labelRootError} />

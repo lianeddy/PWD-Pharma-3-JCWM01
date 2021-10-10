@@ -61,7 +61,7 @@ function App() {
   },
   {
     component: ResetPassword,
-    path: "/ResetPassword",
+    path: "/resetpassword",
     needAuth: false,
     role: [
       roles.Admin,

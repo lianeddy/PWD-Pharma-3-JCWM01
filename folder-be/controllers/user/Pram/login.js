@@ -15,14 +15,14 @@ module.exports = (req, res) => {
     // IF SUCCESS
     if (results.length > 0) {
       // Token Material
-      let {username, role_id} = results[0];
+      let {username, role_id, user_id} = results[0];
       // const token = jwt.sign({username}, "private123", {
       //   expiresIn: "12h",
       // });
       
       // console.log(token, "testtttt")
       // Create Token
-      let token = createToken({username, role_id});
+      let token = createToken({username, role_id, user_id});
 
       res.status(200).send({ dataLogin: results[0], token, message: "Login Success" })
       // res.status(200).send({data:results[0]});
