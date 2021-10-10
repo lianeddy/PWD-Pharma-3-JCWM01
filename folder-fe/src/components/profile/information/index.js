@@ -149,8 +149,8 @@ const Profile_Information = ({ infoRes }) => {
       />
       <Card>
         <CardHeader color="primary">
-          <h4 className={classes.cardTitleWhite}>Edit Profile</h4>
-          <p className={classes.cardCategoryWhite}>Complete your profile</p>
+          <h4 className={classes.cardTitleWhite}>Profile</h4>
+          <p className={classes.cardCategoryWhite}>Your account Information</p>
         </CardHeader>
         <CardBody>
           <GridContainer>

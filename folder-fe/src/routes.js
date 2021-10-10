@@ -41,6 +41,13 @@ const dashboardRoutes = [
     component: Profile,
     layout: "/admin",
   },
+  {
+    path: "/Report",
+    name: "Report Admin",
+    icon: LibraryBooks,
+    component: Profile,
+    layout: "/admin",
+  },
 ];
 
 export default dashboardRoutes;

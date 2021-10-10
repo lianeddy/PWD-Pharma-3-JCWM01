@@ -8,7 +8,17 @@ module.exports = {
       from: `Admin <${NODEMAILER_CONFIG.user}>`,
       to: `${userEmail}`,
       subject: "Account verification",
-      html: `<h2>Halo ayo verifikasi!</h2> <a href='http://localhost:3000/authentication/${token}'>Authentication</a> `,
+      html: `<div
+      style="
+        text-align: center;
+        margin: 20px 30% 0px 30%;
+        border: 1px solid black;
+        height: 1000px;
+        background-color: azure;
+      "
+    >
+      <h2>Halo ayo verifikasi!</h2>
+      <a href="http://localhost:3000/authentication/${token}">Authentication</a>`,
     };
     console.log(userEmail);
     transporter.sendMail(mail, (err, res) => {
@@ -23,26 +33,34 @@ module.exports = {
     let { user_id, username, email, role_id, auth, iat, exp } = req.user;
     let checkVerify = `select auth from users where user_id =${db.escape(
       user_id
-    )} && auth = 'unverified'`;
-    let updateVerify = `update users set auth = 'verified' where user_id = ${db.escape(
+    )} && auth = 'verified'`;
+    let updateVerify = `update users set auth = 'verified', modified_date = NOW() where user_id = ${db.escape(
       user_id
-    )}, modified_date = NOW()`;
+    )}`;
 
     db.query(checkVerify, (err, result) => {
-      err ? res.status(500).send(err) : null;
-      console.log(result);
+      if (err) {
+        res.status(500).send(err);
+        return false;
+      }
+      console.log(result, "test");
       if (result.length > 0) {
         res
           .status(200)
           .send({ message: "User already verified!", success: false });
+        return false;
+      } else {
+        db.query(updateVerify, (err, result) => {
+          if (err) {
+            res.status(500).send(err);
+            return false;
+          }
+          console.log(result, "test2");
+          res
+            .status(200)
+            .send({ message: "User have been verified!", success: true });
+        });
       }
-    });
-    db.query(updateVerify, (err, result) => {
-      err ? res.status(500).send(err) : null;
-      console.log(result);
-      res
-        .status(200)
-        .send({ message: "User have been verified!", success: true });
     });
   },
 };

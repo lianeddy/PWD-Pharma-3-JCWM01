@@ -18,7 +18,7 @@ import Search from "@material-ui/icons/Search";
 // core components
 import CustomInput from "template-components/CustomInput/CustomInput.js";
 import Button from "template-components/CustomButtons/Button.js";
-
+import { Link } from "react-router-dom";
 import styles from "assets/jss/material-dashboard-react/components/headerLinksStyle.js";
 
 const useStyles = makeStyles(styles);
@@ -193,12 +193,29 @@ export default function AdminNavbarLinks() {
               <Paper>
                 <ClickAwayListener onClickAway={handleCloseProfile}>
                   <MenuList role="menu">
-                    <MenuItem
-                      onClick={(e) => {}}
-                      className={classes.dropdownItem}
-                    >
-                      Login
-                    </MenuItem>
+                    {localStorage.getItem("role_id") ? (
+                      <MenuItem
+                        onClick={(e) => {}}
+                        className={classes.dropdownItem}
+                      >
+                        Placeholder
+                      </MenuItem>
+                    ) : (
+                      <>
+                        <MenuItem
+                          onClick={(e) => {}}
+                          className={classes.dropdownItem}
+                        >
+                          <Link to="/register">Register</Link>
+                        </MenuItem>
+                        <MenuItem
+                          onClick={(e) => {}}
+                          className={classes.dropdownItem}
+                        >
+                          <Link to="/login">Login</Link>
+                        </MenuItem>
+                      </>
+                    )}
                   </MenuList>
                 </ClickAwayListener>
               </Paper>
