@@ -1,9 +1,10 @@
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import {connect} from 'react-redux'
-import LoginPage from "./pages/login/LoginPage";
+import LoginPage from "./pages/login/loginPage";
 import Home from "./pages/Home";
+import ProductDetail from "./pages/ProductDetail";
 import Home1 from "./pages/Home";
-import RegisterPage from "./pages/register/RegisterPage";
+import RegisterPage from "./pages/register/registerPage";
 import Admin from "layouts/Admin.js";
 import User from "layouts/User.js";
 import { theme } from "./utils/color";
