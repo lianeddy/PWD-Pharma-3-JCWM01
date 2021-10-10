@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useHistory } from "react-router";
 import axios from "axios";
 
-
 import { makeStyles } from "@material-ui/core/styles";
 
 import Button from "@material-ui/core/Button";
@@ -69,7 +68,9 @@ export default function RegisterPage() {
         email: email,
       })
       .then((res) => {
+        alert("You have registered!");
         console.log("sukses");
+        history.push("/");
       })
       .catch((err) => {
         console.log(err);
@@ -176,5 +177,3 @@ export default function RegisterPage() {
     </div>
   );
 }
-
-

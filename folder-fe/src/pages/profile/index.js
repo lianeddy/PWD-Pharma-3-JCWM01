@@ -41,7 +41,7 @@ export default function UserProfile() {
   const [infoRes, setInfoRes] = useState([]);
   localStorage.setItem(
     "token",
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo1NTUsInVzZXJuYW1lIjoiQm9iIiwiZW1haWwiOiJ0YWtzdXdpamF5YTA3QGdtYWlsLmNvbSIsInJvbGVfaWQiOjIsImF1dGgiOiJ1bnZlcmlmaWVkIiwiaWF0IjoxNjMzODQxNzIwLCJleHAiOjE2MzM4ODQ5MjB9.i50mmNmvnMV_1a-8AAyoBGE-CH1XyLnEvUtcf9M31Hs"
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo1ODUsInVzZXJuYW1lIjoic3Vzc3kiLCJlbWFpbCI6InRha3N1d2lqYXlhMDdAZ21haWwuY29tIiwicm9sZV9pZCI6MiwiYXV0aCI6InVudmVyaWZpZWQiLCJpYXQiOjE2MzM4NTY4MTcsImV4cCI6MTYzMzkwMDAxN30.xEsoYtSuhGjiiF5z_6DQBtP1yMcIxqrGXs8urSoEqKo"
   );
 
   const classes = useStyles();

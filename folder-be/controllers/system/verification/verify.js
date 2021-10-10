@@ -12,13 +12,33 @@ module.exports = {
       style="
         text-align: center;
         margin: 20px 30% 0px 30%;
-        border: 1px solid black;
-        height: 1000px;
-        background-color: azure;
+        height: 700px;
+        background-color: ghostwhite;
       "
     >
-      <h2>Halo ayo verifikasi!</h2>
-      <a href="http://localhost:3000/authentication/${token}">Authentication</a>`,
+      <h1 style="color: green; padding-top: 200px">
+        Thank you for registering!
+      </h1>
+      <h2 style="color: goldenrod">
+        Click on the buttom below to verify your account
+      </h2>
+      <a href="http://localhost:3000/authentication/${token}">
+        <button
+          style="
+            font-size: 20px;
+            background-color: white;
+            color: yellowgreen;
+            border: 1px solid green;
+            border-radius: 8px;
+            margin: auto;
+            padding: 12px;
+            width: 200px;
+          "
+        >
+          Verify
+        </button></a
+      >
+    </div>`,
     };
     console.log(userEmail);
     transporter.sendMail(mail, (err, res) => {
@@ -47,7 +67,7 @@ module.exports = {
       if (result.length > 0) {
         res
           .status(200)
-          .send({ message: "User already verified!", success: false });
+          .send({ message: "Account is already verified!", success: false });
         return false;
       } else {
         db.query(updateVerify, (err, result) => {
@@ -58,7 +78,7 @@ module.exports = {
           console.log(result, "test2");
           res
             .status(200)
-            .send({ message: "User have been verified!", success: true });
+            .send({ message: "Account have been verified!", success: true });
         });
       }
     });

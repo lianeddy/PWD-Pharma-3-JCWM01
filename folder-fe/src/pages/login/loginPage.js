@@ -58,6 +58,9 @@ export default function Signin() {
 
   // create function to handle button login
   const handleSignin = () => {
+    localStorage.setItem("role_id", 1);
+    document.location.href = "/";
+
     axios
       .post("http://localhost:3300/users/login", {
         username: username,
@@ -73,8 +76,7 @@ export default function Signin() {
 
   const goToSignup = () => {
     history.push("/register");
-
-  }
+  };
 
   return (
     <div className={classes.container}>
@@ -149,6 +151,4 @@ export default function Signin() {
       </Container>
     </div>
   );
-};
-
-
+}

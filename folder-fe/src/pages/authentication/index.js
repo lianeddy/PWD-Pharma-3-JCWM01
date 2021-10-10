@@ -8,7 +8,7 @@ import styles from "assets/jss/material-dashboard-react/views/dashboardStyle.js"
 import { Button } from "@material-ui/core";
 
 const Authentication = (props) => {
-  const [status, setStatus] = useState("Not verified");
+  const [status, setStatus] = useState("Processing....");
   const { test } = useParams();
   useEffect(() => {
     axios
@@ -23,13 +23,18 @@ const Authentication = (props) => {
       )
       .then((res) => {
         if (!res.data.status) {
-          alert(res.data.message);
+          //alert(res.data.message);
           setStatus(res.data.message);
           console.log("");
           return false;
         }
-        alert(res.data.message);
+        // alert(res.data.message);
         setStatus(res.data.message);
+      })
+      .catch((err) => {
+        //alert(err);
+        console.log(err);
+        setStatus("Account not found");
       });
   }, []);
   return (
