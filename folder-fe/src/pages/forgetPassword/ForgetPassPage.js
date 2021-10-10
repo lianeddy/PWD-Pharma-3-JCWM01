@@ -78,7 +78,7 @@ const ForgetPassword = (props) => {
     }
 
     axios
-      .post("http://localhost:3300/users/forget", {
+      .post("http://localhost:3300/users/forgetpassword", {
         email: email,
       })
       .then((res) => {
