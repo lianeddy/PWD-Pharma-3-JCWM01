@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import LoginPage from "./pages/login/loginPage";
 import Home from "./pages/Home";
+import ProductDetail from "./pages/ProductDetail";
 import Home1 from "./pages/Home";
 import RegisterPage from "./pages/register/registerPage";
 import Admin from "layouts/Admin.js";
@@ -16,6 +17,7 @@ function App() {
       <Switch>
         <Route component={LoginPage} path="/login" />
         <Route component={RegisterPage} path="/register" />
+        <Route component={ProductDetail} path="/product-detail" />
         <Route path="/" component={User}  />  
       </Switch>
     </BrowserRouter>
