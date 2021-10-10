@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { connect } from 'react-redux'
-import { useHistory } from "react-router";
+// import { useHistory } from "react-router";
 import axios from "axios";
 
 import { makeStyles } from "@material-ui/core/styles";
@@ -8,7 +8,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Box from "@material-ui/core/Box";
 import Container from "@material-ui/core/Container";
-import Link from "@material-ui/core/Link";
 import Paper from "@material-ui/core/Paper";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
@@ -56,72 +55,47 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Signin = (props) => {
+const ForgetPassword = (props) => {
   const classes = useStyles();
-  const history = useHistory();
-
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  // const history = useHistory();
+  const [email, setEmail] = useState('')
 
   const [alertData, setAlertData] = useState({
     isOpen: false,
     message: '',
-    type: ''
+    type: 'success'
   });
 
-  // create function to handle button login
-  const handleSignin = () => {
+  const handlerChangePassword = () => {
 
-    if(username === "" || password === ""){
+    if(email === ""){
       return setAlertData({
         isOpen: true,
-        message: "Username atau sandi tidak boleh kosong",
+        message: "Email tidak boleh kosong",
         type: "error"
 
       })
     }
 
     axios
-      .post("http://localhost:3300/users/login", {
-        username: username,
-        password: password,
+      .post("http://localhost:3300/users/forgetpassword", {
+        email: email,
       })
       .then((res) => {
         localStorage.setItem("token", res.data.token)
-        const {dataLogin} = res.data
-        props.getUserdata(dataLogin)
-        localStorage.setItem('userId', dataLogin.user_id)
-        localStorage.setItem('roleId', dataLogin.role_id)
-        // IF ROLE ID = 1 (ADMIN) REDIRECT TO ADMIN PAGE
-        if(dataLogin.role_id === 1){
-          // TODO: ganti path sesuai page admin nanti
-         return history.push("/")
-        }
-        // IF ROLE ID = 2 (USER) REDIRECT TO USER PAGE
-        history.push("/temptlanding")
-        // this.setState({ redirect: true })
-        console.log('Login Success ✔')
-        // kalo sukses redirect ke home
-
-
-      }).catch((err) => {
         setAlertData({
           isOpen: true,
-          message: "Incorrect username / password",
-          type: 'error'
+          message: "Periksa kotak masuk email kamu",
+          type: 'success'
+
         })
+      }).catch((err) => {
+        console.log(err)
       })
 
   };
 
-  const goToSignup = () => {
-    history.push("/register");
 
-  }
-  const goToForgetPassword = () => {
-    history.push("/forgetpassword");
-
-  }
 
   return (
     <div className={classes.container}>
@@ -155,60 +129,35 @@ const Signin = (props) => {
           {/* END OF LOGO SECTION */}
 
           <div className={classes.form} noValidate>
-            {/* USERNAME */}
+            {/* EMAIL */}
             <TextField
               variant="outlined"
               margin="normal"
               required
               fullWidth
-              id="username"
-              label="Username"
-              name="username"
+              id="email"
+              label="Masukkan email"
+              name="email"
+              value={email}
               autoComplete="username"
               autoFocus
               onChange={(event) => {
-                setUsername(event.target.value);
+                setEmail(event.target.value);
               }}
             />
 
-            {/* PASSWORD */}
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-              onChange={(event) => {
-                setPassword(event.target.value);
-              }}
-            />
-            {/*LUPA PASSWORD*/}
-            <Typography variant="body2">
-                <Link onClick={goToForgetPassword} variant="body2">
-                  Lupa Password
-                </Link>
-              </Typography>
             <Button
               fullWidth
               type="submit"
               variant="contained"
               color="primary"
               className={classes.submit}
-              onClick={handleSignin}
+              onClick={handlerChangePassword}
             >
-              Masuk
+              Kirim
             </Button>
             <div>
-              <Typography variant="body2">
-                Belum punya akun?{" "}
-                <Link onClick={goToSignup} variant="body2">
-                  Daftar di sini.
-                </Link>
-              </Typography>
+
             </div>
           </div>
         </Paper>
@@ -218,10 +167,10 @@ const Signin = (props) => {
 };
 
 const mapStateToProps = (state) => {
-  console.log('===', state)
-return {
-  users: state.userReducer.userData
-}
+  
+  return {
+    users: state.userReducer.userData
+  }
 }
 
 
@@ -232,4 +181,4 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(Signin)
+export default connect(mapStateToProps, mapDispatchToProps)(ForgetPassword)

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { connect } from 'react-redux'
-import { useHistory } from "react-router";
+import { useHistory, withRouter } from "react-router";
 import axios from "axios";
 
 import { makeStyles } from "@material-ui/core/styles";
@@ -8,7 +8,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Box from "@material-ui/core/Box";
 import Container from "@material-ui/core/Container";
-import Link from "@material-ui/core/Link";
 import Paper from "@material-ui/core/Paper";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
@@ -56,12 +55,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Signin = (props) => {
+const ResetPassword = (props) => {
   const classes = useStyles();
   const history = useHistory();
 
-  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const [alertData, setAlertData] = useState({
     isOpen: false,
@@ -69,59 +68,51 @@ const Signin = (props) => {
     type: ''
   });
 
-  // create function to handle button login
-  const handleSignin = () => {
 
-    if(username === "" || password === ""){
+  const params = new URLSearchParams(props.location.search);
+  const token = params.get('token');
+  const userId = params.get('userId');
+
+  console.log('props', props)
+
+  // create function to handle button login
+  const handlerResetPassword = () => {
+
+    if(password === "" || confirmPassword === ""){
       return setAlertData({
         isOpen: true,
-        message: "Username atau sandi tidak boleh kosong",
+        message: "Field tidak boleh kosong",
         type: "error"
 
       })
     }
 
     axios
-      .post("http://localhost:3300/users/login", {
-        username: username,
-        password: password,
+      .patch("http://localhost:3300/users/resetpassword", {
+        password,
+        confirmPassword,
+        userId
       })
       .then((res) => {
-        localStorage.setItem("token", res.data.token)
-        const {dataLogin} = res.data
-        props.getUserdata(dataLogin)
-        localStorage.setItem('userId', dataLogin.user_id)
-        localStorage.setItem('roleId', dataLogin.role_id)
-        // IF ROLE ID = 1 (ADMIN) REDIRECT TO ADMIN PAGE
-        if(dataLogin.role_id === 1){
-          // TODO: ganti path sesuai page admin nanti
-         return history.push("/")
-        }
-        // IF ROLE ID = 2 (USER) REDIRECT TO USER PAGE
-        history.push("/temptlanding")
-        // this.setState({ redirect: true })
-        console.log('Login Success ✔')
-        // kalo sukses redirect ke home
+       props.history.replace("/login")
 
 
       }).catch((err) => {
-        setAlertData({
-          isOpen: true,
-          message: "Incorrect username / password",
-          type: 'error'
-        })
+        
+          console.log("errorr")
+        
       })
 
   };
 
-  const goToSignup = () => {
-    history.push("/register");
+  // const goToSignup = () => {
+  //   history.push("/register");
 
-  }
-  const goToForgetPassword = () => {
-    history.push("/forgetpassword");
+  // }
+  // const goToForgetPassword = () => {
+  //   history.push("/forget");
 
-  }
+  // }
 
   return (
     <div className={classes.container}>
@@ -155,19 +146,20 @@ const Signin = (props) => {
           {/* END OF LOGO SECTION */}
 
           <div className={classes.form} noValidate>
-            {/* USERNAME */}
+         
             <TextField
               variant="outlined"
               margin="normal"
               required
               fullWidth
-              id="username"
-              label="Username"
-              name="username"
-              autoComplete="username"
+              id="password"
+              label="Password"
+              name="password"
+              value={password}
+              autoComplete="password"
               autoFocus
               onChange={(event) => {
-                setUsername(event.target.value);
+                setPassword(event.target.value);
               }}
             />
 
@@ -177,38 +169,28 @@ const Signin = (props) => {
               margin="normal"
               required
               fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
+              name="confirmpassword"
+              value={confirmPassword}
+              label="Confirm password"
+              type="confirmpassword"
+              id="confirmpassword"
               autoComplete="current-password"
               onChange={(event) => {
-                setPassword(event.target.value);
+                setConfirmPassword(event.target.value);
               }}
             />
-            {/*LUPA PASSWORD*/}
-            <Typography variant="body2">
-                <Link onClick={goToForgetPassword} variant="body2">
-                  Lupa Password
-                </Link>
-              </Typography>
+     
             <Button
               fullWidth
               type="submit"
               variant="contained"
               color="primary"
               className={classes.submit}
-              onClick={handleSignin}
+              onClick={handlerResetPassword}
             >
-              Masuk
+              Konfirmasi
             </Button>
             <div>
-              <Typography variant="body2">
-                Belum punya akun?{" "}
-                <Link onClick={goToSignup} variant="body2">
-                  Daftar di sini.
-                </Link>
-              </Typography>
             </div>
           </div>
         </Paper>
@@ -232,4 +214,4 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(Signin)
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(ResetPassword))
