@@ -30,7 +30,7 @@ export default function Sidebar(props) {
   var links = (
     <List className={classes.list}>
       {routes.map((prop, key) => {
-        if (Number(localStorage.getItem("role_id")) === 1) {
+        if (Number(localStorage.getItem("roleId")) === 1) {
           if (prop.layout === "/user") {
             return null;
           }

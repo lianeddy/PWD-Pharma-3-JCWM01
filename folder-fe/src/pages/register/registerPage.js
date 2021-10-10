@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useHistory } from "react-router";
 import axios from "axios";
 
-
 import { makeStyles } from "@material-ui/core/styles";
 
 import Button from "@material-ui/core/Button";
@@ -13,8 +12,8 @@ import Paper from "@material-ui/core/Paper";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 
-import Alert from '@material-ui/lab/Alert';
-import Snackbar from '@material-ui/core/Snackbar';
+import Alert from "@material-ui/lab/Alert";
+import Snackbar from "@material-ui/core/Snackbar";
 
 import Logo from "../../assets/img/logo/Klinik.png";
 
@@ -64,20 +63,17 @@ export default function RegisterPage() {
 
   const [alertData, setAlertData] = useState({
     isOpen: false,
-    message: '',
-    type: ''
+    message: "",
+    type: "",
   });
 
-
   const handlerRegister = () => {
-
-    if(username === "" || password === "" || full_name === "" || email || "" ){
+    if (username === "" || password === "" || full_name === "" || email || "") {
       return setAlertData({
         isOpen: true,
         message: "Field tidak boleh kosong",
-        type: "error"
-
-      })
+        type: "error",
+      });
     }
 
     axios
@@ -88,27 +84,24 @@ export default function RegisterPage() {
         email: email,
       })
       .then((res) => {
-        setFullName('')
-        setEmail('')
-        setPassword('')
-        setUsername('')
+        setFullName("");
+        setEmail("");
+        setPassword("");
+        setUsername("");
 
         setAlertData({
           isOpen: true,
           message: "Register Success",
-          type: 'success'
-        })
-        
-        
+          type: "success",
+        });
+
         console.log("sukses");
+        history.push("/");
       })
       .catch((err) => {
         console.log(err);
       });
   };
-
-
- 
 
   const goToSignin = () => {
     history.push("/login");
@@ -116,24 +109,25 @@ export default function RegisterPage() {
 
   return (
     <div className={classes.wrapper}>
-
       <Snackbar
         open={alertData.isOpen}
         anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'right',
+          vertical: "top",
+          horizontal: "right",
         }}
-        onClose={() => setAlertData({
-          isOpen: false,
-          message: '',
-          type: ''
-        })}>
+        onClose={() =>
+          setAlertData({
+            isOpen: false,
+            message: "",
+            type: "",
+          })
+        }
+      >
         <Alert severity={alertData.type}>{alertData.message}</Alert>
       </Snackbar>
 
       <Container component="main" maxWidth="xs">
         <Paper elevation={3} className={classes.paper}>
-         
           <Box p={2} textAlign="center">
             <img src={Logo} width="96px" alt="logo" />
             <Box mt={1}>
@@ -145,7 +139,6 @@ export default function RegisterPage() {
               </Typography>
             </Box>
           </Box>
-          
 
           <TextField
             margin="normal"
@@ -229,5 +222,3 @@ export default function RegisterPage() {
     </div>
   );
 }
-
-

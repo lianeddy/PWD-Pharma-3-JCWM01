@@ -20,27 +20,9 @@ import logo from "assets/img/reactlogo.png";
 
 let ps;
 
-const switchRoutes = (
-  <Switch>
-    {routes.map((prop, key) => {
-      if (prop.layout === "/admin") {
-        return (
-          <Route
-            path={prop.layout + prop.path}
-            component={prop.component}
-            key={key}
-          />
-        );
-      }
-      return null;
-    })}
-    <Route component={Landing} />
-  </Switch>
-);
-
 const useStyles = makeStyles(styles);
 
-export default function User({ ...rest }) {
+export default function Guest({ ...rest }) {
   // styles
   const classes = useStyles();
   // ref to help us initialize PerfectScrollbar on windows devices
@@ -93,10 +75,10 @@ export default function User({ ...rest }) {
   return (
     <div
       id="test"
-      className={localStorage.getItem("roleId") ? classes.wrapper : ""}
+      className={localStorage.getItem("role_id") ? classes.wrapper : ""}
       style={{ position: "relative", height: "100vh" }}
     >
-      {localStorage.getItem("roleId") ? (
+      {localStorage.getItem("role_id") ? (
         <Sidebar
           routes={routes}
           logoText={"Pharmacy group 3"}
@@ -110,7 +92,7 @@ export default function User({ ...rest }) {
       ) : null}
 
       <div
-        className={localStorage.getItem("roleId") ? classes.mainPanel : ""}
+        className={localStorage.getItem("role_id") ? classes.mainPanel : ""}
         ref={mainPanel}
         style={{ height: "100%" }}
       >
@@ -121,10 +103,14 @@ export default function User({ ...rest }) {
         />
 
         <div
-          className={localStorage.getItem("roleId") ? classes.content : ""}
+          className={localStorage.getItem("role_id") ? classes.content : ""}
           style={{ padding: "0px 20px 0px 20px" }}
         >
-          <div>test{switchRoutes}</div>
+          <div>
+            <Switch>
+              <Route component={Landing} />
+            </Switch>
+          </div>
         </div>
         {null}
       </div>
