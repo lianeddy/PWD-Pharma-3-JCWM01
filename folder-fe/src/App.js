@@ -1,4 +1,5 @@
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
+import {connect} from 'react-redux'
 import LoginPage from "./pages/login/LoginPage";
 import Home from "./pages/Home";
 import Home1 from "./pages/Home";
@@ -15,16 +16,16 @@ import ErrorPage from "pages/errorPage/ErrorPage";
 
 import "assets/css/material-dashboard-react.css?v=1.10.0";
 
-
-function App() {
+function App(props) {
   // GET ROLE ID FROM LOCALSTORAGE
-  const roleId = localStorage.getItem("roleId") // 2
+  const roleId = props.users.role_id.toString() || localStorage.getItem('roleId');
+
+  const test = localStorage.getItem('roleId');
 
   // DEFINE AVAIABLE ROLES 
   const roles = {
     Admin: "1",
     User: "2",
-    Non: null
     
   }
   
@@ -99,7 +100,7 @@ function App() {
   return (
     <BrowserRouter>
       <Switch>
-        {console.log(roleId, "=================================")}
+        {console.log(roleId, test, "=================================")}
         {/* HALAMAN ERROR PAGE */}
       <Route component={ErrorPage} path="/error-404" />
 
@@ -129,6 +130,15 @@ function App() {
       </Switch>
     </BrowserRouter>
   );
+
+  
 }
 
-export default App;
+const mapStateToProps = (state) => {
+  console.log('===', state)
+return {
+  users: state.userReducer.userData
+}
+}
+
+export default connect(mapStateToProps, null)(App)

@@ -1,5 +1,13 @@
 const INITIAL_STATE = {
-  userData: {},
+    userData: {
+        role_id: '',
+        address: "Vila",
+        email: "pramptrbgs@gmail.com",
+        full_name: "Putra Pram",
+        gender: "Male",
+        user_id: 1,
+        username: "pram",
+    },
 
 }
 
