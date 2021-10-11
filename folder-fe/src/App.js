@@ -1,13 +1,14 @@
+import React, {useState, useEffect} from 'react';
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import {connect} from 'react-redux'
 import LoginPage from "./pages/login/LoginPage";
-import Home from "./pages/Home";
-import Home1 from "./pages/Home";
+// import Home from "./pages/Home";
+// import Home1 from "./pages/Home";
+// import Admin from "layouts/Admin.js";
+// import { theme } from "./utils/color";
+// import { ThemeProvider } from "@material-ui/styles";
 import RegisterPage from "./pages/register/RegisterPage";
-import Admin from "layouts/Admin.js";
 import User from "layouts/User.js";
-import { theme } from "./utils/color";
-import { ThemeProvider } from "@material-ui/styles";
 import ForgetPassword from "./pages/forgetPassword/ForgetPassPage";
 import ResetPassword from "./pages/resetPassword/ResetPassPage"
 import ChangePassword from "./pages/changePassword/ChangePassPage"
@@ -16,11 +17,16 @@ import ErrorPage from "pages/errorPage/ErrorPage";
 
 import "assets/css/material-dashboard-react.css?v=1.10.0";
 
+import {keepLoginAction} from "./redux/actions/keepLoginAction"
+
 function App(props) {
   // GET ROLE ID FROM LOCALSTORAGE
-  const roleId = props.users.role_id.toString() || localStorage.getItem('roleId');
+  const roleId = props.users.role_id.toString();
+  console.log(roleId)
 
+  // Test
   const test = localStorage.getItem('roleId');
+  console.log(test, roleId, props.users.role_id, " ini test aja")
 
   // DEFINE AVAIABLE ROLES 
   const roles = {
@@ -28,6 +34,15 @@ function App(props) {
     User: "2",
     
   }
+
+  useEffect(() => {
+    // Update the document title using the browser API
+    const { keepLoginAction } = props;
+    const token = localStorage.getItem("token");
+    if (token) {
+      keepLoginAction();
+    }
+  });
   
   // MENAMPUNG HALAMAN ROUTES AGAR DINAMIS, YANG AKAN DI-MAP DAN ME-RETURN ROUTE COMPONENT
   // KEY COMPONENT = COMPONENT HALAMAN TERSEBUT
@@ -100,7 +115,8 @@ function App(props) {
   return (
     <BrowserRouter>
       <Switch>
-        {console.log(roleId, test, "=================================")}
+        {console.log(roleId, test, "=yaya================================")}
+  
         {/* HALAMAN ERROR PAGE */}
       <Route component={ErrorPage} path="/error-404" />
 
@@ -111,6 +127,7 @@ function App(props) {
           if(!roleId && route.needAuth){
             return  <Redirect key={i} from={routes.component} to="/login" />
           }
+          
 
           if(roleId) {
             const isAllowAccessPage = route.role.includes((roleId))
@@ -141,4 +158,11 @@ return {
 }
 }
 
-export default connect(mapStateToProps, null)(App)
+const mapDispatchToProps = (dispatch) => {
+  return {
+    keepLoginAction: (data) => dispatch(keepLoginAction(data))
+  }
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(App)

@@ -1,7 +1,7 @@
 const { db } = require("../../../database");
 // const Crypto = require("crypto");
-const { sendVerifyForget } = require("../../system/verification/verifyForgetPass");
-const { createToken } = require("../../../helper/createToken");
+// const { sendVerifyForget } = require("../../system/verification/verifyForgetPass");
+// const { createToken } = require("../../../helper/createToken");
 
 
 module.exports = (req, res) => {
@@ -16,7 +16,7 @@ module.exports = (req, res) => {
 
         if (results.length > 0) {
             if (results[0].password !== password) {
-                 res.status(400).send({message: "Sandi lama tidak cocok"})
+                return res.status(400).send({message: "Sandi lama tidak cocok"})
             }
 
             let updateQuery = `UPDATE users SET password = ${db.escape(newPassword)} where user_id = ${db.escape(user_id)};`

@@ -71,7 +71,7 @@ export default function RegisterPage() {
 
   const handlerRegister = () => {
 
-    if(username === "" || password === "" || full_name === "" || email || "" ){
+    if(username === "" || password === "" || full_name === "" || email === "" ){
       return setAlertData({
         isOpen: true,
         message: "Field tidak boleh kosong",

@@ -5,6 +5,9 @@ import axios from "axios";
 
 import { makeStyles } from "@material-ui/core/styles";
 
+import {InputAdornment, IconButton } from "@material-ui/core";
+import Visibility from "@material-ui/icons/Visibility";
+import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import Button from "@material-ui/core/Button";
 import Box from "@material-ui/core/Box";
 import Container from "@material-ui/core/Container";
@@ -63,11 +66,18 @@ const Signin = (props) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
+  // Test password eyes
+  const [showPassword, setShowPassword] = useState(false);
+  const handleClickShowPassword = () => setShowPassword(!showPassword);
+  const handleMouseDownPassword = () => setShowPassword(!showPassword);
+
   const [alertData, setAlertData] = useState({
     isOpen: false,
     message: '',
     type: ''
   });
+
+  console.log(props.users, "ini testttt")
 
   // create function to handle button login
   const handleSignin = () => {
@@ -87,21 +97,26 @@ const Signin = (props) => {
         password: password,
       })
       .then((res) => {
-        localStorage.setItem("token", res.data.token)
+        localStorage.setItem("token", res.data.token);
         const {dataLogin} = res.data
         props.getUserdata(dataLogin)
-        localStorage.setItem('userId', dataLogin.user_id)
-        localStorage.setItem('roleId', dataLogin.role_id)
+        // localStorage.setItem('userId', dataLogin.user_id)
+        // localStorage.setItem('roleId', dataLogin.role_id)
+        // Test isi value data login
+        console.log(dataLogin.role_id, "ini data login yaaaaaaaa")
+
+
         // IF ROLE ID = 1 (ADMIN) REDIRECT TO ADMIN PAGE
         if(dataLogin.role_id === 1){
-          // TODO: ganti path sesuai page admin nanti
+          
          return history.push("/")
+
         }
+
         // IF ROLE ID = 2 (USER) REDIRECT TO USER PAGE
         history.push("/temptlanding")
-        // this.setState({ redirect: true })
         console.log('Login Success ✔')
-        // kalo sukses redirect ke home
+       
 
 
       }).catch((err) => {
@@ -111,7 +126,7 @@ const Signin = (props) => {
           type: 'error'
         })
       })
-
+      
   };
 
   const goToSignup = () => {
@@ -179,12 +194,27 @@ const Signin = (props) => {
               fullWidth
               name="password"
               label="Password"
-              type="password"
+              type={showPassword ? "text" : "password"}
               id="password"
               autoComplete="current-password"
               onChange={(event) => {
                 setPassword(event.target.value);
               }}
+              // test password eyes
+              InputProps={{ // <-- This is where the toggle button is added.
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                    >
+                      {showPassword ? <Visibility /> : <VisibilityOff />}
+                    </IconButton>
+                  </InputAdornment>
+                )
+              }}
+
             />
             {/*LUPA PASSWORD*/}
             <Typography variant="body2">

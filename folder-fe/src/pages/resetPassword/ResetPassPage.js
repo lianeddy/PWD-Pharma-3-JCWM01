@@ -11,6 +11,7 @@ import Container from "@material-ui/core/Container";
 import Paper from "@material-ui/core/Paper";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
+import Link from "@material-ui/core/Link";
 
 import Alert from '@material-ui/lab/Alert';
 
@@ -68,51 +69,56 @@ const ResetPassword = (props) => {
     type: ''
   });
 
-
+  //Get token from route param
   const params = new URLSearchParams(props.location.search);
   const token = params.get('token');
-  const userId = params.get('userId');
 
-  console.log('props', props)
+  const goToSignin = () => {
+    history.push('/login')
+  }
 
   // create function to handle button login
   const handlerResetPassword = () => {
-
-    if(password === "" || confirmPassword === ""){
+    // Condition for password form field
+    if (password === "" || confirmPassword === "") {
       return setAlertData({
         isOpen: true,
         message: "Field tidak boleh kosong",
         type: "error"
 
       })
-    }
+    };
 
+    // Axios patch to change one specific data from table
     axios
       .patch("http://localhost:3300/users/resetpassword", {
         password,
-        confirmPassword,
-        userId
+        confirmPassword
+      }, {
+        // Express bearer token to read users header
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
       })
       .then((res) => {
-       props.history.replace("/login")
-
+        // Run set data for alert if success
+        setAlertData({
+          isOpen: true,
+          message: 'Berhasil mengubah sandi',
+          type: 'success'
+        })
 
       }).catch((err) => {
-        
-          console.log("errorr")
-        
+        console.log("errorr")
+        setAlertData({
+          isOpen: true,
+          message: 'Terjadi kesalahan ',
+          type: 'success'
+        })
+
       })
 
   };
-
-  // const goToSignup = () => {
-  //   history.push("/register");
-
-  // }
-  // const goToForgetPassword = () => {
-  //   history.push("/forget");
-
-  // }
 
   return (
     <div className={classes.container}>
@@ -146,7 +152,7 @@ const ResetPassword = (props) => {
           {/* END OF LOGO SECTION */}
 
           <div className={classes.form} noValidate>
-         
+
             <TextField
               variant="outlined"
               margin="normal"
@@ -179,7 +185,7 @@ const ResetPassword = (props) => {
                 setConfirmPassword(event.target.value);
               }}
             />
-     
+
             <Button
               fullWidth
               type="submit"
@@ -190,6 +196,12 @@ const ResetPassword = (props) => {
             >
               Konfirmasi
             </Button>
+
+            <Typography variant="body2">
+             
+              <Link onClick={goToSignin} variant="body2">Kembali ke halaman Login</Link>
+            </Typography>
+
             <div>
             </div>
           </div>
@@ -201,9 +213,9 @@ const ResetPassword = (props) => {
 
 const mapStateToProps = (state) => {
   console.log('===', state)
-return {
-  users: state.userReducer.userData
-}
+  return {
+    users: state.userReducer.userData
+  }
 }
 
 
