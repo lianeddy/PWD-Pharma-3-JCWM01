@@ -13,13 +13,14 @@ const getData = require("./Pram/getdata");
 const getUsername = require("./Pram/getusername");
 const forgetPassword = require("./Pram/forgetPassword");
 const resetPassword = require("./Pram/resetPassword");
-const changePassword = require("./Pram/changePassword")
+const changePassword = require("./Pram/changePassword");
 //---------------------
 //Taksu
 const verification = require("./Taksu/verification");
 const {
   getUserInfomation,
   updateUserInformation,
+  uploadPicture,
 } = require("./Taksu/userInformation");
 //---------------------
 //Feny
@@ -39,6 +40,6 @@ module.exports = {
   authentication: verification,
   getUserInfomation,
   updateUserInformation,
-
+  uploadPicture,
   //
 };

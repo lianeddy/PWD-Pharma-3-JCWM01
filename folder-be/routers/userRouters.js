@@ -13,7 +13,7 @@ routers.post("/login", userControllers.login);
 routers.post("/register", userControllers.register);
 routers.post("/forgetpassword", userControllers.forgetPassword);
 routers.patch("/resetpassword", userControllers.resetPassword);
-routers.patch("/changepassword", userControllers.changePassword)
+routers.patch("/changepassword", userControllers.changePassword);
 
 routers.patch("/authentication", auth, userControllers.authentication);
 routers.post("/getUserInfomation", auth, userControllers.getUserInfomation);
@@ -22,4 +22,5 @@ routers.patch(
   auth,
   userControllers.updateUserInformation
 );
+routers.post("/testupload", userControllers.uploadPicture);
 module.exports = routers;

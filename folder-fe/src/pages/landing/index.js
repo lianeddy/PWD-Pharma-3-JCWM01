@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 // react plugin for creating charts
 import ChartistGraph from "react-chartist";
 // @material-ui/core
@@ -16,7 +16,7 @@ import Accessibility from "@material-ui/icons/Accessibility";
 import BugReport from "@material-ui/icons/BugReport";
 import Code from "@material-ui/icons/Code";
 import Cloud from "@material-ui/icons/Cloud";
-
+import { URL_API } from "helper/helper";
 // core components
 import GridItem from "template-components/Grid/GridItem.js";
 import GridContainer from "template-components/Grid/GridContainer.js";
@@ -40,11 +40,29 @@ import {
 
 import Klinik from "assets/img/Klinik.png";
 import styles from "assets/jss/material-dashboard-react/views/dashboardStyle.js";
+import axios from "axios";
 
 const useStyles = makeStyles(styles);
 
 export default function Landing() {
   const classes = useStyles();
+  const [img, setImg] = useState();
+  const addImg = () => {
+    let formData = new FormData();
+    let obj = {
+      name: "Random",
+    };
+    formData.append("data", JSON.stringify(obj));
+    formData.append("file", img);
+    axios
+      .post(`${URL_API}/users/testupload`, formData)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   return (
     <div>
       <div
@@ -73,6 +91,21 @@ export default function Landing() {
           been the industry's standard dummy text ever since the 1500s, when an
           unknown printer took a galle
         </p>
+        <form>
+          <div>
+            <label>Image Test</label>
+            <input
+              type="file"
+              id="img"
+              onChange={(e) => {
+                if (e.target.files[0]) {
+                  setImg(e.target.files[0]);
+                }
+              }}
+            />
+          </div>
+          <button onClick={addImg}>Add</button>
+        </form>
       </div>
       <div style={{ marginTop: "100px" }}></div>
       <GridContainer>

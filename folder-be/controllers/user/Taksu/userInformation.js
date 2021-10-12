@@ -1,4 +1,6 @@
 const { db } = require("../../../database");
+const { uploader } = require("../../../helper/upload/upload");
+const fs = require("fs");
 
 module.exports = {
   getUserInfomation: (req, res) => {
@@ -41,6 +43,30 @@ module.exports = {
       });
     } else {
       res.status(500).send({ message: "Data update error", success: false });
+    }
+  },
+  uploadPicture: (req, res) => {
+    try {
+      let path = "/users/picture";
+      const upload = uploader(path, "IMG").fields([{ name: "file" }]);
+
+      upload(req, res, (error) => {
+        if (error) {
+          console.log(error);
+          res.status(500).send(error);
+        }
+        const { file } = req.files;
+        const filePath = file ? path + "/" + file[0].filename : null;
+        let data = JSON.parse(req.body.data);
+        data.image = filePath;
+        /* 
+        query
+        */
+        res.status(200).send({ message: "Berhasil upload" });
+      });
+    } catch (err) {
+      console.log(err);
+      res.status(500).send(err);
     }
   },
 };
