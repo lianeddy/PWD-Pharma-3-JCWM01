@@ -1,14 +1,15 @@
-import React, {useState, useEffect} from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
-import {connect} from 'react-redux'
-import LoginPage from "./pages/login/LoginPage";
-// import Home from "./pages/Home";
-// import Home1 from "./pages/Home";
-// import Admin from "layouts/Admin.js";
-// import { theme } from "./utils/color";
-// import { ThemeProvider } from "@material-ui/styles";
-import RegisterPage from "./pages/register/RegisterPage";
+import { connect } from 'react-redux'
+import axios from 'axios';
+
+import { URL_API, roles } from 'helper/helper';
+
+import { getUserProfile } from "./redux/actions/userAction"
+
 import User from "layouts/User.js";
+import LoginPage from "./pages/login/LoginPage";
+import RegisterPage from "./pages/register/RegisterPage";
 import ForgetPassword from "./pages/forgetPassword/ForgetPassPage";
 import ResetPassword from "./pages/resetPassword/ResetPassPage"
 import ChangePassword from "./pages/changePassword/ChangePassPage"
@@ -17,33 +18,35 @@ import ErrorPage from "pages/errorPage/ErrorPage";
 
 import "assets/css/material-dashboard-react.css?v=1.10.0";
 
-import {keepLoginAction} from "./redux/actions/keepLoginAction"
-
 function App(props) {
-  // GET ROLE ID FROM LOCALSTORAGE
-  const roleId = props.users.role_id.toString();
-  console.log(roleId)
+  const token = localStorage.getItem("token")
 
-  // Test
-  const test = localStorage.getItem('roleId');
-  console.log(test, roleId, props.users.role_id, " ini test aja")
+  const [roleId, setRoleID] = useState(null)
+  const [isFetchProfile, setIsFetchProfile] = useState(true)
 
-  // DEFINE AVAIABLE ROLES 
-  const roles = {
-    Admin: "1",
-    User: "2",
-    
-  }
-
+  // GET USER PROFILE
   useEffect(() => {
-    // Update the document title using the browser API
-    const { keepLoginAction } = props;
-    const token = localStorage.getItem("token");
-    if (token) {
-      keepLoginAction();
+    if (props.users.role_id) {
+      setRoleID(props.users.role_id?.toString())
+      setIsFetchProfile(false)
+
+    } else {
+      axios.post(`${URL_API}/users/getUserData`, {}, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }).then( (res) => {
+        const { data } = res.data;
+        props.getUserProfile(data)
+        setRoleID(data.role_id.toString())
+        setIsFetchProfile(false)
+
+      }).catch(() => {
+        setIsFetchProfile(false)
+      })
     }
-  });
-  
+  }, [props.users.role_id])
+
   // MENAMPUNG HALAMAN ROUTES AGAR DINAMIS, YANG AKAN DI-MAP DAN ME-RETURN ROUTE COMPONENT
   // KEY COMPONENT = COMPONENT HALAMAN TERSEBUT
   // KEY PATH = PATH HALAMAN
@@ -110,59 +113,61 @@ function App(props) {
       roles.Admin,
     ]
   },
-
   ]
+
   return (
     <BrowserRouter>
       <Switch>
-        {console.log(roleId, test, "=yaya================================")}
-  
-        {/* HALAMAN ERROR PAGE */}
-      <Route component={ErrorPage} path="/error-404" />
+
 
         {/* MAPPING ROUTES UNTUK ME-RETURN ROUTE DARI WEBSITE YG ADA */}
         {routes.map((route, i) => {
-          // ISALLOWTOACCESSPAGE UNTUK MENDAPATKAN TRUE ATAU FALSE VALUE ROLE ID YANG SEDANG LOGIN BOLEH MENGAKSES INDEX ROUTE
-
-          if(!roleId && route.needAuth){
-            return  <Redirect key={i} from={routes.component} to="/login" />
-          }
           
+          // ISALLOWTOACCESSPAGE UNTUK MENDAPATKAN TRUE ATAU FALSE VALUE ROLE ID YANG SEDANG LOGIN BOLEH MENGAKSES INDEX ROUTE
+          if (!isFetchProfile && !roleId  && route.needAuth) {
+            return <Redirect key={i} from={routes.component} to="/login" />
+          }
 
-          if(roleId) {
+
+
+
+          if (roleId) {
             const isAllowAccessPage = route.role.includes((roleId))
             // JIKA ROLE ID TIDAK DAPAT MENGAKSES HALAMAN, MAKA AKAN DI-DIRECT KE 404 PAGE
-            if(!isAllowAccessPage){
-             return  <Redirect key={i} from={route.path} to="/error-404" />
+            if (!isFetchProfile && !isAllowAccessPage) {
+              return <Redirect key={i} from={route.path} to="/error-404" />
             }
 
           }
-          
+
 
           // ME RETURN SEMUA HASIL MAP PADA COMPONEN ROUTE
           return <Route key={i} component={route.component} path={route.path} />
         })}
-       
+
+        {/* HALAMAN ERROR PAGE */}
+        <Route component={ErrorPage} path="/error-404" />
 
       </Switch>
     </BrowserRouter>
   );
 
-  
+
 }
+
+
 
 const mapStateToProps = (state) => {
   console.log('===', state)
-return {
-  users: state.userReducer.userData
-}
+  return {
+    users: state.userReducer
+  }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    keepLoginAction: (data) => dispatch(keepLoginAction(data))
+    getUserProfile: (data) => dispatch(getUserProfile(data))
   }
 }
-
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)

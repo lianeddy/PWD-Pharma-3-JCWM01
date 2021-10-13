@@ -15,11 +15,11 @@ module.exports = (req, res) => {
   let insertQuery = `Insert into users values (null, ${db.escape(
     full_name
   )}, ${db.escape(email)}, ${db.escape(username)}, ${db.escape(password)},
-    null, null, null, null, 'unverified', 2, 'system', NOW(), 'system', NOW());`;
+    null, null, null, null, 'unverified', 2, 'system', NOW(), 'system', NOW(), null);`;
   db.query(insertQuery, (err, results) => {
     if (err) {
       console.log(err);
-      res.status(500).send(err);
+      return res.status(500).send(err);
     }
 
     if(results.length > 0) {

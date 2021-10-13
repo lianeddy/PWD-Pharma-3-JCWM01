@@ -42,6 +42,9 @@ const useStyles = makeStyles((theme) => ({
   subtitle: {
     color: "#6fbc97",
   },
+  subtitle2: {
+    color: "#03989e"
+  },
   form: {
     width: "100%",
     marginTop: theme.spacing(1),
@@ -150,6 +153,9 @@ const ResetPassword = (props) => {
             </Box>
           </Box>
           {/* END OF LOGO SECTION */}
+          <Typography className={classes.subtitle2}>
+                MENGATUR ULANG SANDI
+              </Typography>
 
           <div className={classes.form} noValidate>
 
@@ -159,7 +165,7 @@ const ResetPassword = (props) => {
               required
               fullWidth
               id="password"
-              label="Password"
+              label="Sandi"
               name="password"
               value={password}
               autoComplete="password"
@@ -177,7 +183,7 @@ const ResetPassword = (props) => {
               fullWidth
               name="confirmpassword"
               value={confirmPassword}
-              label="Confirm password"
+              label="Konfirmasi Sandi"
               type="confirmpassword"
               id="confirmpassword"
               autoComplete="current-password"
@@ -214,7 +220,7 @@ const ResetPassword = (props) => {
 const mapStateToProps = (state) => {
   console.log('===', state)
   return {
-    users: state.userReducer.userData
+    users: state.userReducer
   }
 }
 

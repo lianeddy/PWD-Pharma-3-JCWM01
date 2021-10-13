@@ -17,6 +17,7 @@ module.exports = (req, res) => {
     if (results.length > 0) {
       let { user_id } = results[0];
       let token = createToken({ user_id });
+      console.log(user_id)
 
       let checkVerify = sendVerifyForget(email, token, user_id);
       if (checkVerify === false) {
