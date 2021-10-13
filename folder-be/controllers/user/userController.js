@@ -13,7 +13,8 @@ const getData = require("./Pram/getdata");
 const getUsername = require("./Pram/getusername");
 const forgetPassword = require("./Pram/forgetPassword");
 const resetPassword = require("./Pram/resetPassword");
-const changePassword = require("./Pram/changePassword")
+const changePassword = require("./Pram/changePassword");
+const getUserProfile = require("./Pram/getUserProfile")
 //---------------------
 //Taksu
 const verification = require("./Taksu/verification");
@@ -34,6 +35,7 @@ module.exports = {
   forgetPassword: forgetPassword,
   resetPassword: resetPassword,
   changePassword: changePassword,
+  getUserProfile,
 
   //Taksu
   authentication: verification,

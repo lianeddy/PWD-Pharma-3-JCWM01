@@ -169,7 +169,7 @@ const ForgetPassword = (props) => {
 const mapStateToProps = (state) => {
   
   return {
-    users: state.userReducer.userData
+    users: state.userReducer
   }
 }
 

@@ -1,15 +1,20 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router";
 import { connect } from 'react-redux'
 import { withRouter } from "react-router";
 import axios from "axios";
 
 import { makeStyles } from "@material-ui/core/styles";
 
+import { InputAdornment, IconButton } from "@material-ui/core";
+import Visibility from "@material-ui/icons/Visibility";
+import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import Button from "@material-ui/core/Button";
 import Box from "@material-ui/core/Box";
 import Container from "@material-ui/core/Container";
 import Paper from "@material-ui/core/Paper";
 import TextField from "@material-ui/core/TextField";
+import Link from "@material-ui/core/Link";
 import Typography from "@material-ui/core/Typography";
 
 import Alert from '@material-ui/lab/Alert';
@@ -41,6 +46,9 @@ const useStyles = makeStyles((theme) => ({
     subtitle: {
         color: "#6fbc97",
     },
+    subtitle2: {
+        color: "#03989e"
+    },
     form: {
         width: "100%",
         marginTop: theme.spacing(1),
@@ -57,10 +65,15 @@ const useStyles = makeStyles((theme) => ({
 
 const ChangePassword = (props) => {
     const classes = useStyles();
+    const history = useHistory();
 
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [currentPassword, setCurrentPassword] = useState("")
+
+    // Test password eyes
+    const [showPassword, setShowPassword] = useState(false);
+    const handleClickShowPassword = () => setShowPassword(!showPassword);
 
     const [alertData, setAlertData] = useState({
         isOpen: false,
@@ -68,23 +81,76 @@ const ChangePassword = (props) => {
         type: ''
     });
 
+    // GO BACK TO LANDING PAGE OR HOME HANDLER
+    const goToLandingPage = () => {
+        history.push('/temptlanding')
+    }
 
 
     // CREATE HANDLER TO CHANGE PASSWORD YA PRAM
     const handleChangePassword = () => {
-        const user_id = localStorage.getItem("userId")
+
+        if (password === "" || confirmPassword === "" || currentPassword === "") {
+            return setAlertData({
+                isOpen: true,
+                message: "Sandi tidak boleh kosong",
+                type: "error"
+
+            })
+        }
+
+        if (password !== confirmPassword) {
+            return setAlertData({
+                isOpen: true,
+                message: "Sandi tidak sama",
+                type: "error"
+
+            })
+        }
+
+        const user_id = props.users.user_id;
+        const token = localStorage.getItem('token')
+        console.log("=============> ini ", user_id)
         axios
             .patch("http://localhost:3300/users/changepassword", {
                 user_id,
                 password: currentPassword,
                 newPassword: password,
+            }, {
+                // Express bearer token to read users header
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
             })
             .then((res) => {
-                console.log("success")
+                console.log("success");
+                console.log(res);
+                console.log(props.users.role_id.toString(), "=======================================aa=a=a=")
+                setAlertData({
+                    isOpen: true,
+                    message: "Sukses mengganti sandi",
+                    type: "success"
+
+                });
+
+                if (props.users.role_id === 1) {
+                    console.log('ini admin')
+                    return history.push("/");
+
+                };
+
+                if (props.users.role_id === 2) {
+                    console.log('ini admin')
+                    return history.push("/temptlanding");
+                }
+
 
             }).catch((err) => {
-
-                console.log("errorr")
+                setAlertData({
+                    isOpen: true,
+                    message: "Sandi lama salah",
+                    type: "error"
+                });
 
             })
 
@@ -121,7 +187,9 @@ const ChangePassword = (props) => {
                             </Typography>
                         </Box>
                     </Box>
-
+                    <Typography mt={3} className={classes.subtitle2}>
+                        GANTI SANDI
+                    </Typography>
 
                     <div className={classes.form} noValidate>
 
@@ -134,10 +202,23 @@ const ChangePassword = (props) => {
                             label="Current Password"
                             name="currentPassword"
                             value={currentPassword}
+                            type={showPassword ? "text" : "password"}
                             autoComplete="currentPassword"
                             autoFocus
                             onChange={(event) => {
                                 setCurrentPassword(event.target.value);
+                            }}
+                            InputProps={{
+                                endAdornment: (
+                                    <InputAdornment position="end">
+                                        <IconButton
+                                            aria-label="toggle password visibility"
+                                            onClick={handleClickShowPassword}
+                                        >
+                                            {showPassword ? <Visibility /> : <VisibilityOff />}
+                                        </IconButton>
+                                    </InputAdornment>
+                                )
                             }}
                         />
 
@@ -150,10 +231,23 @@ const ChangePassword = (props) => {
                             label="Password"
                             name="password"
                             value={password}
+                            type={showPassword ? "text" : "password"}
                             autoComplete="password"
                             autoFocus
                             onChange={(event) => {
                                 setPassword(event.target.value);
+                            }}
+                            InputProps={{
+                                endAdornment: (
+                                    <InputAdornment position="end">
+                                        <IconButton
+                                            aria-label="toggle password visibility"
+                                            onClick={handleClickShowPassword}
+                                        >
+                                            {showPassword ? <Visibility /> : <VisibilityOff />}
+                                        </IconButton>
+                                    </InputAdornment>
+                                )
                             }}
                         />
 
@@ -166,14 +260,32 @@ const ChangePassword = (props) => {
                             name="confirmpassword"
                             value={confirmPassword}
                             label="Confirm password"
-                            type="confirmpassword"
+                            type={showPassword ? "text" : "password"}
                             id="confirmpassword"
                             autoComplete="confirm-password"
                             onChange={(event) => {
                                 setConfirmPassword(event.target.value);
                             }}
+                            InputProps={{
+                                endAdornment: (
+                                    <InputAdornment position="end">
+                                        <IconButton
+                                            aria-label="toggle password visibility"
+                                            onClick={handleClickShowPassword}
+                                        >
+                                            {showPassword ? <Visibility /> : <VisibilityOff />}
+                                        </IconButton>
+                                    </InputAdornment>
+                                )
+                            }}
                         />
 
+                        {/*BACK TO HOME/LANDING PAGE*/}
+                        <Typography variant="body2">
+                            <Link onClick={goToLandingPage} variant="body2">
+                                Kembali ke halaman utama
+                            </Link>
+                        </Typography>
                         <Button
                             fullWidth
                             type="submit"
@@ -195,7 +307,7 @@ const ChangePassword = (props) => {
 
 const mapStateToProps = (state) => {
     return {
-        users: state.userReducer.userData
+        users: state.userReducer
     }
 }
 
@@ -208,3 +320,8 @@ const mapDispatchToProps = (dispatch) => {
 
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(ChangePassword))
+
+
+// NOTES: INGIN MENCOBA MENAMBAHKAN HISTORY() KETIKA SELESAI MERUBAH PASSWORD-
+// - TETAPI TIDAK BISA MENGAMBIL ROLE ID DARI GLOBAL STATE. NANTI DICOBA LAGI, UNTUK SEMENTARA-
+// MENAMBAHKAN OPSI BALIK KE MENU HALAMAN USER/ADMIN
