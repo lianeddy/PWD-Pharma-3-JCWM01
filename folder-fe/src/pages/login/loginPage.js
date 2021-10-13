@@ -5,6 +5,9 @@ import axios from "axios";
 
 import { makeStyles } from "@material-ui/core/styles";
 
+import {InputAdornment, IconButton } from "@material-ui/core";
+import Visibility from "@material-ui/icons/Visibility";
+import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import Button from "@material-ui/core/Button";
 import Box from "@material-ui/core/Box";
 import Container from "@material-ui/core/Container";
@@ -60,14 +63,20 @@ const Signin = (props) => {
   const classes = useStyles();
   const history = useHistory();
 
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
+
+  // Test password eyes
+  const [showPassword, setShowPassword] = useState(false);
+  const handleClickShowPassword = () => setShowPassword(!showPassword);
 
   const [alertData, setAlertData] = useState({
     isOpen: false,
     message: "",
     type: "",
   });
+
 
   // create function to handle button login
   const handleSignin = () => {
@@ -84,30 +93,38 @@ const Signin = (props) => {
         username: username,
         password: password,
       })
-      .then((res) => {
-        localStorage.setItem("token", res.data.token);
-        const { dataLogin } = res.data;
-        props.getUserdata(dataLogin);
-        localStorage.setItem("userId", dataLogin.user_id);
-        localStorage.setItem("roleId", dataLogin.role_id);
-        // IF ROLE ID = 1 (ADMIN) REDIRECT TO ADMIN PAGE
-        if (dataLogin.role_id === 1) {
-          // TODO: ganti path sesuai page admin nanti
-          return history.push("/");
+      .then(async (res) => {
+        if(res.data.password !== password){
+          setAlertData({
+            isOpen: true,
+            message: "Password salah",
+            type: 'error'
+          })
         }
+
+        const {dataLogin, token} = res.data
+        await props.getUserdata(dataLogin)
+        await localStorage.setItem("token", token);
+
+        // IF ROLE ID = 1 (ADMIN) REDIRECT TO ADMIN PAGE
+        if(dataLogin.role_id === 1){
+        
+         return history.push("/")
+
+        }
+     
         // IF ROLE ID = 2 (USER) REDIRECT TO USER PAGE
-        history.push("/temptlanding");
-        // this.setState({ redirect: true })
-        console.log("Login Success ✔");
-        // kalo sukses redirect ke home
-      })
-      .catch((err) => {
+        history.push("/temptlanding")
+        console.log('Login Success ✔')
+
+      }).catch((err) => {
         setAlertData({
           isOpen: true,
-          message: "Incorrect username / password",
-          type: "error",
-        });
-      });
+          message: "Username atau sandi salah",
+          type: 'error'
+        })
+      })
+      
   };
 
   const goToSignup = () => {
@@ -156,6 +173,7 @@ const Signin = (props) => {
             <TextField
               variant="outlined"
               margin="normal"
+              value={username}
               required
               fullWidth
               id="username"
@@ -172,16 +190,30 @@ const Signin = (props) => {
             <TextField
               variant="outlined"
               margin="normal"
+              value={password}
               required
               fullWidth
               name="password"
-              label="Password"
-              type="password"
+              label="Sandi"
+              type={showPassword ? "text" : "password"}
               id="password"
               autoComplete="current-password"
               onChange={(event) => {
                 setPassword(event.target.value);
               }}
+              InputProps={{ 
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                    >
+                      {showPassword ? <Visibility /> : <VisibilityOff />}
+                    </IconButton>
+                  </InputAdornment>
+                )
+              }}
+
             />
             {/*LUPA PASSWORD*/}
             <Typography variant="body2">
@@ -215,11 +247,12 @@ const Signin = (props) => {
 };
 
 const mapStateToProps = (state) => {
-  console.log("===", state);
-  return {
-    users: state.userReducer.userData,
-  };
-};
+  console.log('===', state)
+return {
+  users: state.userReducer
+}
+}
+
 
 const mapDispatchToProps = (dispatch) => {
   return {
@@ -227,4 +260,7 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Signin);
+export default connect(mapStateToProps, mapDispatchToProps)(Signin)
+
+
+// Sementara kirim id dan user role di local storage tanpa token

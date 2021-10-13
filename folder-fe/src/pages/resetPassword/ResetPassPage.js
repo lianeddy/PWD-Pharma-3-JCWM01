@@ -5,12 +5,16 @@ import axios from "axios";
 
 import { makeStyles } from "@material-ui/core/styles";
 
+import {InputAdornment, IconButton } from "@material-ui/core";
+import Visibility from "@material-ui/icons/Visibility";
+import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import Button from "@material-ui/core/Button";
 import Box from "@material-ui/core/Box";
 import Container from "@material-ui/core/Container";
 import Paper from "@material-ui/core/Paper";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
+import Link from "@material-ui/core/Link";
 
 import Alert from '@material-ui/lab/Alert';
 
@@ -41,6 +45,9 @@ const useStyles = makeStyles((theme) => ({
   subtitle: {
     color: "#6fbc97",
   },
+  subtitle2: {
+    color: "#03989e"
+  },
   form: {
     width: "100%",
     marginTop: theme.spacing(1),
@@ -62,57 +69,65 @@ const ResetPassword = (props) => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  const [showPassword, setShowPassword] = useState(false);
+  const handleClickShowPassword = () => setShowPassword(!showPassword);
+
   const [alertData, setAlertData] = useState({
     isOpen: false,
     message: '',
     type: ''
   });
 
-
+  //Get token from route param
   const params = new URLSearchParams(props.location.search);
   const token = params.get('token');
-  const userId = params.get('userId');
 
-  console.log('props', props)
+  const goToSignin = () => {
+    history.push('/login')
+  }
 
   // create function to handle button login
   const handlerResetPassword = () => {
-
-    if(password === "" || confirmPassword === ""){
+    // Condition for password form field
+    if (password === "" || confirmPassword === "") {
       return setAlertData({
         isOpen: true,
         message: "Field tidak boleh kosong",
         type: "error"
 
       })
-    }
+    };
 
+    // Axios patch to change one specific data from table
     axios
       .patch("http://localhost:3300/users/resetpassword", {
         password,
-        confirmPassword,
-        userId
+        confirmPassword
+      }, {
+        // Express bearer token to read users header
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
       })
       .then((res) => {
-       props.history.replace("/login")
-
+        // Run set data for alert if success
+        setAlertData({
+          isOpen: true,
+          message: 'Berhasil mengubah sandi',
+          type: 'success'
+        })
 
       }).catch((err) => {
-        
-          console.log("errorr")
-        
+        console.log("errorr")
+        setAlertData({
+          isOpen: true,
+          message: 'Terjadi kesalahan ',
+          type: 'success'
+        })
+
       })
 
   };
-
-  // const goToSignup = () => {
-  //   history.push("/register");
-
-  // }
-  // const goToForgetPassword = () => {
-  //   history.push("/forget");
-
-  // }
 
   return (
     <div className={classes.container}>
@@ -144,22 +159,38 @@ const ResetPassword = (props) => {
             </Box>
           </Box>
           {/* END OF LOGO SECTION */}
+          <Typography className={classes.subtitle2}>
+                MENGATUR ULANG SANDI
+              </Typography>
 
           <div className={classes.form} noValidate>
-         
+
             <TextField
               variant="outlined"
               margin="normal"
               required
               fullWidth
               id="password"
-              label="Password"
+              label="Sandi"
               name="password"
+              type={showPassword ? "text" : "password"}
               value={password}
               autoComplete="password"
               autoFocus
               onChange={(event) => {
                 setPassword(event.target.value);
+              }}
+              InputProps={{ 
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                    >
+                      {showPassword ? <Visibility /> : <VisibilityOff />}
+                    </IconButton>
+                  </InputAdornment>
+                )
               }}
             />
 
@@ -171,15 +202,27 @@ const ResetPassword = (props) => {
               fullWidth
               name="confirmpassword"
               value={confirmPassword}
-              label="Confirm password"
-              type="confirmpassword"
+              label="Konfirmasi Sandi"
+              type={showPassword ? "text" : "password"}
               id="confirmpassword"
               autoComplete="current-password"
               onChange={(event) => {
                 setConfirmPassword(event.target.value);
               }}
+              InputProps={{ 
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                    >
+                      {showPassword ? <Visibility /> : <VisibilityOff />}
+                    </IconButton>
+                  </InputAdornment>
+                )
+              }}
             />
-     
+
             <Button
               fullWidth
               type="submit"
@@ -190,6 +233,12 @@ const ResetPassword = (props) => {
             >
               Konfirmasi
             </Button>
+
+            <Typography variant="body2">
+             
+              <Link onClick={goToSignin} variant="body2">Kembali ke halaman Login</Link>
+            </Typography>
+
             <div>
             </div>
           </div>
@@ -201,9 +250,9 @@ const ResetPassword = (props) => {
 
 const mapStateToProps = (state) => {
   console.log('===', state)
-return {
-  users: state.userReducer.userData
-}
+  return {
+    users: state.userReducer
+  }
 }
 
 
