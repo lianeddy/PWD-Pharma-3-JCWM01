@@ -9,6 +9,10 @@ module.exports = (req, res) => {
   password = Crypto.createHmac("sha1", "hash123")
   .update(password)
   .digest("hex");
+
+  newPassword = Crypto.createHmac("sha1", "hash123")
+  .update(newPassword)
+  .digest("hex");
     let selectQuery = `SELECT users.password FROM users WHERE user_id = ${db.escape(user_id)}`
     
     db.query(selectQuery, (err, results) => {
@@ -19,8 +23,9 @@ module.exports = (req, res) => {
         
 
         if (results.length > 0) {
-            console.log(results[0].password, password)
+            console.log(results[0].password, password, "ini passwordd >>>>,", newPassword)
             if (results[0].password !== password) {
+                console.log(results[0].password, password, "ini passwordd >>>>", newPassword)
                 return res.status(400).send({message: "Sandi lama tidak cocok"})
             }
 
