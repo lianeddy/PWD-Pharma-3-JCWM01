@@ -63,6 +63,8 @@ module.exports = {
 
         let qUpdatePic = `UPDATE USERS SET image = ${db.escape(
           filePath
+        )}, modified_date = NOW(), modified_by = ${db.escape(
+          user_id
         )} WHERE user_id = ${db.escape(user_id)}`;
 
         db.query(qUpdatePic, (err, result) => {
