@@ -12,7 +12,8 @@ import Sidebar from "template-components/Sidebar/Sidebar.js";
 import FixedPlugin from "template-components/FixedPlugin/FixedPlugin.js";
 import Landing from "pages/landing";
 import routes from "routes.js";
-
+import { connect } from "react-redux";
+import { getUserProfile } from "redux/actions/userAction";
 import styles from "assets/jss/material-dashboard-react/layouts/adminStyle.js";
 
 import bgImage from "assets/img/sidebar-2.jpg";
@@ -40,7 +41,7 @@ const switchRoutes = (
 
 const useStyles = makeStyles(styles);
 
-export default function User({ ...rest }) {
+export function User({ users, ...rest }) {
   // styles
   const classes = useStyles();
   // ref to help us initialize PerfectScrollbar on windows devices
@@ -93,10 +94,10 @@ export default function User({ ...rest }) {
   return (
     <div
       id="test"
-      className={localStorage.getItem("roleid") ? classes.wrapper : ""}
+      className={users.role_id ? classes.wrapper : ""}
       style={{ position: "relative", height: "100vh" }}
     >
-      {localStorage.getItem("roleId") ? (
+      {users.role_id ? (
         <Sidebar
           routes={routes}
           logoText={"Pharmacy group 3"}
@@ -110,7 +111,7 @@ export default function User({ ...rest }) {
       ) : null}
 
       <div
-        className={localStorage.getItem("roleId") ? classes.mainPanel : ""}
+        className={users.role_id ? classes.mainPanel : ""}
         ref={mainPanel}
         style={{ height: "100%" }}
       >
@@ -121,7 +122,7 @@ export default function User({ ...rest }) {
         />
 
         <div
-          className={localStorage.getItem("roleId") ? classes.content : ""}
+          className={users.role_id ? classes.content : ""}
           style={{ padding: "0px 20px 0px 20px" }}
         >
           <div>{switchRoutes}</div>
@@ -131,3 +132,18 @@ export default function User({ ...rest }) {
     </div>
   );
 }
+
+const mapStateToProps = (state) => {
+  console.log("===", state);
+  return {
+    users: state.userReducer,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getUserProfile: (data) => dispatch(getUserProfile(data)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(User);

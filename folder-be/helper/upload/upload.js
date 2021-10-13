@@ -9,7 +9,6 @@ module.exports = {
       destination: (req, file, cb) => {
         const pathDir = _defaultDir + dir;
         if (fs.existsSync(pathDir)) {
-          console.log("Dir ada");
           cb(null, pathDir);
         } else {
           fs.mkdir(pathDir, { recursive: true }, (err) => cb(err, pathDir));
@@ -17,7 +16,7 @@ module.exports = {
       },
       filename: (req, file, cb) => {
         let ext = file.originalname.split(".");
-        let filename = `${prefix}${Date.now()}.${ext[ext.length - 1]}`;
+        let filename = `${prefix}.${ext[ext.length - 1]}`;
         cb(null, filename);
       },
     });
