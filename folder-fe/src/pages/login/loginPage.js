@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { connect } from 'react-redux'
+import { connect } from "react-redux";
 import { useHistory } from "react-router";
 import axios from "axios";
 
@@ -16,13 +16,13 @@ import Paper from "@material-ui/core/Paper";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 
-import Alert from '@material-ui/lab/Alert';
+import Alert from "@material-ui/lab/Alert";
 
-import Snackbar from '@material-ui/core/Snackbar';
+import Snackbar from "@material-ui/core/Snackbar";
 
 import Logo from "../../assets/img/logo/Klinik.png";
 
-import { getUserdata } from 'redux/actions/userAction';
+import { getUserdata } from "redux/actions/userAction";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -73,21 +73,19 @@ const Signin = (props) => {
 
   const [alertData, setAlertData] = useState({
     isOpen: false,
-    message: '',
-    type: ''
+    message: "",
+    type: "",
   });
 
 
   // create function to handle button login
   const handleSignin = () => {
-
-    if(username === "" || password === ""){
+    if (username === "" || password === "") {
       return setAlertData({
         isOpen: true,
         message: "Username atau sandi tidak boleh kosong",
-        type: "error"
-
-      })
+        type: "error",
+      });
     }
 
     axios
@@ -131,26 +129,27 @@ const Signin = (props) => {
 
   const goToSignup = () => {
     history.push("/register");
-
-  }
+  };
   const goToForgetPassword = () => {
     history.push("/forgetpassword");
-
-  }
+  };
 
   return (
     <div className={classes.container}>
       <Snackbar
         open={alertData.isOpen}
         anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'right',
+          vertical: "top",
+          horizontal: "right",
         }}
-        onClose={() => setAlertData({
-          isOpen: false,
-          message: '',
-          type: ''
-        })}>
+        onClose={() =>
+          setAlertData({
+            isOpen: false,
+            message: "",
+            type: "",
+          })
+        }
+      >
         <Alert severity={alertData.type}>{alertData.message}</Alert>
       </Snackbar>
       <Container component="main" maxWidth="xs">
@@ -218,10 +217,10 @@ const Signin = (props) => {
             />
             {/*LUPA PASSWORD*/}
             <Typography variant="body2">
-                <Link onClick={goToForgetPassword} variant="body2">
-                  Lupa Password
-                </Link>
-              </Typography>
+              <Link onClick={goToForgetPassword} variant="body2">
+                Lupa Password
+              </Link>
+            </Typography>
             <Button
               fullWidth
               type="submit"
@@ -257,10 +256,9 @@ return {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getUserdata: (data) => dispatch(getUserdata(data))
-  }
-}
-
+    getUserdata: (data) => dispatch(getUserdata(data)),
+  };
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Signin)
 

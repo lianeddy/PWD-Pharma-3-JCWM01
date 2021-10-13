@@ -5,6 +5,9 @@ import axios from "axios";
 
 import { makeStyles } from "@material-ui/core/styles";
 
+import {InputAdornment, IconButton } from "@material-ui/core";
+import Visibility from "@material-ui/icons/Visibility";
+import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import Button from "@material-ui/core/Button";
 import Box from "@material-ui/core/Box";
 import Container from "@material-ui/core/Container";
@@ -65,6 +68,9 @@ const ResetPassword = (props) => {
 
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+
+  const [showPassword, setShowPassword] = useState(false);
+  const handleClickShowPassword = () => setShowPassword(!showPassword);
 
   const [alertData, setAlertData] = useState({
     isOpen: false,
@@ -167,11 +173,24 @@ const ResetPassword = (props) => {
               id="password"
               label="Sandi"
               name="password"
+              type={showPassword ? "text" : "password"}
               value={password}
               autoComplete="password"
               autoFocus
               onChange={(event) => {
                 setPassword(event.target.value);
+              }}
+              InputProps={{ 
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                    >
+                      {showPassword ? <Visibility /> : <VisibilityOff />}
+                    </IconButton>
+                  </InputAdornment>
+                )
               }}
             />
 
@@ -184,11 +203,23 @@ const ResetPassword = (props) => {
               name="confirmpassword"
               value={confirmPassword}
               label="Konfirmasi Sandi"
-              type="confirmpassword"
+              type={showPassword ? "text" : "password"}
               id="confirmpassword"
               autoComplete="current-password"
               onChange={(event) => {
                 setConfirmPassword(event.target.value);
+              }}
+              InputProps={{ 
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                    >
+                      {showPassword ? <Visibility /> : <VisibilityOff />}
+                    </IconButton>
+                  </InputAdornment>
+                )
               }}
             />
 

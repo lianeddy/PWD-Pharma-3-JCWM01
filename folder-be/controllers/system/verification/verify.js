@@ -8,7 +8,37 @@ module.exports = {
       from: `Admin <${NODEMAILER_CONFIG.user}>`,
       to: `${userEmail}`,
       subject: "Account verification",
-      html: `<h2>Halo ayo verifikasi!</h2> <a href='http://localhost:3000/authentication/${token}'>Authentication</a> `,
+      html: `<div
+      style="
+        text-align: center;
+        margin: 20px 30% 0px 30%;
+        height: 700px;
+        background-color: ghostwhite;
+      "
+    >
+      <h1 style="color: green; padding-top: 200px">
+        Thank you for registering!
+      </h1>
+      <h2 style="color: goldenrod">
+        Click on the buttom below to verify your account
+      </h2>
+      <a href="http://localhost:3000/authentication/${token}">
+        <button
+          style="
+            font-size: 20px;
+            background-color: white;
+            color: yellowgreen;
+            border: 1px solid green;
+            border-radius: 8px;
+            margin: auto;
+            padding: 12px;
+            width: 200px;
+          "
+        >
+          Verify
+        </button></a
+      >
+    </div>`,
     };
     console.log(userEmail);
     transporter.sendMail(mail, (err, res) => {
@@ -23,26 +53,34 @@ module.exports = {
     let { user_id, username, email, role_id, auth, iat, exp } = req.user;
     let checkVerify = `select auth from users where user_id =${db.escape(
       user_id
-    )} && auth = 'unverified'`;
-    let updateVerify = `update users set auth = 'verified' where user_id = ${db.escape(
+    )} && auth = 'verified'`;
+    let updateVerify = `update users set auth = 'verified', modified_date = NOW() where user_id = ${db.escape(
       user_id
-    )}, modified_date = NOW()`;
+    )}`;
 
     db.query(checkVerify, (err, result) => {
-      err ? res.status(500).send(err) : null;
-      console.log(result);
+      if (err) {
+        res.status(500).send(err);
+        return false;
+      }
+      console.log(result, "test");
       if (result.length > 0) {
         res
           .status(200)
-          .send({ message: "User already verified!", success: false });
+          .send({ message: "Account is already verified!", success: false });
+        return false;
+      } else {
+        db.query(updateVerify, (err, result) => {
+          if (err) {
+            res.status(500).send(err);
+            return false;
+          }
+          console.log(result, "test2");
+          res
+            .status(200)
+            .send({ message: "Account have been verified!", success: true });
+        });
       }
-    });
-    db.query(updateVerify, (err, result) => {
-      err ? res.status(500).send(err) : null;
-      console.log(result);
-      res
-        .status(200)
-        .send({ message: "User have been verified!", success: true });
     });
   },
 };

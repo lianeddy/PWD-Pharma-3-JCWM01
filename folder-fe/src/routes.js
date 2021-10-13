@@ -11,6 +11,7 @@ import Language from "@material-ui/icons/Language";
 //Route to App
 import Home from "pages/Home";
 import Profile from "pages/profile";
+import TemptLanding from "pages/tempLanding/TemptLanding";
 
 const dashboardRoutes = [
   {
@@ -39,6 +40,13 @@ const dashboardRoutes = [
     name: "Admin-Profile",
     icon: Person,
     component: Profile,
+    layout: "/admin",
+  },
+  {
+    path: "/Report",
+    name: "Report Admin",
+    icon: LibraryBooks,
+    component: TemptLanding,
     layout: "/admin",
   },
 ];

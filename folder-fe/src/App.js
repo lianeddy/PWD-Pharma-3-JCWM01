@@ -11,10 +11,11 @@ import User from "layouts/User.js";
 import LoginPage from "./pages/login/LoginPage";
 import RegisterPage from "./pages/register/RegisterPage";
 import ForgetPassword from "./pages/forgetPassword/ForgetPassPage";
-import ResetPassword from "./pages/resetPassword/ResetPassPage"
-import ChangePassword from "./pages/changePassword/ChangePassPage"
+import ResetPassword from "./pages/resetPassword/ResetPassPage";
+import ChangePassword from "./pages/changePassword/ChangePassPage";
 import TemptLanding from "pages/tempLanding/TemptLanding";
 import ErrorPage from "pages/errorPage/ErrorPage";
+import Landing from "./pages/landing/";
 
 import "assets/css/material-dashboard-react.css?v=1.10.0";
 
@@ -119,6 +120,8 @@ function App(props) {
     <BrowserRouter>
       <Switch>
 
+        {/* HALAMAN ERROR PAGE */}
+        <Route component={ErrorPage} path="/error-404" />
 
         {/* MAPPING ROUTES UNTUK ME-RETURN ROUTE DARI WEBSITE YG ADA */}
         {routes.map((route, i) => {
@@ -137,16 +140,14 @@ function App(props) {
             if (!isFetchProfile && !isAllowAccessPage) {
               return <Redirect key={i} from={route.path} to="/error-404" />
             }
-
           }
 
-
           // ME RETURN SEMUA HASIL MAP PADA COMPONEN ROUTE
-          return <Route key={i} component={route.component} path={route.path} />
+          return (
+            <Route key={i} component={route.component} path={route.path} />
+          );
         })}
 
-        {/* HALAMAN ERROR PAGE */}
-        <Route component={ErrorPage} path="/error-404" />
 
       </Switch>
     </BrowserRouter>
