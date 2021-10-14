@@ -26,11 +26,11 @@ export default function Sidebar(props) {
   function activeRoute(routeName) {
     return location.pathname === routeName;
   }
-  const { color, logo, bg: image, logoText, routes } = props;
+  const { role_id, color, logo, bg: image, logoText, routes } = props;
   var links = (
     <List className={classes.list}>
       {routes.map((prop, key) => {
-        if (Number(localStorage.getItem("roleId")) === 1) {
+        if (role_id == 1) {
           if (prop.layout === "/user") {
             return null;
           }
@@ -125,7 +125,7 @@ export default function Sidebar(props) {
         >
           {brand}
           <div className={classes.sidebarWrapper}>
-            {props.rtlActive ? <RTLNavbarLinks /> : <AdminNavbarLinks />}
+            {<AdminNavbarLinks />}
             {links}
           </div>
           {image !== undefined ? (
