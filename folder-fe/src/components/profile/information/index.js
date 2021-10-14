@@ -22,6 +22,9 @@ import Snackbar from "template-components/Snackbar/Snackbar.js";
 import axios from "axios";
 import { URL_API } from "helper/helper";
 import { color } from "@mui/system";
+import CardAvatar from "template-components/Card/CardAvatar.js";
+import avatar from "assets/img/faces/marc.jpg";
+
 const styles = {
   cardCategoryWhite: {
     color: "rgba(255,255,255,.62)",
@@ -57,6 +60,7 @@ const Profile_Information = ({ infoRes }) => {
     phone_number: "Loading...",
     gender: "Loading...",
     address: "Loading...",
+    image: null,
   });
   useEffect(() => {
     setFormData({
@@ -67,14 +71,22 @@ const Profile_Information = ({ infoRes }) => {
       phone_number: infoRes.phone_no ? infoRes.phone_no : "Data Not Found",
       gender: infoRes.gender ? infoRes.gender : "Male",
       address: infoRes.address ? infoRes.address : "Data Not Found",
+      image: infoRes.image ? URL_API + infoRes.image : null,
     });
+    if (infoRes.image)
+      document.getElementById("profile_picture").src = URL_API + infoRes.image;
   }, [infoRes]);
   const classes = useStyles();
 
   const hdnInputChange = (e) => {
     console.log(e);
     const key = e.target.name;
-    const val = e.target.value;
+    const val = key == "image" ? e.target.files[0] : e.target.value;
+    if (key == "image") {
+      document.getElementById("profile_picture").src = URL.createObjectURL(
+        e.target.files[0]
+      );
+    }
     setFormData({ ...formData, [key]: val });
   };
   const hdnDateChange = (e) => {
@@ -87,6 +99,8 @@ const Profile_Information = ({ infoRes }) => {
   };
   const hdnSubmit = (e) => {
     setEdit(true);
+    let form = new FormData();
+    form.append("file", formData.image);
     setMessage({
       state: true,
       message: "Please wait while we process your data",
@@ -112,11 +126,26 @@ const Profile_Information = ({ infoRes }) => {
       )
       .then((res) => {
         if (res.data.success) {
-          setMessage({
-            state: true,
-            message: "Profile have been Updated!",
-            color: "success",
-          });
+          axios
+            .post(`${URL_API}/users/uploadProfilePic`, form, {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
+            })
+            .then((res) => {
+              setMessage({
+                state: true,
+                message: "Profile have been Updated!",
+                color: "success",
+              });
+            })
+            .catch((err) => {
+              setMessage({
+                state: true,
+                message: "An error occured when updating profile data",
+                color: "danger",
+              });
+            });
         } else {
           setMessage({
             state: true,
@@ -153,6 +182,34 @@ const Profile_Information = ({ infoRes }) => {
           <p className={classes.cardCategoryWhite}>Your account Information</p>
         </CardHeader>
         <CardBody>
+          <GridItem xs={12} sm={12} md={12}>
+            <Card profile>
+              <CardAvatar>
+                <img
+                  id="profile_picture"
+                  style={{
+                    objectFit: "contain",
+                    width: "100%",
+                    maxWidth: "400px",
+                    maxHeight: "500px",
+                  }}
+                  alt="..."
+                />
+              </CardAvatar>
+              <CardBody profile>
+                <h2 className={classes.cardCategory}>{formData.full_name}</h2>
+                <h4 className={classes.cardCategory}>{formData.username}</h4>
+                <input
+                  type="file"
+                  id="image"
+                  name="image"
+                  onChange={hdnInputChange}
+                  style={{ opacity: edit ? "0%" : "100%" }}
+                  disabled={edit}
+                />
+              </CardBody>
+            </Card>
+          </GridItem>
           <GridContainer>
             <GridItem xs={12} sm={12} md={4}>
               <CustomInput

@@ -7,11 +7,13 @@ import LocationOn from "@material-ui/icons/LocationOn";
 import Notifications from "@material-ui/icons/Notifications";
 import Unarchive from "@material-ui/icons/Unarchive";
 import Language from "@material-ui/icons/Language";
+import Category from "@material-ui/icons/Category";
 
 //Route to App
 import Home from "pages/Home";
 import Profile from "pages/profile";
 import TemptLanding from "pages/tempLanding/TemptLanding";
+import Cart from "pages/cart";
 
 const dashboardRoutes = [
   {
@@ -48,6 +50,13 @@ const dashboardRoutes = [
     icon: LibraryBooks,
     component: TemptLanding,
     layout: "/admin",
+  },
+  {
+    path: "/Cart",
+    name: "Cart",
+    icon: Category,
+    component: Cart,
+    layout: "/user",
   },
 ];
 

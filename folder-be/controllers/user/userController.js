@@ -21,6 +21,7 @@ const verification = require("./Taksu/verification");
 const {
   getUserInfomation,
   updateUserInformation,
+  uploadPicture,
 } = require("./Taksu/userInformation");
 //---------------------
 //Feny
@@ -41,6 +42,6 @@ module.exports = {
   authentication: verification,
   getUserInfomation,
   updateUserInformation,
-
+  uploadPicture,
   //
 };

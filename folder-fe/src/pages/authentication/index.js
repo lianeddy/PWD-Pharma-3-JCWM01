@@ -9,7 +9,7 @@ import { Button } from "@material-ui/core";
 
 const Authentication = (props) => {
   const [status, setStatus] = useState("Processing....");
-  const { test } = useParams();
+  const { token } = useParams();
   useEffect(() => {
     axios
       .patch(
@@ -17,7 +17,7 @@ const Authentication = (props) => {
         {},
         {
           headers: {
-            Authorization: `Bearer ${test}`,
+            Authorization: `Bearer ${token}`,
           },
         }
       )
