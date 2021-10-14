@@ -91,19 +91,14 @@ export default function Sidebar(props) {
     </List>
   );
   var brand = (
-    <div className={classes.logo}>
-      <a
-        href="https://www.creative-tim.com?ref=mdr-sidebar"
-        className={classNames(classes.logoLink, {
-          [classes.logoLinkRTL]: props.rtlActive,
-        })}
-        target="_blank"
-      >
-        <div className={classes.logoImage}>
-          <img src={logo} alt="logo" className={classes.img} />
-        </div>
-        {logoText}
-      </a>
+    <div
+      className={classes.logo}
+      style={{ backgroundColor: "white", color: "black" }}
+    >
+      <div className={classes.logoImage}>
+        <img src={logo} alt="logo" className={classes.img} />
+      </div>
+      <h4 style={{ display: "inline" }}>{logoText}</h4>
     </div>
   );
   return (
@@ -148,7 +143,12 @@ export default function Sidebar(props) {
           }}
         >
           {brand}
-          <div className={classes.sidebarWrapper}>{links}</div>
+          <div
+            className={classes.sidebarWrapper}
+            style={{ backgroundColor: image }}
+          >
+            {links}
+          </div>
           {image !== undefined ? (
             <div
               className={classes.background}
