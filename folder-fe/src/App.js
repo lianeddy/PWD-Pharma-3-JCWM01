@@ -8,6 +8,7 @@ import { URL_API, roles } from "helper/helper";
 import { getUserProfile } from "./redux/actions/userAction";
 
 import User from "layouts/User.js";
+import Admin from "layouts/Admin.js";
 import LoginPage from "./pages/login/LoginPage";
 import RegisterPage from "./pages/register/RegisterPage";
 import ForgetPassword from "./pages/forgetPassword/ForgetPassPage";
@@ -96,7 +97,7 @@ function App(props) {
       role: [roles.Admin, roles.User],
     },
     {
-      component: User,
+      component: Admin,
       needAuth: true,
       path: "/",
       role: [roles.Admin],
@@ -130,7 +131,6 @@ function App(props) {
               return <Redirect key={i} from={route.path} to="/error-404" />;
             }
           }
-
           // ME RETURN SEMUA HASIL MAP PADA COMPONEN ROUTE
           return (
             <Route key={i} component={route.component} path={route.path} />

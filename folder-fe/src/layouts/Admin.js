@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
 // creates a beautiful scrollbar
 import PerfectScrollbar from "perfect-scrollbar";
@@ -12,7 +12,8 @@ import Sidebar from "template-components/Sidebar/Sidebar.js";
 import FixedPlugin from "template-components/FixedPlugin/FixedPlugin.js";
 import Landing from "pages/landing";
 import routes from "routes.js";
-
+import { connect } from "react-redux";
+import { getUserProfile } from "redux/actions/userAction";
 import styles from "assets/jss/material-dashboard-react/layouts/adminStyle.js";
 
 import bgImage from "assets/img/sidebar-2.jpg";
@@ -40,68 +41,33 @@ const switchRoutes = (
 
 const useStyles = makeStyles(styles);
 
-export default function User({ ...rest }) {
+export function Admin({ users, ...rest }) {
   // styles
   const classes = useStyles();
   // ref to help us initialize PerfectScrollbar on windows devices
   const mainPanel = React.createRef();
   // states and functions
-  const [image, setImage] = React.useState(bgImage);
-  const [color, setColor] = React.useState("blue");
-  const [fixedClasses, setFixedClasses] = React.useState("dropdown show");
+  const [image, setImage] = useState("#03989e");
+  const [color, setColor] = useState("blue");
   const [mobileOpen, setMobileOpen] = React.useState(false);
-  const handleImageClick = (image) => {
-    setImage(image);
-  };
-  const handleColorClick = (color) => {
-    setColor(color);
-  };
-  const handleFixedClick = () => {
-    if (fixedClasses === "dropdown") {
-      setFixedClasses("dropdown show");
-    } else {
-      setFixedClasses("dropdown");
-    }
-  };
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
-
-  const resizeFunction = () => {
-    if (window.innerWidth >= 960) {
-      setMobileOpen(false);
-    }
-  };
   // initialize and destroy the PerfectScrollbar plugin
-  React.useEffect(() => {
-    if (navigator.platform.indexOf("Win") > -1) {
-      ps = new PerfectScrollbar(mainPanel.current, {
-        suppressScrollX: true,
-        suppressScrollY: false,
-      });
-      document.body.style.overflow = "hidden";
-    }
-    window.addEventListener("resize", resizeFunction);
-    // Specify how to clean up after this effect:
-    return function cleanup() {
-      if (navigator.platform.indexOf("Win") > -1) {
-        ps.destroy();
-      }
-      window.removeEventListener("resize", resizeFunction);
-    };
-  }, [mainPanel]);
   return (
     <div
       id="test"
-      className={localStorage.getItem("roleId") ? classes.wrapper : ""}
+      className={users.role_id ? classes.wrapper : ""}
       style={{ position: "relative", height: "100vh" }}
     >
-      {localStorage.getItem("roleId") ? (
+
+      {users.role_id ? (
         <Sidebar
+          role_id={users.role_id}
           routes={routes}
           logoText={"Pharmacy group 3"}
           logo={logo}
-          image={image}
+          bg={image}
           handleDrawerToggle={handleDrawerToggle}
           open={mobileOpen}
           color={color}
@@ -110,7 +76,7 @@ export default function User({ ...rest }) {
       ) : null}
 
       <div
-        className={localStorage.getItem("roleId") ? classes.mainPanel : ""}
+        className={users.role_id ? classes.mainPanel : ""}
         ref={mainPanel}
         style={{ height: "100%" }}
       >
@@ -121,13 +87,28 @@ export default function User({ ...rest }) {
         />
 
         <div
-          className={localStorage.getItem("roleId") ? classes.content : ""}
+          className={users.role_id ? classes.content : ""}
           style={{ padding: "0px 20px 0px 20px" }}
         >
-          <div>test{switchRoutes}</div>
+          <div>{switchRoutes}</div>
         </div>
         {null}
       </div>
     </div>
   );
 }
+
+const mapStateToProps = (state) => {
+  console.log("===", state);
+  return {
+    users: state.userReducer,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getUserProfile: (data) => dispatch(getUserProfile(data)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Admin);
