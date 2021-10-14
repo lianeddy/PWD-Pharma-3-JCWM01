@@ -79,6 +79,7 @@ export function User({ users, ...rest }) {
         style={{ height: "100%" }}
       >
         <Navbar
+          user_id={users.role_id}
           routes={routes}
           handleDrawerToggle={handleDrawerToggle}
           {...rest}
