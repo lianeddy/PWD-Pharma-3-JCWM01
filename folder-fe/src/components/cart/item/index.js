@@ -40,13 +40,13 @@ const CartItem = ({ data }) => {
               display: "flex",
             }}
           >
-            <Button variant="contained" color="primary">
+            {/* <Button variant="contained" color="primary">
               -
             </Button>
             <h3>{data.price}</h3>
             <Button variant="contained" color="primary">
               +
-            </Button>
+            </Button> */}
           </div>
         </div>
       </CardHeader>

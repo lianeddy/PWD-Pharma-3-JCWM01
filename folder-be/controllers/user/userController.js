@@ -14,7 +14,7 @@ const getUsername = require("./Pram/getusername");
 const forgetPassword = require("./Pram/forgetPassword");
 const resetPassword = require("./Pram/resetPassword");
 const changePassword = require("./Pram/changePassword");
-const getUserProfile = require("./Pram/getUserProfile")
+const getUserProfile = require("./Pram/getUserProfile");
 //---------------------
 //Taksu
 const verification = require("./Taksu/verification");
@@ -23,6 +23,7 @@ const {
   updateUserInformation,
   uploadPicture,
 } = require("./Taksu/userInformation");
+const { addCart, editCart } = require("./Taksu/userCart");
 //---------------------
 //Feny
 
@@ -43,5 +44,7 @@ module.exports = {
   getUserInfomation,
   updateUserInformation,
   uploadPicture,
+  addCart,
+  editCart
   //
 };

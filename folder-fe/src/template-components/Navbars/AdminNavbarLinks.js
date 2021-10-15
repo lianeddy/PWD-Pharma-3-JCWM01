@@ -23,7 +23,7 @@ import styles from "assets/jss/material-dashboard-react/components/headerLinksSt
 
 const useStyles = makeStyles(styles);
 
-export default function AdminNavbarLinks() {
+export default function AdminNavbarLinks({ user_id }) {
   const classes = useStyles();
   const [openNotification, setOpenNotification] = React.useState(null);
   const [openProfile, setOpenProfile] = React.useState(null);
@@ -87,7 +87,7 @@ export default function AdminNavbarLinks() {
               <Paper>
                 <ClickAwayListener onClickAway={handleCloseProfile}>
                   <MenuList role="menu">
-                    {localStorage.getItem("roleId") ? (
+                    {user_id ? (
                       <MenuItem
                         onClick={(e) => {
                           localStorage.clear();

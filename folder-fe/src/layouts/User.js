@@ -17,7 +17,7 @@ import { getUserProfile } from "redux/actions/userAction";
 import styles from "assets/jss/material-dashboard-react/layouts/adminStyle.js";
 
 import bgImage from "assets/img/sidebar-2.jpg";
-import logo from "assets/img/reactlogo.png";
+import logo from "assets/img/Klinik.png";
 
 let ps;
 
@@ -79,6 +79,7 @@ export function User({ users, ...rest }) {
         style={{ height: "100%" }}
       >
         <Navbar
+          user_id={users.role_id}
           routes={routes}
           handleDrawerToggle={handleDrawerToggle}
           {...rest}
