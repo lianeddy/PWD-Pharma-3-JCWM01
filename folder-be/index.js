@@ -7,6 +7,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(bearerToken());
+app.use(express.static("public"));
 const { userRouter, adminRouter, productRouter } = require("./routers");
 
 app.get("/", (req, res) => {

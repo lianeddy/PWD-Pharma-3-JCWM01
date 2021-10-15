@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
-import { connect } from 'react-redux'
-import axios from 'axios';
+import { connect } from "react-redux";
+import axios from "axios";
 
-import { URL_API, roles } from 'helper/helper';
+import { URL_API, roles } from "helper/helper";
 
-import { getUserProfile } from "./redux/actions/userAction"
+import { getUserProfile } from "./redux/actions/userAction";
 
 import User from "layouts/User.js";
+import Admin from "layouts/Admin.js";
 import LoginPage from "./pages/login/LoginPage";
 import RegisterPage from "./pages/register/RegisterPage";
 import ForgetPassword from "./pages/forgetPassword/ForgetPassPage";
@@ -16,6 +17,7 @@ import ChangePassword from "./pages/changePassword/ChangePassPage";
 import TemptLanding from "pages/tempLanding/TemptLanding";
 import ErrorPage from "pages/errorPage/ErrorPage";
 import Products from "./pages/products/ManageProduct"
+import Authentication from "pages/authentication";
 import Landing from "./pages/landing/";
 
 import "assets/css/material-dashboard-react.css?v=1.10.0";
@@ -58,7 +60,7 @@ function App(props) {
         setIsFetchProfile(false)
       })
     }
-  }, [props.users.role_id])
+  }, [props.users.role_id]);
 
   // MENAMPUNG HALAMAN ROUTES AGAR DINAMIS, YANG AKAN DI-MAP DAN ME-RETURN ROUTE COMPONENT
   // KEY COMPONENT = COMPONENT HALAMAN TERSEBUT
@@ -141,7 +143,6 @@ function App(props) {
   return (
     <BrowserRouter>
       <Switch>
-
         {/* HALAMAN ERROR PAGE */}
         <Route component={ErrorPage} path="/error-404" />
 
@@ -154,40 +155,34 @@ function App(props) {
           }
 
           if (roleId) {
-            const isAllowAccessPage = route.role.includes((roleId))
+            const isAllowAccessPage = route.role.includes(roleId);
             // JIKA ROLE ID TIDAK DAPAT MENGAKSES HALAMAN, MAKA AKAN DI-DIRECT KE 404 PAGE
             if (!isFetchProfile && !isAllowAccessPage) {
-              return <Redirect key={i} from={route.path} to="/error-404" />
+              if (route.path === "/") return null;
+              return <Redirect key={i} from={route.path} to="/error-404" />;
             }
           }
-
           // ME RETURN SEMUA HASIL MAP PADA COMPONEN ROUTE
           return (
             <Route key={i} exact component={route.component} path={route.path} />
           );
         })}
-
-
       </Switch>
     </BrowserRouter>
   );
-
-
 }
-
-
 
 const mapStateToProps = (state) => {
-  console.log('===', state)
+  console.log("===", state);
   return {
-    users: state.userReducer
-  }
-}
+    users: state.userReducer,
+  };
+};
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getUserProfile: (data) => dispatch(getUserProfile(data))
-  }
-}
+    getUserProfile: (data) => dispatch(getUserProfile(data)),
+  };
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(App)
+export default connect(mapStateToProps, mapDispatchToProps)(App);
