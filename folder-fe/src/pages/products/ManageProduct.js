@@ -17,9 +17,9 @@ import Box from '@material-ui/core/Box';
 import Container from "@material-ui/core/Container";
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
-import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -39,26 +39,33 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
-}
-
-const rows = [
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-];
 const Products = (props) => {
   const classes = useStyles();
-  const [namaProduk, setNamaProduk] = useState('')
-  const [hargaProduk, setHargaProduk] = useState('')
-  const [gambarProduk, setGambarProduk] = useState('')
-  const [deskripsiProduk, setDeskripsiProduk] = useState('')
-  const [jumlahProduk, setJumlahProduk] = useState('')
+  // Product yang akan diinput ke dalam table
+  const [namaProduk, setNamaProduk] = useState('');
+  const [hargaProduk, setHargaProduk] = useState('');
+  const [gambarProduk, setGambarProduk] = useState('');
+  const [deskripsiProduk, setDeskripsiProduk] = useState('');
+  const [jumlahProduk, setJumlahProduk] = useState('');
 
+  // Untuk edit produk
+  const [editNama, setEditNama] = useState('');
+  const [editHarga, setEditHarga] = useState('');
+  const [editGambar, setEditGambar] = useState('');
+  const [editDeskripsi, setEditDeskripsi] = useState('');
+  const [editJumlah, setEditJumlah] = useState('');
+
+  // Product list adalah sebuah var yang menampung data produk yg didapat dari database.
   const [productList, setProductList] = useState([]);
+
+  // Menampung list categories yg didapatkan dari db
   const [categoriesList, setCategoriesList] = useState([]);
-  const [selectedCategories, setSelectedCategories] = useState([])
+  // Menampung value categories yg dipilih
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  // Edit value categories pada produk
+  const [editSelectedCategories, setEditSelectedCategories] = useState('');
+
+  const [editId, setEditID] = useState(0);
 
   // to GET data
   const fetchProduct = () => {
@@ -88,17 +95,45 @@ const Products = (props) => {
         setGambarProduk("");
         setDeskripsiProduk("");
         setJumlahProduk("");
-        console.log("sukses menambahkan data");
-        fetchProduct()
+        fetchProduct();
 
       })
       .catch((err) => {
         console.log(err)
       })
   }
+
+  // to SAVE EDIT DATA
+  const handlerEdit = () => {
+    axios
+      .patch(`${URL_API}/products/editproducts`, {
+        editNama,
+        editHarga,
+        editGambar,
+        editDeskripsi,
+        editJumlah,
+        editSelectedCategories,
+        editId
+
+      })
+      .then((res) => {
+        // setNamaProduk("");
+        // setHargaProduk("");
+        // setGambarProduk("");
+        // setDeskripsiProduk("");
+        // setJumlahProduk("");
+        fetchProduct();
+        cancleEdit();
+
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
+
   // to Get catrgories
   const fetchCategories = () => {
-    axios.get(`${URL_API}/products/getcategories`,)
+    axios.get(`${URL_API}/products/getcategories`)
       .then((results) => {
         setCategoriesList(results.data)
         console.log(results.data, "ini result data")
@@ -107,8 +142,21 @@ const Products = (props) => {
       })
   };
 
+  // All Handler and toggle
   const handleChange = (e) => {
     setSelectedCategories(e.target.value);
+  }
+
+  const editHandleChange = (e) => {
+    setEditSelectedCategories(e.target.value);
+  }
+
+  const editToggle = (product_id) => {
+    setEditID(product_id)
+  }
+
+  const cancleEdit = () => {
+    setEditID(0)
   }
 
   // to RENDER produk automatically after render
@@ -117,8 +165,110 @@ const Products = (props) => {
     fetchProduct()
   }, []);
 
+  // Merender Produk List
   const printData = () => {
     return productList.map((val) => {
+      if (val.product_id === editId) {
+        return (
+          <TableRow key={val.name}>
+
+            <TableCell component="th" scope="row">
+              <TextField
+                margin={'dense'}
+                label="Nama"
+                id="outlined-size-small"
+                defaultValue=""
+                variant="outlined"
+                size="small"
+                // value={namaProduk}
+                value={editNama}
+                onChange={(event) => {
+                  setEditNama(event.target.value);
+                }}
+              />
+            </TableCell>
+
+            <TableCell align="left">
+              <TextField
+                margin={'dense'}
+                label="Harga"
+                id="outlined-size-small"
+                defaultValue=""
+                variant="outlined"
+                size="small"
+                // defaultValue={hargaProduk}
+                value={editHarga}
+                onChange={(event) => {
+                  setEditHarga(event.target.value);
+                }}
+              />
+            </TableCell>
+
+            <TableCell align="left">
+              <TextField
+                margin={'dense'}
+                label="Gambar"
+                id="outlined-size-small"
+                defaultValue=""
+                variant="outlined"
+                size="small"
+                // defaultValue={gambarProduk}
+                value={editGambar}
+                onChange={(event) => {
+                  setEditGambar(event.target.value);
+                }}
+              />
+            </TableCell>
+
+            <TableCell align="left">
+              <TextField
+                margin={'dense'}
+                label="Deskripsi"
+                id="outlined-size-small"
+                defaultValue=""
+                variant="outlined"
+                size="small"
+                // defaultValue={deskripsiProduk}
+                value={editDeskripsi}
+                onChange={(event) => {
+                  setEditDeskripsi(event.target.value);
+                }}
+              />
+            </TableCell>
+            <TableCell align="left">
+              <TextField
+                margin={'dense'}
+                label="Jumlah"
+                id="outlined-size-small"
+                defaultValue=""
+                variant="outlined"
+                size="small"
+                // defaultValue={jumlahProduk}
+                value={editJumlah}
+                onChange={(event) => {
+                  setEditJumlah(event.target.value);
+                }}
+              />
+            </TableCell>
+            <TableCell align="left">
+              <FormControl className={classes.formControl}>
+                <InputLabel id="demo-simple-select-label">Kategori</InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={editSelectedCategories}
+                  onChange={editHandleChange}
+                >
+                  {printCategories()}
+
+                </Select>
+              </FormControl>
+            </TableCell>
+            <TableCell align="left"><Button onClick={handlerEdit} className={classes.button} size="medium" variant="contained" color="secondary" m={2} >Simpan</Button></TableCell>
+            <TableCell align="left"><Button onClick={cancleEdit} className={classes.button} size="medium" variant="contained" color="secondary" m={2} >Batal</Button></TableCell>
+          </TableRow>
+        )
+      }
       return <TableRow key={val.name}>
         <TableCell component="th" scope="row">
           {val.name}
@@ -128,19 +278,19 @@ const Products = (props) => {
         <TableCell align="left">{val.description}</TableCell>
         <TableCell align="left">{val.quantity}</TableCell>
         <TableCell align="left"></TableCell>
-        <TableCell align="left"><Button className={classes.button} size="medium" variant="contained" color="primary" m={2} >Edit</Button></TableCell>
+        <TableCell align="left"><Button onClick={() => { editToggle(val.product_id) }} className={classes.button} size="medium" variant="contained" color="primary" m={2} >Edit</Button></TableCell>
       </TableRow>
 
     })
   }
 
   const printCategories = () => {
-    return categoriesList.map((val)=> {
+    return categoriesList.map((val) => {
       return <MenuItem value={val.category_id}>{val.category_name}</MenuItem>
     })
   }
 
-  console.log(productList, "ini product list >>>>>>>>>>>>>>.")
+  console.log(productList, "ini product list >>>>>>>>>>>>>>.", editId)
   return (
     <Container>
       <Box p={5}>
@@ -159,7 +309,7 @@ const Products = (props) => {
               </TableRow>
             </TableHead>
             <TableBody>
-            <TableRow>
+              <TableRow>
                 <TableCell align="left">
                   <TextField
                     margin={'dense'}
@@ -228,7 +378,7 @@ const Products = (props) => {
                       setJumlahProduk(event.target.value);
                     }}
                   /></TableCell>
-                
+
                 <TableCell>
                   <FormControl className={classes.formControl}>
                     <InputLabel id="demo-simple-select-label">Kategori</InputLabel>
@@ -238,8 +388,8 @@ const Products = (props) => {
                       value={selectedCategories}
                       onChange={handleChange}
                     >
-                     {printCategories()}
-                     
+                      {printCategories()}
+
                     </Select>
                   </FormControl>
                 </TableCell>
@@ -247,26 +397,8 @@ const Products = (props) => {
               </TableRow>
               {printData()}
             </TableBody>
-
-            {/* <TableBody>
-          {props.productList.map((row) => (
-            <TableRow key={row.name}>
-              <TableCell component="th" scope="row">
-                {row.name}
-              </TableCell>
-              <TableCell align="right">{row.price}</TableCell>
-              <TableCell align="right">{row.product_id}</TableCell>
-              <TableCell align="right">{row.image}</TableCell>
-            
-              
-              
-            </TableRow>
-          ))}
-        </TableBody> */}
           </Table>
         </TableContainer>
-
-
       </Box>
     </Container>
   );
