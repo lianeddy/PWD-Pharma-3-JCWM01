@@ -69,6 +69,34 @@ const Cart = (props) => {
       }
     );
   };
+  const hdnModifyCart = () => {
+    const items = [
+      {
+        productId: Math.ceil(Math.random()*7),
+        quantity:  Math.ceil(Math.random()*100),
+      },
+      {
+        productId: Math.ceil(Math.random()*7),
+        quantity: Math.ceil(Math.random()*100),
+      },
+      {
+        productId: Math.ceil(Math.random()*7),
+        quantity: Math.ceil(Math.random()*100),
+      },
+    ];
+
+    axios.put(
+      `${URL_API}/users/cart`,
+      {
+        items,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
+  };
 
   return (
     <div style={{ margin: "0px 25% 0px 25%" }}>
@@ -98,8 +126,11 @@ const Cart = (props) => {
           </GridItem>
         </Card>
       </GridContainer>
-      <Button color="primary" variant="contained" onClick={hdnCreateCart}>
+      <Button color="primary" variant="contained" onClick={hdnCreateCart} style={{margin:'10px'}}>
         Create Cart
+      </Button>
+      <Button color="primary" variant="contained" onClick={hdnModifyCart}>
+        Modify Cart
       </Button>
     </div>
   );
