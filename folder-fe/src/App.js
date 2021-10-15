@@ -15,31 +15,43 @@ import ResetPassword from "./pages/resetPassword/ResetPassPage";
 import ChangePassword from "./pages/changePassword/ChangePassPage";
 import TemptLanding from "pages/tempLanding/TemptLanding";
 import ErrorPage from "pages/errorPage/ErrorPage";
+import Products from "./pages/products/ManageProduct"
 import Landing from "./pages/landing/";
 
 import "assets/css/material-dashboard-react.css?v=1.10.0";
 
 function App(props) {
+  // get token from localstorage
   const token = localStorage.getItem("token")
+
 
   const [roleId, setRoleID] = useState(null)
   const [isFetchProfile, setIsFetchProfile] = useState(true)
 
   // GET USER PROFILE
   useEffect(() => {
+    // JIKA ROLE ID SUDAH ADA
     if (props.users.role_id) {
+      // SET ROLE ID PADA VARIABLE ROLEID PADA LOCAL STATE
       setRoleID(props.users.role_id?.toString())
+      // JIKA ROLE ID SUDAH DISET, MAKA SETFETCH PROFILE DISET UNTUK MENANDAKAN BAHWA SUDAH MENGAMBIL DATA UNTUK ROLEID.
       setIsFetchProfile(false)
 
     } else {
+      // JIKA ROLE ID PADA GLOBAL STATE BELUM ADA, JALANKAN AXIOS.POST UNTUK MENGAMBIL ROLEID DARI GET USER DATA
       axios.post(`${URL_API}/users/getUserData`, {}, {
         headers: {
+          // MENERJEMAHKAN TOKEN
           Authorization: `Bearer ${token}`,
         },
-      }).then( (res) => {
+      }).then((res) => {
+        // JIKA sukses request endpoint getuserdata, DIKIRIM ULANG OLEH BE DAN DITERIMA OLEH FE DGN BERBENTUK PROMISE YG MEMBAWA DATA
         const { data } = res.data;
+        // PROPS.GEUSERPROFILE BETUJUAN UNTUK MEMBERIKAN DATA TERBARU YG TELAH DITERIMA DARI BE UNTUK DIJADIKAN DATA PADA GLOBAL STATE
         props.getUserProfile(data)
+        // SET ROLE ID PADA LOCAL STATE UNTUK DIGUNAKAN PADA ROUTE, DAN KONDISI UNTUK AUTORISASI
         setRoleID(data.role_id.toString())
+        // JIKA ROLE ID SUDAH ADA, SET ULANG VALUE PADA ISFETCHPROFILE
         setIsFetchProfile(false)
 
       }).catch(() => {
@@ -52,7 +64,8 @@ function App(props) {
   // KEY COMPONENT = COMPONENT HALAMAN TERSEBUT
   // KEY PATH = PATH HALAMAN
   // KEY ROLE = ROLE APA SAJA YANG BSA MENGAKSES HALAMAN
-  const routes = [{
+  const routes = [
+  {
     component: LoginPage,
     path: "/login",
     needAuth: false,
@@ -114,6 +127,15 @@ function App(props) {
       roles.Admin,
     ]
   },
+  {
+    component: Products,
+    needAuth: true,
+    path: "/admin/products",
+    role: [
+      roles.Admin,
+    ]
+  },
+  
   ]
 
   return (
@@ -125,14 +147,11 @@ function App(props) {
 
         {/* MAPPING ROUTES UNTUK ME-RETURN ROUTE DARI WEBSITE YG ADA */}
         {routes.map((route, i) => {
-          
+
           // ISALLOWTOACCESSPAGE UNTUK MENDAPATKAN TRUE ATAU FALSE VALUE ROLE ID YANG SEDANG LOGIN BOLEH MENGAKSES INDEX ROUTE
-          if (!isFetchProfile && !roleId  && route.needAuth) {
+          if (!isFetchProfile && !roleId && route.needAuth) {
             return <Redirect key={i} from={routes.component} to="/login" />
           }
-
-
-
 
           if (roleId) {
             const isAllowAccessPage = route.role.includes((roleId))
@@ -144,7 +163,7 @@ function App(props) {
 
           // ME RETURN SEMUA HASIL MAP PADA COMPONEN ROUTE
           return (
-            <Route key={i} component={route.component} path={route.path} />
+            <Route key={i} exact component={route.component} path={route.path} />
           );
         })}
 

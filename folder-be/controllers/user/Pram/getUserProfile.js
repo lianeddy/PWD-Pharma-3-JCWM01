@@ -2,7 +2,6 @@ const { db } = require("../../../database");
 
 
 module.exports = (req, res) => {
-    console.log(req.user)
     let {user_id: userId} = req.user;
     let selectQuery = `Select * from users where user_id = ${db.escape(userId)};`;
     db.query(selectQuery, (err, results) => {
