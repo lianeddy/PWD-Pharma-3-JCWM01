@@ -159,6 +159,26 @@ const Products = (props) => {
     setEditID(0)
   }
 
+  const deleteBtnHandler = (idProduct) => {
+    const confirmDelete = window.confirm("Apakah anda yakin akan menghapus produk ini?");
+    if(confirmDelete) {
+      axios
+      .delete(`${URL_API}/products/deleteproducts`,  {
+     
+        data: {
+          idProduct: idProduct
+        }
+      })
+      .then((res)=>{
+        fetchProduct();
+        cancleEdit();
+      })
+      .catch((err) => {
+        console.log( "ini id dalam delete")
+      })
+    }
+  }
+
   // to RENDER produk automatically after render
   useEffect(() => {
     fetchCategories()
@@ -264,8 +284,8 @@ const Products = (props) => {
                 </Select>
               </FormControl>
             </TableCell>
-            <TableCell align="left"><Button onClick={handlerEdit} className={classes.button} size="medium" variant="contained" color="secondary" m={2} >Simpan</Button></TableCell>
-            <TableCell align="left"><Button onClick={cancleEdit} className={classes.button} size="medium" variant="contained" color="secondary" m={2} >Batal</Button></TableCell>
+            <TableCell align="left"><Button onClick={handlerEdit} className={classes.button} size="medium" variant="contained" color="primary" m={2}>Simpan</Button></TableCell>
+            <TableCell align="left"><Button onClick={cancleEdit} className={classes.button} size="medium" variant="contained" color="secondary" m={2}>Batal</Button></TableCell>
           </TableRow>
         )
       }
@@ -279,6 +299,7 @@ const Products = (props) => {
         <TableCell align="left">{val.quantity}</TableCell>
         <TableCell align="left"></TableCell>
         <TableCell align="left"><Button onClick={() => { editToggle(val.product_id) }} className={classes.button} size="medium" variant="contained" color="primary" m={2} >Edit</Button></TableCell>
+        <TableCell align="left"><Button onClick={() => { deleteBtnHandler(val.product_id);  }} className={classes.button} size="medium" variant="contained" color="secondary" m={2} >Delete</Button></TableCell>
       </TableRow>
 
     })
@@ -290,7 +311,6 @@ const Products = (props) => {
     })
   }
 
-  console.log(productList, "ini product list >>>>>>>>>>>>>>.", editId)
   return (
     <Container>
       <Box p={5}>
@@ -306,6 +326,7 @@ const Products = (props) => {
                 <TableCell align="left">Jumlah</TableCell>
                 <TableCell align="left"></TableCell>
                 <TableCell align="left">Edit Produk</TableCell>
+                <TableCell align="left"></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
