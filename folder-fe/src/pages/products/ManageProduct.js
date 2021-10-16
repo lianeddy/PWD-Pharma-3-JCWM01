@@ -19,6 +19,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import TablePagination from '@material-ui/core/TablePagination';
 
 
 
@@ -67,12 +68,29 @@ const Products = (props) => {
 
   const [editId, setEditID] = useState(0);
 
+  // For paginate
+  const [page, setPage] = useState(0)
+  const [limit, setLimit] = useState(2)
+
+  const [total, setTotal] = useState(0)
+  // const [rowsPerPage, setRowPerPage] = useState()
+
+  const handleChangePage = (e, number) => {
+      setPage(number)
+  }
+
+  const handleChangeRowsPerPage = (e) => {
+    setLimit(e.target.value)
+  }
+
+  
   // to GET data
   const fetchProduct = () => {
-    axios.get(`${URL_API}/products/getproducts`,)
+    axios.get(`${URL_API}/products/getproducts?page=${page}&limit=${limit}`,)
       .then((results) => {
-        setProductList(results.data)
+        setProductList(results.data.data)
         console.log(results.data, "ini result data")
+        setTotal(results.data.total)
       }).catch(() => {
         alert("Server error")
       })
@@ -184,6 +202,11 @@ const Products = (props) => {
     fetchCategories()
     fetchProduct()
   }, []);
+
+   // to RENDER produk automatically after render
+   useEffect(() => {
+    fetchProduct()
+  }, [page]);
 
   // Merender Produk List
   const printData = () => {
@@ -419,9 +442,25 @@ const Products = (props) => {
               {printData()}
             </TableBody>
           </Table>
+          <TablePagination 
+            rowsPerPageOptions={[5, 10, 25]}
+            component="div"
+            count={total}
+            rowsPerPage={limit}
+            page={page}
+            onChangePage={handleChangePage}
+            onChangeRowsPerPage={handleChangeRowsPerPage}
+            classes={{spacer: classes.paginationSpacer}}
+   /> 
         </TableContainer>
+        {console.log(page, limit, total)}
+        
       </Box>
+
+     
     </Container>
+
+   
   );
 }
 
