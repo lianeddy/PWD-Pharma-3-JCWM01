@@ -107,6 +107,7 @@ class Home extends React.Component{
   render(){
     return(
         <div>
+            <GridContainer>
              <GridItem xs={12} sm={6} md={4}>
              <InputLabel htmlFor="standard-adornment-amount">Cari Katalog Obat</InputLabel>
                 <Input
@@ -171,12 +172,15 @@ class Home extends React.Component{
             <CustomButtons color="info" size="md" onClick={this.searchBtnHandler} ><Search/> </CustomButtons >
                     
             </GridItem>
+            </GridContainer>
+            
             <GridContainer>
             <GridItem xs={12} sm={12} md={4}>
             {this.renderProducts()}
             </GridItem>
        
             </GridContainer>
+            
             <GridContainer>
             <GridItem xs={12} sm={8} md={8}>
                 <ButtonGroup  variant="contained" aria-label="outlined info button group">
