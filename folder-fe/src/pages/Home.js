@@ -94,6 +94,10 @@ class Home extends React.Component{
     const value = event.target.value
     this.setState({ [name] : value })
   }
+  inputSortHandler =(event)=>{
+    const value = event.target.value
+    this.setState({ sortBy : value })
+  }
   searchBtnHandler = ()=>{
     const filterProductList = this.state.productList.filter((val)=>{
       return val.productName.toLowerCase().includes(this.state.searchProductName.toLowerCase()) && val.category_id.includes(this.state.searchCategory.toLowerCase());
@@ -148,7 +152,7 @@ class Home extends React.Component{
                     //labelId="demo-simple-select-standard-label"
                     //id="demo-simple-select-standard"
                     //value={age}
-                    onChange={this.inputHandler}
+                    onChange= {this.inputSortHandler}
                     label="Urutkan Produk"
                     >
                     <MenuItem value="">
