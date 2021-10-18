@@ -4,7 +4,6 @@ const TOKEN_KEY = require("./constants/token_config");
 
 module.exports = {
   auth: (req, res, next) => {
-    console.log(req.token," ini ress")
     jwt.verify(req.token, TOKEN_KEY.privateString, (err, decode) => {
       if (err) {
         return res.status(401).send("User not auth!");
