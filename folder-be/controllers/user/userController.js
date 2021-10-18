@@ -23,7 +23,18 @@ const {
   updateUserInformation,
   uploadPicture,
 } = require("./Taksu/userInformation");
-const { addCart, editCart } = require("./Taksu/userCart");
+const {
+  addCart,
+  editCart,
+  getCart,
+  checkOut,
+  recipeUpload,
+} = require("./Taksu/userCart");
+const {
+  getTransaction,
+  getTransactionDetail,
+  uploadPaymentProof,
+} = require("./Taksu/userTransaction");
 //---------------------
 //Feny
 
@@ -45,6 +56,12 @@ module.exports = {
   updateUserInformation,
   uploadPicture,
   addCart,
-  editCart
+  editCart,
+  getCart,
+  checkOut,
+  recipeUpload,
+  getTransaction,
+  getTransactionDetail,
+  uploadPaymentProof,
   //
 };
