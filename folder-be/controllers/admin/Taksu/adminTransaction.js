@@ -1,4 +1,21 @@
 const { db } = require("../../../database");
+const insertCart = (req, res, order_id) => {
+  const { user_id } = req.user;
+  let itemsInsert = req.body.items.map((val) => {
+    return `(${db.escape(order_id)}, ${db.escape(val.productId)}, ${db.escape(
+      val.quantity
+    )}, ${db.escape(user_id)}, NOW(), ${db.escape(user_id)}, NOW())`;
+  });
+  let qInsertCartItems = `INSERT INTO ORDER_ITEMS (order_id, product_id, quantity, created_by, created_date, modified_by, modified_date)
+      VALUES ${itemsInsert}`;
+  db.query(qInsertCartItems, (err, result_3) => {
+    if (err) {
+      console.log(err);
+      res.status(500).send({ message: "error", success: false });
+    }
+    res.status(200).send({ message: result_3, success: true });
+  });
+};
 
 module.exports = {
   getTransaction: (req, res) => {
