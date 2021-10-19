@@ -41,13 +41,13 @@ const {
 //----------------
 
 module.exports = {
-  getUsername: getUsername,
-  getData: getData,
-  login: login,
-  register: register,
-  forgetPassword: forgetPassword,
-  resetPassword: resetPassword,
-  changePassword: changePassword,
+  getUsername,
+  getData,
+  login,
+  register,
+  forgetPassword,
+  resetPassword,
+  changePassword,
   getUserProfile,
 
   //Taksu

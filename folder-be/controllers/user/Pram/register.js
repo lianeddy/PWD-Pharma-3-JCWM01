@@ -7,7 +7,6 @@ const { createToken } = require("../../../helper/createToken");
 const { nextTick } = require("process");
 
 module.exports = (req, res) => {
-  console.log(req.body);
   let { full_name, username, email, password } = req.body;
   password = Crypto.createHmac("sha1", "hash123")
     .update(password)
@@ -33,7 +32,6 @@ module.exports = (req, res) => {
       })
     }
 
-
     if (results.insertId) {
       let sqlGet = `Select * from users where user_id = ${results.insertId};`;
       db.query(sqlGet, (err2, results2) => {
@@ -52,8 +50,6 @@ module.exports = (req, res) => {
              message: "Registration Success, Check Your Email!",
              success: true,
             });
-            console.log('====================')
-            console.log(results)
           });
         }
       });

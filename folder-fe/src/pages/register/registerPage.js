@@ -104,7 +104,7 @@ export default function RegisterPage() {
         });
 
         console.log("sukses");
-        history.push("/");
+        // history.push("/");
       })
       .catch((err) => {
         console.log(err);
