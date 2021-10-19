@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Products = (props) => {
+const ProductsAdmin = (props) => {
   const classes = useStyles();
   // Product yang akan diinput ke dalam table
   // const [namaProduk, setNamaProduk] = useState('');
@@ -367,4 +367,4 @@ const Products = (props) => {
 }
 
 
-export default Products
+export default ProductsAdmin;

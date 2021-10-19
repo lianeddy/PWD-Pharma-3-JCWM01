@@ -14,6 +14,7 @@ import Home from "pages/Home";
 import Profile from "pages/profile";
 import TemptLanding from "pages/tempLanding/TemptLanding";
 import Cart from "pages/cart";
+import ProductsAdmin from "pages/products/ManageProduct";
 
 const dashboardRoutes = [
   {
@@ -57,6 +58,13 @@ const dashboardRoutes = [
     icon: Category,
     component: Cart,
     layout: "/user",
+  },
+  {
+    path: "/ProductsAdmin",
+    name: "Product Admin",
+    icon: Category,
+    component: ProductsAdmin,
+    layout: "/admin",
   },
 ];
 
