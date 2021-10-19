@@ -98,12 +98,15 @@ function App(props) {
       role: [roles.Admin, roles.User],
     },
     {
+<<<<<<< HEAD
       component: ProductsAdmin,
       path: '/admin/products',
       needAuth: true,
       role: [roles.Admin],
     },
     {
+=======
+>>>>>>> 23780c61957d90131e9317d88af4edf590290920
       component: Admin,
       needAuth: true,
       path: "/",

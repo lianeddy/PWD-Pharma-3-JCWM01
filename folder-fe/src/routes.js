@@ -14,8 +14,15 @@ import Home from "pages/Home";
 import Profile from "pages/profile";
 import TemptLanding from "pages/tempLanding/TemptLanding";
 import Cart from "pages/cart";
+<<<<<<< HEAD
 import ProductsAdmin from "pages/products/ManageProduct";
 
+=======
+import AdminTransaction from "pages/transaction/admin";
+import AdminTransactionDetail from "pages/transaction/admin/detail";
+import UserTransaction from "pages/transaction/user";
+import UserTransactionDetail from "pages/transaction/user/detail";
+>>>>>>> 23780c61957d90131e9317d88af4edf590290920
 const dashboardRoutes = [
   {
     path: "/Home",
@@ -51,6 +58,36 @@ const dashboardRoutes = [
     icon: LibraryBooks,
     component: TemptLanding,
     layout: "/admin",
+  },
+  {
+    path: "/Transaction",
+    name: "Admin Transaction",
+    icon: LibraryBooks,
+    component: AdminTransaction,
+    layout: "/admin",
+  },
+  {
+    path: "/Detail/:id",
+    name: "Admin Transaction Detail",
+    icon: LibraryBooks,
+    component: AdminTransactionDetail,
+    layout: "/admin",
+    hide: true,
+  },
+  {
+    path: "/Transaction",
+    name: "User Transaction",
+    icon: LibraryBooks,
+    component: UserTransaction,
+    layout: "/user",
+  },
+  {
+    path: "/Detail/:id",
+    name: "User Transaction Detail",
+    icon: LibraryBooks,
+    component: UserTransactionDetail,
+    layout: "/user",
+    hide: true,
   },
   {
     path: "/Cart",
