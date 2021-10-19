@@ -187,6 +187,12 @@ class Home extends React.Component{
             <GridItem xs={12} sm={12} md={4}>
             {this.renderProducts()}
             </GridItem>
+            <GridItem xs={12} sm={12} md={4}>
+            {this.renderProducts()}
+            </GridItem>
+            <GridItem xs={12} sm={12} md={4}>
+            {this.renderProducts()}
+            </GridItem>
        
             </GridContainer>
             <GridContainer>
