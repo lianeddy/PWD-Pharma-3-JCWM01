@@ -14,4 +14,6 @@ routers.get(
   adminControllers.getTransactionDetail
 );
 routers.get("/getRawMedicine", auth, adminControllers.getRawMedicine);
+routers.post("/insertItems", auth, adminControllers.insertItems);
+routers.post("/changeTotal", auth, adminControllers.changeTotal);
 module.exports = routers;

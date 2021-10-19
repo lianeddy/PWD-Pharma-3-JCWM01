@@ -7,6 +7,8 @@ const {
   getStatus,
   changeStatus,
   getRawMedicine,
+  insertItems,
+  changeTotal,
 } = require("./Taksu/adminTransaction");
 
 //----
@@ -17,4 +19,6 @@ module.exports = {
   getStatus,
   changeStatus,
   getRawMedicine,
+  insertItems,
+  changeTotal,
 };
