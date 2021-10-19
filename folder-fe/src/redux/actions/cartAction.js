@@ -2,81 +2,43 @@ import Axios from "axios";
 import { Provider } from "react-redux";
 import { URL_API } from "helper/helper";
 
-export const registerHandler = (state) => {
+export const getCart = (user_state) => {
+  const { role_id } = user_state;
+  if (!role_id) return false;
   return (dispatch) => {
-    Axios.post(`${API_URL}/users`, {
-      ...state,
-      role: "user",
-    })
-      .then((result) => {
-        delete result.data.password;
-        dispatch({
-          type: "USER_LOGIN",
-          payloads: result.data,
-        });
-      })
-      .catch(() => {
-        alert("Not nice");
-      });
-  };
-};
-export const loginUser = ({ username, password }) => {
-  return (dispatch) => {
-    Axios.get(`${API_URL}/users`, {
-      params: {
-        username,
+    Axios.get(`${URL_API}/users/cart`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     })
       .then((res) => {
-        if (res.data.length) {
-          if (password === res.data[0].password) {
-            delete res.data[0].password;
-            localStorage.setItem("userDataEmerce", JSON.stringify(res.data[0]));
-            dispatch({
-              type: "USER_LOGIN",
-              payloads: res.data[0],
-            });
-          } else {
-            dispatch({
-              type: "USER_ERROR",
-              payloads: "Wrong password",
-            });
-          }
+        if (!res.data.DATA.cart_id) {
+          dispatch({
+            type: "NOTHING",
+            payloads: res.data.DATA,
+          });
         } else {
           dispatch({
-            type: "USER_ERROR",
-            payloads: "User not found",
+            type: "GET_USER_CART",
+            payloads: res.data.DATA,
           });
         }
-        console.log(res.data);
       })
-      .catch((err) => {});
-  };
-};
-export const logoutUser = () => {
-  localStorage.removeItem("userDataEmerce");
-  return {
-    type: "USER_LOGOUT",
+      .catch((err) => {
+        console.error(err);
+      });
   };
 };
 
-export const userKeepLogin = (userData) => {
-  return (dispatch) => {
-    Axios.get(`${API_URL}/users`, {
-      params: {
-        id: userData.id,
-      },
-    }).then((res) => {
-      localStorage.setItem("userDataEmerce", JSON.stringify(res.data[0]));
-      dispatch({
-        type: "USER_LOGIN",
-        payloads: res.data[0],
-      });
-    });
+export const updateCart = (product_id, qty) => {
+  return {
+    type: "UPDATE_CART",
+    payloads: { product_id, qty },
   };
 };
-export const checkStorage = () => {
+export const recipeCart = (image) => {
   return {
-    type: "CHECK_STORAGE",
+    type: "ADD_RECIPE",
+    payloads: image,
   };
 };

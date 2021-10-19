@@ -31,11 +31,11 @@ export default function Sidebar(props) {
     <List className={classes.list}>
       {routes.map((prop, key) => {
         if (role_id == 1) {
-          if (prop.layout === "/user") {
+          if (prop.layout === "/user" || prop.hide) {
             return null;
           }
         } else {
-          if (prop.layout === "/admin") {
+          if (prop.layout === "/admin" || prop.hide) {
             return null;
           }
         }
