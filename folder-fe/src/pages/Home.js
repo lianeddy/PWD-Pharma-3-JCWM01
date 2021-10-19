@@ -32,29 +32,29 @@ class Home extends React.Component{
   fetchProducts = () => {
     Axios.get("http://localhost:3300/products/getData")
     .then((result) => {
-    alert("Berhasil") 
-    this.setState({ productList: result.data, maxPage:Math.ceil(result.data.length/this.state.itemPerPage), filterProductList:result.data})
+    this.setState({ productList: result.data, maxPage:Math.ceil(result.data.length/this.state.itemPerPage), 
+      filterProductList:result.data})
     })
     .catch(() => {
     alert("Terjadi kesalahan di server")
     })
   }
   renderProducts = () => { 
-    console.log("render")
     const beginningIndex =(this.state.page -1)*this.state.itemPerPage
     const compareString =(a,b)=>{
-      if(a.productName < b.productName){
+      if(a.name < b.name){
         return -1;
       }
-      if(a.productName > b.productName){
+      if(a.name > b.name){
         return 1;
       }
       return 0;
     }
     let rawData = [...this.state.filterProductList]
+    console.log(rawData, "ini raw data")
     switch (this.state.sortBy){
       case "lowestPrice":
-        rawData.sort((a,b)=> a.price - b.price);
+          rawData.sort((a,b)=> a.price - b.price);
         break
         case "highestPrice":
           rawData.sort((a,b)=> b.price - a.price);
@@ -89,17 +89,29 @@ class Home extends React.Component{
     this.setState({page:this.state.page-1})
     }
   }
+
   inputHandler =(event)=>{
-    const name = event.target.name
+    //const name = event.target.name
     const value = event.target.value
-    this.setState({ [name] : value })
+    this.setState({ name : value })
   }
+
+  inputCategoryHandler =(event)=>{
+   
+    const value = event.target.value
+    this.setState({ searchCategory : value })
+  }
+
   searchBtnHandler = ()=>{
     const filterProductList = this.state.productList.filter((val)=>{
-      return val.productName.toLowerCase().includes(this.state.searchProductName.toLowerCase()) && val.category_id.includes(this.state.searchCategory.toLowerCase());
+    
+      return val.name.toLowerCase().includes(this.state.searchProductName.toLowerCase()) &&
+       val.category_id === parseInt(this.state.searchCategory);
+      
     })
     
     this.setState({ filterProductList,  maxPage:Math.ceil(filterProductList.length/this.state.itemPerPage), page:1 })
+
   }
   componentDidMount() {
     this.fetchProducts();
@@ -124,7 +136,7 @@ class Home extends React.Component{
                     //labelId="demo-simple-select-standard-label"
                     //id="demo-simple-select-standard"
                     //value={age}
-                    onChange={this.inputHandler}
+                    onChange={this.inputCategoryHandler}
                     label="Pilih Jenis Obat"
                     >
                     <MenuItem value="">
@@ -155,7 +167,7 @@ class Home extends React.Component{
                         <em>Default</em>
                     </MenuItem>
                     <MenuItem value="lowestPrice">Harga Terendah</MenuItem>
-                    <MenuItem value="highestPrice">Harga Tertinngi</MenuItem>
+                    <MenuItem value="highestPrice">Harga Tertinggi</MenuItem>
                     <MenuItem value="az">A-Z</MenuItem>
                     <MenuItem value="za">z-A</MenuItem>
                     </Select>
@@ -172,6 +184,12 @@ class Home extends React.Component{
                     
             </GridItem>
             <GridContainer>
+            <GridItem xs={12} sm={12} md={4}>
+            {this.renderProducts()}
+            </GridItem>
+            <GridItem xs={12} sm={12} md={4}>
+            {this.renderProducts()}
+            </GridItem>
             <GridItem xs={12} sm={12} md={4}>
             {this.renderProducts()}
             </GridItem>
