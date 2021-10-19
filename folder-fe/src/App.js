@@ -39,7 +39,9 @@ function App(props) {
       // JIKA ROLE ID SUDAH DISET, MAKA SETFETCH PROFILE DISET UNTUK MENANDAKAN BAHWA SUDAH MENGAMBIL DATA UNTUK ROLEID.
       setIsFetchProfile(false)
 
-    } else {
+    } 
+    
+    if (props.users.role_id === null && isFetchProfile) {
       // JIKA ROLE ID PADA GLOBAL STATE BELUM ADA, JALANKAN AXIOS.POST UNTUK MENGAMBIL ROLEID DARI GET USER DATA
       axios.post(`${URL_API}/users/getUserData`, {}, {
         headers: {

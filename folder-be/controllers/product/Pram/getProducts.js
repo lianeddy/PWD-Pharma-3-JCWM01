@@ -2,7 +2,6 @@ const { db } = require("../../../database");
 
 module.exports = (req, res) => {
   const { page, limit } = req.query
-  console.log('====', req.query)
   let queryOffset = parseInt(page) * parseInt(limit)
   let scriptQuery = `SELECT p.*, i.quantity FROM products p join inventories i on p.product_id = i.product_id LIMIT ${queryOffset}, ${limit};
   `;
@@ -18,8 +17,5 @@ module.exports = (req, res) => {
         
       })
     }
-
-    // if (err) res.status(500).send(err);
-   
 });
 };
