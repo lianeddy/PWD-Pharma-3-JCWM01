@@ -14,15 +14,12 @@ import Home from "pages/Home";
 import Profile from "pages/profile";
 import TemptLanding from "pages/tempLanding/TemptLanding";
 import Cart from "pages/cart";
-<<<<<<< HEAD
 import ProductsAdmin from "pages/products/ManageProduct";
 
-=======
 import AdminTransaction from "pages/transaction/admin";
 import AdminTransactionDetail from "pages/transaction/admin/detail";
 import UserTransaction from "pages/transaction/user";
 import UserTransactionDetail from "pages/transaction/user/detail";
->>>>>>> 23780c61957d90131e9317d88af4edf590290920
 const dashboardRoutes = [
   {
     path: "/Home",
