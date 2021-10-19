@@ -28,4 +28,6 @@ routers.patch(
   userControllers.updateUserInformation
 );
 routers.post("/uploadProfilePic", auth, userControllers.uploadPicture);
+routers.post("/cart", auth, userControllers.addCart);
+routers.put("/cart", auth, userControllers.editCart);
 module.exports = routers;

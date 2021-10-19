@@ -38,7 +38,7 @@ export default function Header(props) {
           </Button>
         </div>
         <Hidden smDown implementation="css">
-          {props.rtlActive ? <RTLNavbarLinks /> : <AdminNavbarLinks />}
+          {props.rtlActive ? <RTLNavbarLinks /> : <AdminNavbarLinks user_id={props.user_id} />}
         </Hidden>
         <Hidden mdUp implemen belum tation="css">
           <IconButton
