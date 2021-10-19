@@ -77,31 +77,68 @@ const Cart = (props) => {
       "data",
       JSON.stringify({ cart_id: props.cart_id, cart: props.cart })
     );
-    axios
-      .post(
-        `${URL_API}/users/checkOut`,
-        {
-          cart_id: props.cart_id,
-          items: props.cart,
-          total: props.cart.reduce(
-            (prev, curr) => prev + curr.quantity * curr.price,
-            0
-          ),
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+    if (props.cart.length > 0) {
+      axios
+        .post(
+          `${URL_API}/users/checkOut`,
+          {
+            cart_id: props.cart_id,
+            items: props.cart,
+            total: props.cart.reduce(
+              (prev, curr) => prev + curr.quantity * curr.price,
+              0
+            ),
           },
-        }
-      )
-      .then((res) => {
-        console.log(res);
-        if (props.recipe) {
-          hdnSubmitRecipe(res.data.order_id);
-        }
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        )
+        .then((res) => {
+          console.log(res);
+          if (props.recipe) {
+            hdnSubmitRecipe(res.data.order_id);
+          }
 
-        props.getCart(props.users);
-      });
+          props.getCart(props.users);
+        });
+    } else if (props.recipe) {
+      axios
+        .post(
+          `${URL_API}/users/cart`,
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        )
+        .then((res) => {
+          props.getCart(props.users);
+          axios
+            .post(
+              `${URL_API}/users/checkOut`,
+              {
+                cart_id: res.data.DATA.cart_id,
+                total: 0,
+              },
+              {
+                headers: {
+                  Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+              }
+            )
+            .then((res) => {
+              console.log(res);
+              if (props.recipe) {
+                hdnSubmitRecipe(res.data.order_id);
+              }
+
+              props.getCart(props.users);
+            });
+        });
+    }
   };
   const hdnSubmitRecipe = (id) => {
     let form = new FormData();

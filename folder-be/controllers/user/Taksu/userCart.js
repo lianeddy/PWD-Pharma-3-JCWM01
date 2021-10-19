@@ -16,7 +16,9 @@ const insertCart = (req, res, cart_id) => {
       console.log(err);
       res.status(500).send({ message: "error", success: false });
     }
-    res.status(200).send({ message: result_3, success: true });
+    res
+      .status(200)
+      .send({ message: result_3, success: true, DATA: { cart_id } });
   });
 };
 const insertCartNew = (req, res) => {
@@ -32,13 +34,21 @@ const insertCartNew = (req, res) => {
       return false;
     }
     let cart_id = result_1.insertId;
-    console.log(cart_id, "Id");
-    insertCart(req, res, cart_id);
+    if (req.body.items) {
+      console.log(cart_id, "Id");
+      insertCart(req, res, cart_id);
+    } else {
+      res.status(200).send({
+        message: "success",
+        success: true,
+        DATA: { cart_id },
+      });
+    }
   });
 };
 const insertOrderNew = (req, res) => {
   const { user_id } = req.user;
-  const { total } = req.body;
+  const { total, cart_id } = req.body;
   let qInsert = `INSERT INTO ORDERS (user_id, status_id, prescription, payment_proof, total, created_by, created_date, modified_by, modified_date) 
   VALUES(${db.escape(user_id)}, 1, false, false, ${db.escape(
     total
@@ -51,7 +61,11 @@ const insertOrderNew = (req, res) => {
     }
     let order_id = result_1.insertId;
     console.log(order_id, "Id");
-    insertOrderItems(req, res, order_id);
+    if (req.body.items) {
+      insertOrderItems(req, res, order_id);
+    } else {
+      deleteCart(req, res, cart_id, order_id);
+    }
   });
 };
 const insertOrderItems = (req, res, order_id) => {
@@ -140,7 +154,15 @@ module.exports = {
     let qCheck = `SELECT * FROM CARTS WHERE user_id = ${db.escape(user_id)}`;
     db.query(qCheck, (err, result) => {
       if (result.length > 0) {
-        insertCart(req, res, result[0].cart_id);
+        if (req.body.items) {
+          insertCart(req, res, result[0].cart_id);
+        } else {
+          res.status(200).send({
+            message: "Success",
+            success: true,
+            DATA: { cart_id: result[0].cart_id },
+          });
+        }
       } else {
         insertCartNew(req, res);
       }
