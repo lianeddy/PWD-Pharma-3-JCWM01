@@ -69,43 +69,12 @@ export default function AdminTransactionDetail() {
   const { id } = useParams();
 
   const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+
   const [rawItems, setRawItems] = useState([]);
   const [rawItemsF, setRawItemsF] = useState([]);
   const [customMed, setCustomMed] = useState([]);
   const [customMedF, setCustomMedF] = useState([]);
-  const hdnChangeStatus = (order_id, status_id) => {
-    console.log({ order_id, status_id }, "Status");
-    axios
-      .post(
-        `${URL_API}/admins/status`,
-        {
-          order_id,
-          status_id,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      )
-      .then((res) => {
-        alert(res.data.message);
-        transactionFetch();
-      });
-  };
-  const dataParse = (data) => {
-    const dataF = data.map((val) => {
-      let parsing = {
-        ...val,
-        IMAGE: <img style={{ width: "200px" }} src={val.IMAGE} />,
-      };
-      return Object.values(parsing);
-    });
-    setDataItemF([...dataF]);
-    console.log(dataF, "Hello");
-  };
+
   const statusFetch = () => {
     axios
       .get(`${URL_API}/admins/status`, {
@@ -127,7 +96,7 @@ export default function AdminTransactionDetail() {
       })
       .then((res) => {
         dataParse(res.data.DATA);
-        setDataItem(...res.data.DATA);
+        setDataItem([...res.data.DATA]);
       })
       .catch((err) => {
         console.error(err);
@@ -147,20 +116,17 @@ export default function AdminTransactionDetail() {
         console.error(err);
       });
   };
-  useEffect(() => {
-    transactionDetailFetch();
-    transactionFetch();
-    statusFetch();
-    rawMedicineFetch();
-  }, []);
-  useEffect(() => {
-    dataParseRaw(rawItems);
-  }, [rawItems]);
-  useEffect(() => {
-    dataParseCutom(customMed);
-    dataParseRaw(rawItems);
-    console.log("Triggered");
-  }, [customMed]);
+  const dataParse = (data) => {
+    const dataF = data.map((val) => {
+      let parsing = {
+        ...val,
+        IMAGE: <img style={{ width: "200px" }} src={val.IMAGE} />,
+      };
+      return Object.values(parsing);
+    });
+    setDataItemF([...dataF]);
+    console.log(dataF, "Hello");
+  };
   const dataParseRaw = (data) => {
     const dataF = data.map((val) => {
       let parsing = {
@@ -189,7 +155,6 @@ export default function AdminTransactionDetail() {
     console.log(dataF, "Hello");
   };
   const dataParseCutom = (data) => {
-    console.log(data, "HELLO HELLO");
     const dataF = data.map((val) => {
       let parsing = {
         id: val.product_id,
@@ -200,13 +165,22 @@ export default function AdminTransactionDetail() {
           : `${val.measurement_mg * val.quantity_inventory} mg`,
         stock: val.quantity_inventory,
         actions: (
-          <Button
-            onClick={() => hdnAdd(val.product_id)}
-            variant="contained"
-            color="primary"
-          >
-            Remove
-          </Button>
+          <>
+            <Button
+              onClick={() => hdbRemove(val.product_id)}
+              variant="contained"
+              color="primary"
+            >
+              -
+            </Button>
+            <Button
+              onClick={() => hdnAdd(val.product_id)}
+              variant="contained"
+              color="primary"
+            >
+              +
+            </Button>
+          </>
         ),
       };
       return Object.values(parsing);
@@ -229,20 +203,21 @@ export default function AdminTransactionDetail() {
   const classes = useStyles();
   function hdnAdd(id) {
     let valtemp = { ...rawItems.find((x) => x.product_id == id) };
-    console.log(valtemp, "Valtemp");
+
     let temp = rawItems.map((val) =>
       val.product_id == id
-        ? { ...val, quantity_inventory: (val.quantity_inventory -= 1) }
+        ? {
+            ...val,
+            quantity_inventory:
+              val.quantity_inventory == 1 ? 1 : (val.quantity_inventory -= 1),
+          }
         : val
     );
-    console.log(
-      customMed.find((x) => x.product_id == id),
-      "FIND 2"
-    );
-    console.log(customMed, "customMed");
+
     let temp2;
     if (customMed.find((x) => x.product_id == id)) {
-      customMed.find((x) => x.product_id == id).quantity_inventory += 1;
+      customMed.find((x) => x.product_id == id).quantity_inventory +=
+        valtemp.quantity_inventory == 1 ? 0 : 1;
       temp2 = [...customMed];
     } else {
       temp2 = [...customMed, { ...valtemp, quantity_inventory: 1 }];
@@ -254,6 +229,93 @@ export default function AdminTransactionDetail() {
     dataParseRaw(temp);
     setCustomMed([...customF]);
   }
+  function hdbRemove(id) {
+    let valtemp = { ...rawItems.find((x) => x.product_id == id) };
+
+    let temp = rawItems.map((val) =>
+      val.product_id == id
+        ? {
+            ...val,
+            quantity_inventory: (val.quantity_inventory += 1),
+          }
+        : val
+    );
+
+    let temp2;
+    if (customMed.find((x) => x.product_id == id)) {
+      customMed.find((x) => x.product_id == id).quantity_inventory -= 1;
+      temp2 = [...customMed];
+    } else {
+      temp2 = [...customMed, { ...valtemp, quantity_inventory: 1 }];
+    }
+    temp2 = temp2.filter((x) => x.quantity_inventory > 0);
+    let customF = [...temp2];
+    console.log(temp2, "temp2");
+    console.log(customF, "customF");
+    dataParseRaw(temp);
+    setCustomMed([...customF]);
+  }
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  const hdnChangeStatus = (order_id, status_id) => {
+    console.log({ order_id, status_id }, "Status");
+    axios
+      .post(
+        `${URL_API}/admins/status`,
+        {
+          order_id,
+          status_id,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      )
+      .then((res) => {
+        alert(res.data.message);
+        transactionFetch();
+      });
+  };
+  function hdnFinishCustom() {
+    let newCustomMeds = customMed.map((x) => {
+      return {
+        PRODUCT_ID: x.product_id,
+        QUANTITY: `${
+          x.quantity_inventory *
+          (x.measurement_ml ? x.measurement_ml : x.measurement_mg)
+        } ${x.measurement_ml ? "ml" : "mg"}`,
+        NAME: x.name,
+        IMAGE: x.image,
+        TOTAL: x.price * x.quantity_inventory,
+      };
+    });
+    let newTotal =
+      newCustomMeds.reduce((prev, next) => prev + next.TOTAL, 0) +
+      dataOrder.total;
+    alert(newTotal);
+    setDataOrder({ ...dataOrder, total: newTotal });
+    setDataItem([...dataItem, ...newCustomMeds]);
+    dataParse([...dataItem, ...newCustomMeds]);
+    handleClose();
+  }
+
+  useEffect(() => {
+    transactionDetailFetch();
+    transactionFetch();
+    statusFetch();
+    rawMedicineFetch();
+  }, []);
+  useEffect(() => {
+    dataParseRaw(rawItems);
+  }, [rawItems]);
+  useEffect(() => {
+    dataParseCutom(customMed);
+    dataParseRaw(rawItems);
+  }, [customMed]);
+  useEffect(() => {
+    console.log(dataOrder, "Data IRder");
+  });
   return (
     <GridContainer>
       <GridItem xs={12} sm={12} md={12}>
@@ -262,7 +324,6 @@ export default function AdminTransactionDetail() {
             <h4 className={classes.cardTitleWhite}>Detail</h4>
             <p className={classes.cardCategoryWhite}>On going order</p>
           </CardHeader>
-
           <CardBody>
             <div>
               {dataOrder ? (
@@ -271,6 +332,7 @@ export default function AdminTransactionDetail() {
                   <StatusChanger
                     order_id={dataOrder.id}
                     status={dataOrder.status_name}
+                    status_id={dataOrder.status_id}
                     status_options={status_option}
                     hdnChangeStatus={hdnChangeStatus}
                     prescription={
@@ -361,8 +423,7 @@ export default function AdminTransactionDetail() {
                             round
                             onClick={(e) => {
                               if (window.confirm("Selesai merancang resep?")) {
-                                alert("Resep telah masuk ke order!");
-                                handleClose();
+                                hdnFinishCustom();
                               }
                             }}
                           >

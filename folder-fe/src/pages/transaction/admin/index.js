@@ -56,7 +56,9 @@ export default function AdminTransaction() {
           payment_proof:
             val.payment_proof != "No payment proof" ? (
               <a href={URL_API + val.payment_proof} target="_blank">
-                {val.payment_proof}
+                {val.payment_proof == "No payment proof"
+                  ? "No payment proof"
+                  : "Payment proof available"}
               </a>
             ) : (
               val.payment_proof
