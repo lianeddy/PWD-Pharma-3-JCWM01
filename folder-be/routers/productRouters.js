@@ -9,6 +9,8 @@ routers.get("/getData", productControllers.getData);
 // Pram
 routers.get("/getproducts", productControllers.getProducts);
 routers.post("/inputproducts", productControllers.inputProducts);
-routers.get("/getcategories", productControllers.getCategories)
+routers.get("/getcategories", productControllers.getCategories);
+routers.patch("/editproducts", productControllers.editProducts);
+routers.delete("/deleteproducts", productControllers.deleteProducts);
 
 module.exports = routers;

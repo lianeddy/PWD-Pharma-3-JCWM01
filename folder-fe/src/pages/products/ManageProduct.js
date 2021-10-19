@@ -4,6 +4,10 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import { URL_API } from 'helper/helper';
 
+import FormDialog from './dialogDeleteProducts';
+import FormEditDialog from './dialogEditProducts';
+import FormDialogAddProduct from './dialogAddProduct'
+
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -15,11 +19,18 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Box from '@material-ui/core/Box';
 import Container from "@material-ui/core/Container";
-import InputLabel from '@material-ui/core/InputLabel';
+import Typography from '@material-ui/core/Typography';
 import MenuItem from '@material-ui/core/MenuItem';
-import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import TablePagination from '@material-ui/core/TablePagination';
+
+import DeleteIcon from '@material-ui/icons/DeleteForeverRounded';
+import EditIcon from '@material-ui/icons/EditOutlined';
+import AddIcon from '@material-ui/icons/AddOutlined';
+import { IconButton } from '@material-ui/core';
+
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -30,75 +41,163 @@ const useStyles = makeStyles((theme) => ({
     width: 100,
   },
   button: {
-    borderRadius: 8,
     backgroundColor: "#03989e",
     margin: theme.spacing(3, 0, 2),
+    color: '#fff',
     "&:hover": {
-      backgroundColor: "#03989e",
+      backgroundColor: "#00cbd3",
     },
   },
 }));
 
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
-}
-
-const rows = [
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-];
 const Products = (props) => {
   const classes = useStyles();
-  const [namaProduk, setNamaProduk] = useState('')
-  const [hargaProduk, setHargaProduk] = useState('')
-  const [gambarProduk, setGambarProduk] = useState('')
-  const [deskripsiProduk, setDeskripsiProduk] = useState('')
-  const [jumlahProduk, setJumlahProduk] = useState('')
+  // Product yang akan diinput ke dalam table
+  // const [namaProduk, setNamaProduk] = useState('');
+  // const [hargaProduk, setHargaProduk] = useState('');
+  // const [gambarProduk, setGambarProduk] = useState('');
+  // const [deskripsiProduk, setDeskripsiProduk] = useState('');
+  // const [jumlahProduk, setJumlahProduk] = useState('');
+  const [addOpen, setAddOpen] = useState(false)
 
+  // Product list adalah sebuah var yang menampung data produk yg didapat dari database.
   const [productList, setProductList] = useState([]);
+
+  // Menampung list categories yg didapatkan dari db
   const [categoriesList, setCategoriesList] = useState([]);
-  const [selectedCategories, setSelectedCategories] = useState([])
+  // Menampung value categories yg dipilih
+  const [selectedCategories, setSelectedCategories] = useState('');
+  // Edit value categories pada produk
+  const [editSelectedCategories, setEditSelectedCategories] = useState('');
+
+  const [editId, setEditID] = useState(0);
+
+  // For paginate
+  const [page, setPage] = useState(0)
+  const [limit, setLimit] = useState(5)
+
+  const [total, setTotal] = useState(0)
+  // const [rowsPerPage, setRowPerPage] = useState()
+
+  // For Dialog Delete/
+  const [open, setOpen] = useState(false);
+  const [selectedId, setSelectedId] = useState('')
+  const [selectedData, setSelectedData] = useState('')
+
+  // All Handler and toggle
+  const handleChange = (e) => {
+    setSelectedCategories(e.target.value);
+  }
+
+  const editHandleChange = (e) => {
+    setEditSelectedCategories(e.target.value);
+  }
+
+  const editToggle = (product_id) => {
+    setEditID(product_id)
+  }
+
+  const cancleEdit = () => {
+    setEditID(0)
+  }
+
+  // For Dialog Edit
+  const [openEdit, setOpenEdit] = useState(false);
+
+
+  const handleDialogEditOpen = () => {
+    console.log('masuk ===  ', open)
+
+    setOpenEdit(true);
+  };
+
+  const handleDialogEditClose = () => {
+    setOpenEdit(false);
+  };
+
+
+  // For Dialog Delete
+  const handleDialogOpen = () => {
+    console.log('masuk ===  ', open)
+
+    setOpen(true);
+  };
+
+  const handleDialogClose = () => {
+    setOpen(false);
+    console.log('masuk ', open)
+  };
+
+
+
+  // For Paginate
+  const handleChangePage = (e, number) => {
+    setPage(number)
+  }
+
+  const handleChangeRowsPerPage = (e) => {
+    setLimit(e.target.value);
+
+  }
+
+  // For Dialog Add
+  const handleOpenAdd = () => {
+    setAddOpen(true)
+  }
+
+  const handleCloseAdd = () => {
+    setAddOpen(false)
+  }
+
+
+
 
   // to GET data
   const fetchProduct = () => {
-    axios.get(`${URL_API}/products/getproducts`,)
+    axios.get(`${URL_API}/products/getproducts?page=${page}&limit=${limit}`,)
       .then((results) => {
-        setProductList(results.data)
+        setProductList(results.data.data)
         console.log(results.data, "ini result data")
+        setTotal(results.data.total)
       }).catch(() => {
         alert("Server error")
       })
   };
 
-  // to INPUT data
-  const handlerInput = () => {
-    axios
-      .post(`${URL_API}/products/inputproducts`, {
-        namaProduk,
-        hargaProduk,
-        gambarProduk,
-        deskripsiProduk,
-        jumlahProduk,
-        selectedCategories
-      })
-      .then((res) => {
-        setNamaProduk("");
-        setHargaProduk("");
-        setGambarProduk("");
-        setDeskripsiProduk("");
-        setJumlahProduk("");
-        console.log("sukses menambahkan data");
-        fetchProduct()
 
+
+  // to INPUT data
+  const handleAddProduct = (payload) => {
+    console.log('------', payload)
+    axios
+      .post(`${URL_API}/products/inputproducts`, payload)
+      .then((res) => {
+        fetchProduct();
+        handleCloseAdd();
       })
       .catch((err) => {
         console.log(err)
       })
   }
-  // to Get catrgories
+
+  // to SAVE EDIT DATA
+  const handleEditProduct = (payload) => {
+    axios
+      .patch(`${URL_API}/products/editproducts`, payload)
+      .then((res) => {
+        fetchProduct();
+        handleDialogEditClose()
+
+      })
+      .catch((err) => {
+        console.log(err)
+        handleDialogEditClose()
+      })
+  }
+
+  // to Get categories
   const fetchCategories = () => {
-    axios.get(`${URL_API}/products/getcategories`,)
+    axios.get(`${URL_API}/products/getcategories`)
       .then((results) => {
         setCategoriesList(results.data)
         console.log(results.data, "ini result data")
@@ -107,19 +206,64 @@ const Products = (props) => {
       })
   };
 
-  const handleChange = (e) => {
-    setSelectedCategories(e.target.value);
+
+
+  const deleteBtnHandler = () => {
+    axios
+      .delete(`${URL_API}/products/deleteproducts`, {
+
+        data: {
+          idProduct: selectedId
+        }
+      })
+      .then((res) => {
+        fetchProduct();
+        cancleEdit();
+      })
+      .catch((err) => {
+        console.log("ini id dalam delete")
+      })
+
+    handleDialogClose()
+
+
   }
 
-  // to RENDER produk automatically after render
+  // to RENDER product automatically after render
   useEffect(() => {
     fetchCategories()
     fetchProduct()
   }, []);
 
-  const printData = () => {
-    return productList.map((val) => {
+  // to RENDER produk automatically after render
+  useEffect(() => {
+    fetchProduct()
+  }, [page]);
+
+
+  const renderItemCategories = (value, onChange) => {
+    return <Select
+      labelId="demo-simple-select-label"
+      id="demo-simple-select"
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+    >
+      {categoriesList.map((val) => {
+        return <MenuItem value={val.category_id}>{val.category_name}</MenuItem>
+      })}
+    </Select>
+  }
+
+
+
+  // Merender Produk List
+  const renderProductList = () => {
+    return productList.map((val, index) => {
+      const category = categoriesList.find((cat) => { return cat.category_id === val.category_id })
       return <TableRow key={val.name}>
+        <TableCell component="th" scope="row">
+          {index + 1}
+        </TableCell>
         <TableCell component="th" scope="row">
           {val.name}
         </TableCell>
@@ -127,147 +271,97 @@ const Products = (props) => {
         <TableCell align="left"> <img className={classes.gambar} src={val.image} alt="produk" /></TableCell>
         <TableCell align="left">{val.description}</TableCell>
         <TableCell align="left">{val.quantity}</TableCell>
-        <TableCell align="left"></TableCell>
-        <TableCell align="left"><Button className={classes.button} size="medium" variant="contained" color="primary" m={2} >Edit</Button></TableCell>
+        <TableCell align="left">{category.category_name}</TableCell>
+        <TableCell align="left">
+          <IconButton onClick={() => {
+            // editToggle(val.product_id)
+            setSelectedData(val)
+            handleDialogEditOpen()
+          }}
+            className={classes.button} size="medium" variant="contained" color="primary" m={2} >
+            <EditIcon />
+
+          </IconButton>
+        </TableCell>
+
+        <TableCell align="left"><IconButton onClick={() => {
+          setSelectedId(val.product_id)
+          handleDialogOpen()
+        }} className={classes.button} size="medium" variant="contained" color="secondary" m={2} >
+          <DeleteIcon />
+        </IconButton></TableCell>
       </TableRow>
 
     })
   }
 
-  const printCategories = () => {
-    return categoriesList.map((val)=> {
-      return <MenuItem value={val.category_id}>{val.category_name}</MenuItem>
-    })
-  }
 
-  console.log(productList, "ini product list >>>>>>>>>>>>>>.")
   return (
     <Container>
+      {/* Dialog */}
+      <FormDialog
+        open={open}
+        handleClickOpen={handleDialogOpen}
+        handleClose={handleDialogClose}
+        handleConfirm={deleteBtnHandler}
+      />
+
+      <FormEditDialog
+        open={openEdit}
+        handleClickOpen={handleDialogEditOpen}
+        handleClose={handleDialogEditClose}
+        renderItemCategories={renderItemCategories}
+        selectedData={selectedData}
+        handleConfirm={handleEditProduct}
+      />
+
+      <FormDialogAddProduct
+        open={addOpen}
+        handleClose={handleCloseAdd}
+        renderItemCategories={renderItemCategories}
+        handleAddProduct={handleAddProduct}
+      />
+      {/* start from here */}
+
+
       <Box p={5}>
         <TableContainer component={Paper}>
+          <Box display="flex" justifyContent="flex-end" alignItems="center" mr={2}>
+            <Button onClick={() => { handleOpenAdd() }} className={classes.button} size="medium" variant="contained" color="primary" m={2} >Tambah Product <AddIcon fontSize="small" /></Button>
+          </Box>
           <Table className={classes.table} aria-label="caption table">
             {/* <caption>A basic table example with a caption</caption> */}
             <TableHead>
               <TableRow>
+                <TableCell>No.</TableCell>
                 <TableCell>Nama Produk</TableCell>
                 <TableCell align="left">Harga</TableCell>
                 <TableCell align="left">Gambar</TableCell>
                 <TableCell align="left">Deskripsi</TableCell>
                 <TableCell align="left">Jumlah</TableCell>
-                <TableCell align="left"></TableCell>
+                <TableCell align="left">Kategori</TableCell>
                 <TableCell align="left">Edit Produk</TableCell>
+                <TableCell align="left"></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-            <TableRow>
-                <TableCell align="left">
-                  <TextField
-                    margin={'dense'}
-                    label="Nama"
-                    id="outlined-size-small"
-                    defaultValue=""
-                    variant="outlined"
-                    size="small"
-                    value={namaProduk}
-                    onChange={(event) => {
-                      setNamaProduk(event.target.value);
-                    }}
-                  /></TableCell>
-
-                <TableCell>
-                  <TextField
-                    align="left"
-                    margin={'dense'}
-                    label="Harga"
-                    id="outlined-size-small"
-                    defaultValue=""
-                    variant="outlined"
-                    size="small"
-                    value={hargaProduk}
-                    onChange={(event) => {
-                      setHargaProduk(event.target.value);
-                    }}
-                  /></TableCell>
-
-                <TableCell>
-                  <TextField
-                    margin={'dense'}
-                    label="Gambar"
-                    id="outlined-size-small"
-                    defaultValue=""
-                    variant="outlined"
-                    size="small"
-                    value={gambarProduk}
-                    onChange={(event) => {
-                      setGambarProduk(event.target.value);
-                    }}
-                  /></TableCell>
-                <TableCell>
-                  <TextField
-                    margin={'dense'}
-                    label="Deskripsi"
-                    id="outlined-size-small"
-                    defaultValue=""
-                    variant="outlined"
-                    size="small"
-                    value={deskripsiProduk}
-                    onChange={(event) => {
-                      setDeskripsiProduk(event.target.value);
-                    }}
-                  /></TableCell>
-                <TableCell>
-                  <TextField
-                    margin={'dense'}
-                    label="Jumlah"
-                    id="outlined-size-small"
-                    defaultValue=""
-                    variant="outlined"
-                    size="small"
-                    value={jumlahProduk}
-                    onChange={(event) => {
-                      setJumlahProduk(event.target.value);
-                    }}
-                  /></TableCell>
-                
-                <TableCell>
-                  <FormControl className={classes.formControl}>
-                    <InputLabel id="demo-simple-select-label">Kategori</InputLabel>
-                    <Select
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      value={selectedCategories}
-                      onChange={handleChange}
-                    >
-                     {printCategories()}
-                     
-                    </Select>
-                  </FormControl>
-                </TableCell>
-                <Button onClick={handlerInput} className={classes.button} size="medium" variant="contained" color="primary" m={2} >Tambah</Button>
-              </TableRow>
-              {printData()}
+              {renderProductList()}
             </TableBody>
-
-            {/* <TableBody>
-          {props.productList.map((row) => (
-            <TableRow key={row.name}>
-              <TableCell component="th" scope="row">
-                {row.name}
-              </TableCell>
-              <TableCell align="right">{row.price}</TableCell>
-              <TableCell align="right">{row.product_id}</TableCell>
-              <TableCell align="right">{row.image}</TableCell>
-            
-              
-              
-            </TableRow>
-          ))}
-        </TableBody> */}
           </Table>
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 25]}
+            component="div"
+            count={total}
+            rowsPerPage={limit}
+            page={page}
+            onChangePage={handleChangePage}
+            onChangeRowsPerPage={handleChangeRowsPerPage}
+            classes={{ spacer: classes.paginationSpacer }}
+          />
         </TableContainer>
-
-
       </Box>
+
+
     </Container>
   );
 }

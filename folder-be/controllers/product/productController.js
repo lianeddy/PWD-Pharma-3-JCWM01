@@ -6,6 +6,8 @@ const getData = require("./Feny/getData");
 const getProducts = require("./Pram/getProducts")
 const inputProducts = require("./Pram/inputProducts")
 const getCategories = require("./Pram/getCategories")
+const editProducts = require("./Pram/editProducts")
+const deleteProducts = require("./Pram/deleteProducts")
 
 
 module.exports = {
@@ -15,6 +17,8 @@ module.exports = {
   getProducts: getProducts,
   inputProducts: inputProducts,
   getCategories: getCategories,
+  editProducts: editProducts,
+  deleteProducts: deleteProducts,
 
 
 };

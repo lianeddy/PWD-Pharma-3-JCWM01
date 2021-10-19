@@ -4,7 +4,8 @@ const { userControllers } = require("../controllers/");
 const routers = express.Router();
 // const {auth} = require("../helper/authToken")
 const { auth } = require("../helper/authToken");
-
+const multer = require("multer");
+const upload = multer();
 // Pram
 // routers.post('login', userControllers.getData)
 routers.get("/username", userControllers.getUsername);
@@ -29,5 +30,16 @@ routers.patch(
 );
 routers.post("/uploadProfilePic", auth, userControllers.uploadPicture);
 routers.post("/cart", auth, userControllers.addCart);
-routers.put("/cart", auth, userControllers.editCart);
+routers.patch("/cart", auth, userControllers.editCart);
+routers.get("/cart", auth, userControllers.getCart);
+routers.post("/checkOut", auth, userControllers.checkOut);
+routers.post("/recipeUpload/:id", auth, userControllers.recipeUpload);
+routers.get("/transaction/:id", auth, userControllers.getTransaction);
+routers.get("/transaction", auth, userControllers.getTransaction);
+routers.get(
+  "/transactionDetail/:id",
+  auth,
+  userControllers.getTransactionDetail
+);
+routers.patch("/payment/:id", auth, userControllers.uploadPaymentProof);
 module.exports = routers;

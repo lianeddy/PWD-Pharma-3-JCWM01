@@ -91,21 +91,6 @@ export default function Landing() {
           been the industry's standard dummy text ever since the 1500s, when an
           unknown printer took a galle
         </p>
-        <form>
-          <div>
-            <label>Image Test</label>
-            <input
-              type="file"
-              id="img"
-              onChange={(e) => {
-                if (e.target.files[0]) {
-                  setImg(e.target.files[0]);
-                }
-              }}
-            />
-          </div>
-          <button onClick={addImg}>Add</button>
-        </form>
       </div>
       <div style={{ marginTop: "100px" }}></div>
       <GridContainer>
