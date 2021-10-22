@@ -14,4 +14,6 @@ routers.get(
   adminControllers.getTransactionDetail
 );
 routers.get("/getRawMedicine", auth, adminControllers.getRawMedicine);
+
+routers.get("/admin/revenue", adminControllers.adminRevenue );
 module.exports = routers;

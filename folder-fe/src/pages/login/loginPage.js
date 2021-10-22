@@ -66,7 +66,7 @@ const Signin = (props) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-
+console.log('-------')
   // Test password eyes
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword(!showPassword);

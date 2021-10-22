@@ -18,12 +18,9 @@ const useStyles = makeStyles((theme) => ({
         width: 100,
     },
     button: {
-        // borderRadius: 8,
-        // backgroundColor: "#03989e",
+
         margin: theme.spacing(3, 0, 2),
-        // "&:hover": {
-        //   backgroundColor: "#03989e",
-        // },
+    
     },
 }));
 export default function FormDialog(props) {
@@ -62,10 +59,6 @@ export default function FormDialog(props) {
 
     }, [props.selectedData])
 
-    // useEffect(() => {
-    //     props.handleClose()
-    //   });
-
     return (
         <div>
 
@@ -73,7 +66,7 @@ export default function FormDialog(props) {
                 <DialogTitle id="form-dialog-title">Edit produk</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        Merubah data produkkkkkkkk
+                        Merubah data produk
                     </DialogContentText>
                     <TextField
                         margin={'dense'}

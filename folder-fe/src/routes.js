@@ -1,6 +1,7 @@
 // @material-ui/icons
 import Dashboard from "@material-ui/icons/Dashboard";
 import Person from "@material-ui/icons/Person";
+import AlignVerticalBottomTwoToneIcon from '@mui/icons-material/AlignVerticalBottomTwoTone';
 import LibraryBooks from "@material-ui/icons/LibraryBooks";
 import BubbleChart from "@material-ui/icons/BubbleChart";
 import LocationOn from "@material-ui/icons/LocationOn";
@@ -20,6 +21,7 @@ import AdminTransaction from "pages/transaction/admin";
 import AdminTransactionDetail from "pages/transaction/admin/detail";
 import UserTransaction from "pages/transaction/user";
 import UserTransactionDetail from "pages/transaction/user/detail";
+import AdminRevenue from "pages/revenue/adminRevenue";
 const dashboardRoutes = [
   {
     path: "/Home",
@@ -100,6 +102,13 @@ const dashboardRoutes = [
     component: ProductsAdmin,
     layout: "/admin",
   },
+  {
+    path: "/AdminRevenue",
+    name: "Admin Revenue",
+    icon: AlignVerticalBottomTwoToneIcon,
+    component: AdminRevenue,
+    layout: '/admin',
+  }
 ];
 
 export default dashboardRoutes;
