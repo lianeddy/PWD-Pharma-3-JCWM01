@@ -10,6 +10,7 @@ import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import Hidden from "@material-ui/core/Hidden";
 import Poppers from "@material-ui/core/Popper";
 import Divider from "@material-ui/core/Divider";
+// import 
 // @material-ui/icons
 import Person from "@material-ui/icons/Person";
 import Notifications from "@material-ui/icons/Notifications";
@@ -91,7 +92,9 @@ export default function AdminNavbarLinks({ user_id }) {
                       <MenuItem
                         onClick={(e) => {
                           localStorage.clear();
-                          document.location.reload();
+                          window.location = window.location.origin;
+                       
+                          
                         }}
                         className={classes.dropdownItem}
                       >

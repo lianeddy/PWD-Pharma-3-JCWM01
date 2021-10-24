@@ -33,8 +33,6 @@ export default function FormDialog(props) {
     const [jumlah, setJumlah] = useState('')
     const [kategori, setKategori] = useState('')
     const [id, setId] = useState('')
-    console.log(props.selectedData.name)
-
 
     const payloadEdit = {
         editNama: nama,
@@ -45,8 +43,6 @@ export default function FormDialog(props) {
         editSelectedCategories: kategori,
         editId: id
     }
-
-    
 
     useEffect(() => {
         setNama(props.selectedData.name)

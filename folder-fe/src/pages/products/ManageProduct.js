@@ -85,17 +85,17 @@ const ProductsAdmin = (props) => {
   const [selectedData, setSelectedData] = useState('')
 
   // All Handler and toggle
-  const handleChange = (e) => {
-    setSelectedCategories(e.target.value);
-  }
+  // const handleChange = (e) => {
+  //   setSelectedCategories(e.target.value);
+  // }
 
-  const editHandleChange = (e) => {
-    setEditSelectedCategories(e.target.value);
-  }
+  // const editHandleChange = (e) => {
+  //   setEditSelectedCategories(e.target.value);
+  // }
 
-  const editToggle = (product_id) => {
-    setEditID(product_id)
-  }
+  // const editToggle = (product_id) => {
+  //   setEditID(product_id)
+  // }
 
   const cancleEdit = () => {
     setEditID(0)
@@ -157,7 +157,6 @@ const ProductsAdmin = (props) => {
     axios.get(`${URL_API}/products/getproducts?page=${page}&limit=${limit}`,)
       .then((results) => {
         setProductList(results.data.data)
-        console.log(results.data, "ini result data")
         setTotal(results.data.total)
       }).catch(() => {
         alert("Server error")
@@ -200,7 +199,6 @@ const ProductsAdmin = (props) => {
     axios.get(`${URL_API}/products/getcategories`)
       .then((results) => {
         setCategoriesList(results.data)
-        console.log(results.data, "ini result data")
       }).catch(() => {
         alert("Server error")
       })
@@ -238,7 +236,7 @@ const ProductsAdmin = (props) => {
   // to RENDER produk automatically after render
   useEffect(() => {
     fetchProduct()
-  }, [page]);
+  }, [page, limit]);
 
 
   const renderItemCategories = (value, onChange) => {
@@ -255,12 +253,11 @@ const ProductsAdmin = (props) => {
   }
 
 
-
   // Merender Produk List
   const renderProductList = () => {
     return productList.map((val, index) => {
       const category = categoriesList.find((cat) => { return cat.category_id === val.category_id })
-      return <TableRow key={val.name}>
+      return <TableRow key={index}>
         <TableCell component="th" scope="row">
           {index + 1}
         </TableCell>
@@ -324,7 +321,6 @@ const ProductsAdmin = (props) => {
       {/* start from here */}
 
 
-      <Box p={5}>
         <TableContainer component={Paper}>
           <Box display="flex" justifyContent="flex-end" alignItems="center" mr={2}>
             <Button onClick={() => { handleOpenAdd() }} className={classes.button} size="medium" variant="contained" color="primary" m={2} >Tambah Product <AddIcon fontSize="small" /></Button>
@@ -359,7 +355,6 @@ const ProductsAdmin = (props) => {
             classes={{ spacer: classes.paginationSpacer }}
           />
         </TableContainer>
-      </Box>
 
 
     </Container>

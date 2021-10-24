@@ -17,9 +17,8 @@ import ChangePassword from "./pages/changePassword/ChangePassPage";
 import TemptLanding from "pages/tempLanding/TemptLanding";
 import ErrorPage from "pages/errorPage/ErrorPage";
 import Authentication from "pages/authentication";
-import ProductsAdmin from "pages/products/ManageProduct"
 import Landing from "./pages/landing/";
-import AdminRevenue from "pages/revenue/adminRevenue";
+import Guest from "../src/layouts/Guest";
 
 import "assets/css/material-dashboard-react.css?v=1.10.0";
 
@@ -33,9 +32,8 @@ function App(props) {
   useEffect(() => {
     if (props.users.role_id) {
       setRoleID(props.users.role_id?.toString());
-    } 
-    
-    if (token && !props.users.role_id){
+      setIsFetchProfile(false);
+    } else {
       axios
         .post(
           `${URL_API}/users/getUserData`,
@@ -55,9 +53,6 @@ function App(props) {
         .catch(() => {
           setIsFetchProfile(false);
         });
-    } else {
-      setIsFetchProfile(false);
-
     }
   }, [props.users.role_id]);
 
@@ -67,11 +62,17 @@ function App(props) {
   // KEY ROLE = ROLE APA SAJA YANG BSA MENGAKSES HALAMAN
   const routes = [
     {
-      component: AdminRevenue,
-      path: "/admin/revenue",
-      needAuth: true,
-      role: [roles.Admin]
+      component: LoginPage,
+      path: "/login",
+      needAuth: false,
+      role: [roles.Admin, roles.User],
     },
+    {
+        component: Guest,
+        needAuth: false,
+        path: "/guest",
+        role: [roles.User, roles.Admin],
+      },
     {
       component: Authentication,
       path: "/authentication/:token",
@@ -103,12 +104,6 @@ function App(props) {
       role: [roles.Admin, roles.User],
     },
     {
-      component: ProductsAdmin,
-      path: '/admin/products',
-      needAuth: true,
-      role: [roles.Admin],
-    },
-    {
       component: Admin,
       needAuth: true,
       path: "/",
@@ -127,19 +122,21 @@ function App(props) {
       <Switch>
         {/* HALAMAN ERROR PAGE */}
         <Route component={ErrorPage} path="/error-404" />
-        <Route component={LoginPage} path="/login" />
 
         {/* MAPPING ROUTES UNTUK ME-RETURN ROUTE DARI WEBSITE YG ADA */}
         {routes.map((route, i) => {
           // ISALLOWTOACCESSPAGE UNTUK MENDAPATKAN TRUE ATAU FALSE VALUE ROLE ID YANG SEDANG LOGIN BOLEH MENGAKSES INDEX ROUTE
           if (!isFetchProfile && !roleId && route.needAuth) {
-             return <Redirect key={i} from={routes.component} to="/login" />;
+              console.log(!isFetchProfile && !roleId && route.needAuth)
+            return (<> <Route component={LoginPage} path="/login" /> 
+                     <Route component={Guest} path="/" /> </>)
           }
 
           if (roleId) {
             const isAllowAccessPage = route.role.includes(roleId);
             // JIKA ROLE ID TIDAK DAPAT MENGAKSES HALAMAN, MAKA AKAN DI-DIRECT KE 404 PAGE
             if (!isFetchProfile && !isAllowAccessPage) {
+              if (route.path == "/") return null;
               return <Redirect key={i} from={route.path} to="/error-404" />;
             }
           }

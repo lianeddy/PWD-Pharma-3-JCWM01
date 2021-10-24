@@ -74,8 +74,6 @@ const AdminRevenue = () => {
           .then((results) => {
             setTransactionList(results.data.data)
             setDataChart(results.data.revenue)
-            console.log(results.data, "ini result data")
-            
           }).catch(() => {
             alert("Server error")
           })

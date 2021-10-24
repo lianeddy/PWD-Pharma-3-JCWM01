@@ -94,27 +94,17 @@ console.log('-------')
         password: password,
       })
       .then(async (res) => {
-        if(res.data.password !== password){
-          setAlertData({
-            isOpen: true,
-            message: "Password salah",
-            type: 'error'
-          })
-        }
-
         const {dataLogin, token} = res.data
         await props.getUserdata(dataLogin)
         await localStorage.setItem("token", token);
 
         // IF ROLE ID = 1 (ADMIN) REDIRECT TO ADMIN PAGE
-        if(dataLogin.role_id === 1){
-        
+        if (dataLogin.role_id === 1) {
          return history.push("/")
-
         }
      
-        // IF ROLE ID = 2 (USER) REDIRECT TO USER PAGE
-        history.push("/temptlanding")
+        // IF ROLE ID = 2 (USER) REDIRECT TO HOME
+        history.push("/")
         console.log('Login Success ✔')
 
       }).catch((err) => {

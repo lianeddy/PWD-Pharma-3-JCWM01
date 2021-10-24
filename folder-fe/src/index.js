@@ -2,6 +2,8 @@ import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+import { BrowserRouter } from "react-router-dom";
+
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 // Reduc Config
 import { Provider } from "react-redux"; // untuk menghungkan antara action, reducer dan component
@@ -15,9 +17,11 @@ const storeReducer = createStore(Reducers, applyMiddleware(ReduxThunk));
 
 ReactDOM.render(
   <Provider store={storeReducer}>
-    <MuiPickersUtilsProvider utils={DateFnsUtils}>
-      <App />
-    </MuiPickersUtilsProvider>
+      <MuiPickersUtilsProvider utils={DateFnsUtils}>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+      </MuiPickersUtilsProvider>
   </Provider>,
   document.getElementById("root")
 );

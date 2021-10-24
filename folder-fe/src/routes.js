@@ -9,6 +9,7 @@ import Notifications from "@material-ui/icons/Notifications";
 import Unarchive from "@material-ui/icons/Unarchive";
 import Language from "@material-ui/icons/Language";
 import Category from "@material-ui/icons/Category";
+import LocalPharmacyRoundedIcon from '@material-ui/icons/LocalPharmacyRounded';
 
 //Route to App
 import Home from "pages/Home";
@@ -16,6 +17,7 @@ import Profile from "pages/profile";
 import TemptLanding from "pages/tempLanding/TemptLanding";
 import Cart from "pages/cart";
 import ProductsAdmin from "pages/products/ManageProduct";
+import RawMaterialUsage from "pages/products/rawMaterialUsage"
 
 import AdminTransaction from "pages/transaction/admin";
 import AdminTransactionDetail from "pages/transaction/admin/detail";
@@ -39,14 +41,14 @@ const dashboardRoutes = [
   },
   {
     path: "/Home",
-    name: "Admin-Home",
+    name: "Halaman Utama",
     icon: Dashboard,
     component: Home,
     layout: "/admin",
   },
   {
     path: "/Profile",
-    name: "Admin-Profile",
+    name: "Profil Admin",
     icon: Person,
     component: Profile,
     layout: "/admin",
@@ -60,7 +62,7 @@ const dashboardRoutes = [
   },
   {
     path: "/Transaction",
-    name: "Admin Transaction",
+    name: "Transaksi Admin",
     icon: LibraryBooks,
     component: AdminTransaction,
     layout: "/admin",
@@ -97,16 +99,23 @@ const dashboardRoutes = [
   },
   {
     path: "/ProductsAdmin",
-    name: "Product Admin",
+    name: "Daftar Produk",
     icon: Category,
     component: ProductsAdmin,
     layout: "/admin",
   },
   {
     path: "/AdminRevenue",
-    name: "Admin Revenue",
+    name: "Pendapatan",
     icon: AlignVerticalBottomTwoToneIcon,
     component: AdminRevenue,
+    layout: '/admin',
+  },
+  {
+    path: "/product/raws",
+    name: "Pemakaian Bahan Mentah",
+    icon: LocalPharmacyRoundedIcon,
+    component: RawMaterialUsage,
     layout: '/admin',
   }
 ];
