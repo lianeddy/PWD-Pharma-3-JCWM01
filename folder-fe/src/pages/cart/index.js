@@ -163,6 +163,9 @@ const Cart = (props) => {
   useEffect(() => {
     props.getCart(props.users);
   }, []);
+  useEffect(() => {
+    props.getCart(props.users);
+  }, []);
 
   return (
     <div style={{ margin: "0px 25% 0px 25%" }}>
