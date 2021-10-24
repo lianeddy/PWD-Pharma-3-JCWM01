@@ -63,7 +63,7 @@ export function User({ users, ...rest }) {
       {users.role_id ? (
         <Sidebar
           routes={routes}
-          logoText={"Pharmacy group 3"}
+          logoText={"KLINK-KU"}
           logo={logo}
           bg={image}
           handleDrawerToggle={handleDrawerToggle}

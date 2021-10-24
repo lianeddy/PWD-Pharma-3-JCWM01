@@ -134,7 +134,11 @@ const StatusChanger = ({
                 onChange={(e) => setTotal(e.target.value)}
               />
             </h2>
-            <Button onClick={(e) => hdnChangeTotal(totals)}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={(e) => hdnChangeTotal(totals)}
+            >
               Change Total
             </Button>{" "}
           </>

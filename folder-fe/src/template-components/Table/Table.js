@@ -55,7 +55,10 @@ export default function CustomTable(props) {
       <input type="text" onChange={(e) => hdnSearch(e)} />
       <Table className={classes.table}>
         {tableHead !== undefined ? (
-          <TableHead className={classes[tableHeaderColor + "TableHeader"]}>
+          <TableHead
+            className={classes[tableHeaderColor + "TableHeader"]}
+            style={{ backgroundColor: "#03989e" }}
+          >
             <TableRow className={classes.tableHeadRow}>
               {tableHead.map((prop, key) => {
                 return (
@@ -63,7 +66,13 @@ export default function CustomTable(props) {
                     className={classes.tableCell + " " + classes.tableHeadCell}
                     key={key}
                   >
-                    <Button onClick={() => hdnSort(key)}> {prop} </Button>
+                    <Button
+                      onClick={() => hdnSort(key)}
+                      style={{ color: "white" }}
+                    >
+                      {" "}
+                      {prop}{" "}
+                    </Button>
                   </TableCell>
                 );
               })}

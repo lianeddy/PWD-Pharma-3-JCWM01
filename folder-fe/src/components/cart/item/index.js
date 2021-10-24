@@ -36,8 +36,8 @@ const CartItem = ({ data, updateCart }) => {
   const classes = useStyles();
   return (
     <Card>
-      <CardHeader color="warning" stats icon style={{ textAlign: "left" }}>
-        <CardIcon color="warning">
+      <CardHeader color="primary" stats icon style={{ textAlign: "left" }}>
+        <CardIcon color="primary">
           <img style={{ width: "100px" }} src={dataItem.image} />
         </CardIcon>
         <div style={{ display: "flex", flexWrap: "wrap" }}>

@@ -17,7 +17,7 @@ import { getUserProfile } from "redux/actions/userAction";
 import styles from "assets/jss/material-dashboard-react/layouts/adminStyle.js";
 
 import bgImage from "assets/img/sidebar-2.jpg";
-import logo from "assets/img/reactlogo.png";
+import logo from "assets/img/Klinik.png";
 
 let ps;
 
@@ -60,12 +60,11 @@ export function Admin({ users, ...rest }) {
       className={users.role_id ? classes.wrapper : ""}
       style={{ position: "relative", height: "100vh" }}
     >
-
       {users.role_id ? (
         <Sidebar
           role_id={users.role_id}
           routes={routes}
-          logoText={"Pharmacy group 3"}
+          logoText={"KLINIK-KU"}
           logo={logo}
           bg={image}
           handleDrawerToggle={handleDrawerToggle}
