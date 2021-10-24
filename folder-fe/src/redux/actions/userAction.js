@@ -6,7 +6,6 @@ export const getUserdata = (data) => {
 }
 
 export const getUserProfile = (data) => {
-    console.log(data, "inii data di actionnn")
     return {
         type: 'GET_USER_PROFILE',
         payload: data
