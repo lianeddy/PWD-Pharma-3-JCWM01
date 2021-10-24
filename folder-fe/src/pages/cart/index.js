@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
-import { getCart, recipeCart } from "redux/actions/cartAction";
+import { getCart, recipeCart, addCart } from "redux/actions/cartAction";
 import { Button } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useHistory } from "react-router";
@@ -57,18 +57,18 @@ const Cart = (props) => {
         quantity: Math.ceil(Math.random() * 10),
       },
     ];
-
-    axios.post(
-      `${URL_API}/users/cart`,
-      {
-        items,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      }
-    );
+    props.addCart(5, Math.ceil(Math.random() * 10));
+    // axios.post(
+    //   `${URL_API}/users/cart`,
+    //   {
+    //     items,
+    //   },
+    //   {
+    //     headers: {
+    //       Authorization: `Bearer ${localStorage.getItem("token")}`,
+    //     },
+    //   }
+    // );
   };
   const hdnSubmitOrder = () => {
     let form = new FormData();
@@ -160,6 +160,9 @@ const Cart = (props) => {
         console.log(err);
       });
   };
+  useEffect(() => {
+    props.getCart(props.users);
+  }, []);
   useEffect(() => {
     props.getCart(props.users);
   }, []);

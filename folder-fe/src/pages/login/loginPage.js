@@ -5,7 +5,7 @@ import axios from "axios";
 
 import { makeStyles } from "@material-ui/core/styles";
 
-import {InputAdornment, IconButton } from "@material-ui/core";
+import { InputAdornment, IconButton } from "@material-ui/core";
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import Button from "@material-ui/core/Button";
@@ -63,10 +63,10 @@ const Signin = (props) => {
   const classes = useStyles();
   const history = useHistory();
 
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
-
+  console.log("-------");
   // Test password eyes
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword(!showPassword);
@@ -76,7 +76,6 @@ const Signin = (props) => {
     message: "",
     type: "",
   });
-
 
   // create function to handle button login
   const handleSignin = () => {
@@ -94,37 +93,26 @@ const Signin = (props) => {
         password: password,
       })
       .then(async (res) => {
-        if(res.data.password !== password){
-          setAlertData({
-            isOpen: true,
-            message: "Password salah",
-            type: 'error'
-          })
-        }
-
-        const {dataLogin, token} = res.data
-        await props.getUserdata(dataLogin)
+        const { dataLogin, token } = res.data;
+        await props.getUserdata(dataLogin);
         await localStorage.setItem("token", token);
 
         // IF ROLE ID = 1 (ADMIN) REDIRECT TO ADMIN PAGE
-        if(dataLogin.role_id === 1){
-        
-         return history.push("/")
-
+        if (dataLogin.role_id === 1) {
+          return history.push("/");
         }
-     
-        // IF ROLE ID = 2 (USER) REDIRECT TO USER PAGE
-        history.push("/temptlanding")
-        console.log('Login Success ✔')
 
-      }).catch((err) => {
+        // IF ROLE ID = 2 (USER) REDIRECT TO HOME
+        history.push("/");
+        console.log("Login Success ✔");
+      })
+      .catch((err) => {
         setAlertData({
           isOpen: true,
           message: "Username atau sandi salah",
-          type: 'error'
-        })
-      })
-      
+          type: "error",
+        });
+      });
   };
 
   const goToSignup = () => {
@@ -201,7 +189,7 @@ const Signin = (props) => {
               onChange={(event) => {
                 setPassword(event.target.value);
               }}
-              InputProps={{ 
+              InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
                     <IconButton
@@ -211,9 +199,8 @@ const Signin = (props) => {
                       {showPassword ? <Visibility /> : <VisibilityOff />}
                     </IconButton>
                   </InputAdornment>
-                )
+                ),
               }}
-
             />
             {/*LUPA PASSWORD*/}
             <Typography variant="body2">
@@ -247,12 +234,11 @@ const Signin = (props) => {
 };
 
 const mapStateToProps = (state) => {
-  console.log('===', state)
-return {
-  users: state.userReducer
-}
-}
-
+  console.log("===", state);
+  return {
+    users: state.userReducer,
+  };
+};
 
 const mapDispatchToProps = (dispatch) => {
   return {
@@ -260,7 +246,6 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Signin)
-
+export default connect(mapStateToProps, mapDispatchToProps)(Signin);
 
 // Sementara kirim id dan user role di local storage tanpa token

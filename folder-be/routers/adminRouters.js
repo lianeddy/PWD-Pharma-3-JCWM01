@@ -16,4 +16,6 @@ routers.get(
 routers.get("/getRawMedicine", auth, adminControllers.getRawMedicine);
 routers.post("/insertItems", auth, adminControllers.insertItems);
 routers.post("/changeTotal", auth, adminControllers.changeTotal);
+
+routers.get("/admin/revenue", adminControllers.adminRevenue);
 module.exports = routers;

@@ -11,6 +11,7 @@ const {
   changeTotal,
 } = require("./Taksu/adminTransaction");
 
+const adminRevenue = require("./Pram/adminRevenue");
 //----
 module.exports = {
   //Taksu
@@ -21,4 +22,7 @@ module.exports = {
   getRawMedicine,
   insertItems,
   changeTotal,
+
+  //Pram
+  adminRevenue,
 };

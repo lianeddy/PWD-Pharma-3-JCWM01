@@ -29,22 +29,7 @@ const CartItem = ({ data, updateCart }) => {
     setDataItem({ ...data, qty: data.qty, total: data.qty * data.price });
     setClick(
       setTimeout(() => {
-        updateCart(data.product_id, data.qty);
-        axios.patch(
-          `${URL_API}/users/cart`,
-          {
-            cart_id: dataItem.cart_id,
-            product_id: dataItem.product_id,
-            qty: data.qty,
-            remove: false,
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          }
-        );
-        console.log("test", data.qty);
+        updateCart(data.product_id, data.qty, dataItem.cart_id);
       }, 1000)
     );
   };

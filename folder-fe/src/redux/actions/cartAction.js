@@ -30,12 +30,59 @@ export const getCart = (user_state) => {
   };
 };
 
-export const updateCart = (product_id, qty) => {
-  return {
-    type: "UPDATE_CART",
-    payloads: { product_id, qty },
+export const updateCart = (product_id, qty, cart_id) => {
+  return (dispatch) => {
+    Axios.patch(
+      `${URL_API}/users/cart`,
+      {
+        cart_id: cart_id,
+        product_id: product_id,
+        qty: qty,
+        remove: false,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    ).then((res) => {
+      dispatch({
+        type: "UPDATE_CART",
+        payloads: { product_id, qty },
+      });
+    });
   };
 };
+
+export const addCart = (product_id, qty = 1) => {
+  return (dispatch) => {
+    let items = [
+      {
+        productId: product_id,
+        quantity: qty,
+      },
+    ];
+    Axios.post(
+      `${URL_API}/users/cart`,
+      {
+        items,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    ).then((res) => {
+      dispatch({
+        type: "ADD_CART",
+        payloads: { product_id, qty },
+      });
+    });
+  };
+};
+
+export const removeCart = (product_id) => {};
+
 export const recipeCart = (image) => {
   return {
     type: "ADD_RECIPE",

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
@@ -7,16 +7,52 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
+import { Button, TableFooter } from "@material-ui/core";
 // core components
 import styles from "assets/jss/material-dashboard-react/components/tableStyle.js";
 
 const useStyles = makeStyles(styles);
 
 export default function CustomTable(props) {
-  const classes = useStyles();
   const { tableHead, tableData, tableHeaderColor } = props;
+  const classes = useStyles();
+  const [data, setData] = useState([]);
+  const [dataFiltered, setDataFiltered] = useState([]);
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(5);
+  const [totalPage, setTotalPage] = useState(0);
+  const [inputSearch, setSearch] = useState("");
+  useEffect(() => {
+    setData([...tableData]);
+    setTotalPage(Math.floor(tableData.length / limit));
+    let pagination = tableData.slice((page - 1) * limit, page * limit);
+    hdnPaging(pagination);
+  }, [props.tableData, page]);
+  const hdnSort = (key) => {
+    let sortData =
+      dataFiltered[dataFiltered.length - 1] <= dataFiltered[0]
+        ? dataFiltered.sort((a, b) => (a[key] > b[key] ? 1 : -1))
+        : dataFiltered.sort((a, b) => (b[key] > a[key] ? 1 : -1));
+    setDataFiltered([...sortData]);
+  };
+  const hdnPaging = (x) => {
+    setDataFiltered([...x]);
+  };
+
+  const hdnSearch = (e) => {
+    let temp = data.filter((x) =>
+      x.find((v) =>
+        typeof v == "string"
+          ? v.toLowerCase().includes(e.target.value.toLowerCase())
+          : false
+      )
+    );
+    temp = temp.slice((page - 1) * limit, page * limit);
+    setDataFiltered([...temp]);
+  };
   return (
     <div className={classes.tableResponsive}>
+      <input type="text" onChange={(e) => hdnSearch(e)} />
       <Table className={classes.table}>
         {tableHead !== undefined ? (
           <TableHead className={classes[tableHeaderColor + "TableHeader"]}>
@@ -27,7 +63,7 @@ export default function CustomTable(props) {
                     className={classes.tableCell + " " + classes.tableHeadCell}
                     key={key}
                   >
-                    {prop}
+                    <Button onClick={() => hdnSort(key)}> {prop} </Button>
                   </TableCell>
                 );
               })}
@@ -35,7 +71,7 @@ export default function CustomTable(props) {
           </TableHead>
         ) : null}
         <TableBody>
-          {tableData.map((prop, key) => {
+          {dataFiltered.map((prop, key) => {
             return (
               <TableRow key={key} className={classes.tableBodyRow}>
                 {prop.map((prop, key) => {
@@ -49,6 +85,30 @@ export default function CustomTable(props) {
             );
           })}
         </TableBody>
+        <TableFooter style={{ float: "right", width: "100%" }}>
+          <TableRow>
+            <Button
+              onClick={(e) => {
+                let test = page - 1 <= 0 ? null : setPage(page - 1);
+              }}
+            >
+              {" "}
+              {"<"}{" "}
+            </Button>
+            {page} of {Math.ceil(tableData.length / limit)}{" "}
+            <Button
+              onClick={(e) => {
+                let test =
+                  page + 1 > Math.ceil(tableData.length / limit)
+                    ? null
+                    : setPage(page + 1);
+              }}
+            >
+              {" "}
+              {">"}{" "}
+            </Button>
+          </TableRow>
+        </TableFooter>
       </Table>
     </div>
   );

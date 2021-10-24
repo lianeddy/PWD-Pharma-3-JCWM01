@@ -23,6 +23,15 @@ export const cartReducer = (state = INITIAL_STATE, action) => {
       });
       state.cart_item = [...updatedCart];
       return { ...state };
+
+    case "ADD_CART":
+      const addCart = state.cart_item.map((x) => {
+        return x.product_id == action.payloads.product_id
+          ? { ...x, quantity: x.quantity + action.payloads.qty }
+          : x;
+      });
+      state.cart_item = [...addCart];
+      return { ...state };
     default:
       return { ...INITIAL_STATE };
   }
