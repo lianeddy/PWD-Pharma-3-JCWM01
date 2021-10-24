@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
@@ -7,14 +7,23 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
+import { Button } from "@material-ui/core";
 // core components
 import styles from "assets/jss/material-dashboard-react/components/tableStyle.js";
 
 const useStyles = makeStyles(styles);
 
 export default function CustomTable(props) {
-  const classes = useStyles();
   const { tableHead, tableData, tableHeaderColor } = props;
+  const classes = useStyles();
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    setData([...tableData]);
+  }, [props.tableData]);
+  const hdnSort = (key) => {
+    let sortData = data.sort((a, b) => a[key] - b[key]);
+    setData([...sortData]);
+  };
   return (
     <div className={classes.tableResponsive}>
       <Table className={classes.table}>
@@ -27,7 +36,7 @@ export default function CustomTable(props) {
                     className={classes.tableCell + " " + classes.tableHeadCell}
                     key={key}
                   >
-                    {prop}
+                    <Button onClick={() => hdnSort(key)}> {prop} </Button>
                   </TableCell>
                 );
               })}
@@ -35,7 +44,7 @@ export default function CustomTable(props) {
           </TableHead>
         ) : null}
         <TableBody>
-          {tableData.map((prop, key) => {
+          {data.map((prop, key) => {
             return (
               <TableRow key={key} className={classes.tableBodyRow}>
                 {prop.map((prop, key) => {
