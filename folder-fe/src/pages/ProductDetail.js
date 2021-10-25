@@ -1,5 +1,5 @@
 /*eslint-disable*/
-import React from "react";
+import  React,{useState} from "react";
 // nodejs library to set properties for components
 import PropTypes from "prop-types";
 // @material-ui/core components
@@ -20,6 +20,8 @@ import CardBody from "../template-components/Card/CardBody.js";
 import CardFooter from "../template-components/Card/CardFooter.js";
 import CustomButtons from "../template-components/CustomButtons/Button";
 import Info from "../template-components/Typography/Info.js";
+import Axios from 'axios';
+
 
 const styles = {
   cardCategoryWhite: {
@@ -54,28 +56,50 @@ const styles = {
 const useStyles = makeStyles(styles);
 
 function ProductDetail(props) {
-  const classes = useStyles();
-  // const [tl, setTL] = React.useState(false);
-  // const [tc, setTC] = React.useState(false);
-  // const [tr, setTR] = React.useState(false);
-  // const [bl, setBL] = React.useState(false);
-  // const [bc, setBC] = React.useState(false);
-  // const [br, setBR] = React.useState(false);
-  // React.useEffect(() => {
-  //   // Specify how to clean up after this effect:
-  //   return function cleanup() {
-  //     // to stop the warning of calling setState of unmounted component
-  //     var id = window.setTimeout(null, 0);
-  //     while (id--) {
-  //       window.clearTimeout(id);
-  //     }
-  //   };
-  // });
+ const classes = useStyles();
+ const [productNotFound, setProductNotFound] = useState()
+ const [productData, setProductData] = useState()
+
+ const  fetchProduct = () => {
+    Axios.get("http://localhost:3300/products/getData",{
+      params:{
+        id:props.match.params.productId
+      }
+    })
+    .then((result) => {
+    if(result.data.length){
+      setProduct({ productData: result.data[0]})
+    }else{
+      setProduct({ productNotFound:true})
+    }
+    })
+    .catch(() => {
+    alert("Terjadi kesalahan di server")
+    })
+  }
+
+ const  qtyBtnHandler=(action)=>{
+    if(action === "increment"){
+      setState({quantity:state.quantity+1})
+    }else if(action === "decrement" && state.quantity>1) {
+      setState({quantity:state.quantity-1})
+    }
+  }
+  
 
   return (
+   
     <Card>
       <CardBody>
-        <GridContainer>
+          {
+          state.productNotFound?
+          <Info>
+          <h3 className={classes.cardTitle}>
+            {props.match.params.productId}
+          </h3>
+          </Info>
+          :
+          <GridContainer>
           <GridItem xs={12} sm={12} md={6}>
             <Card>
               <img
@@ -99,8 +123,14 @@ function ProductDetail(props) {
                 <p className={classes.cardCategory}>
                   {props.productData.description}
                 </p>
+                <ButtonGroup  variant="contained" aria-label="outlined info button group">
+                        <Button onClick={qtyBtnHandler("decrement")} color="info"  >{"-"}</Button>
+                        <Button color="info" variant="outlined"  aria-label="outlined"> </Button>
+                        <Button onClick={qtyBtnHandler("increment")}color="info" >{"+"}</Button>
+                </ButtonGroup>
                 <LocalOffer />
                 {props.productData.price}
+
               </CardBody>
               <CardFooter stats>
                 <CustomButtons
@@ -111,9 +141,12 @@ function ProductDetail(props) {
                   <AddShoppingCartIcon /> Beli{" "}
                 </CustomButtons>
               </CardFooter>
+              
             </Card>
           </GridItem>
-        </GridContainer>
+          </GridContainer>
+        }
+       
         <br />
         <br />
       </CardBody>

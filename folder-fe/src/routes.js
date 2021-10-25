@@ -91,11 +91,12 @@ const dashboardRoutes = [
     layout: "/user",
   },
   {
-    path: "/ProductDetail",
+    path: "/ProductDetail/:productId",
     name: "Product Detail",
     icon: Category,
     component: ProductDetail,
     layout: "/user",
+    hide:true,
   },
   {
     path: "/ProductsAdmin",

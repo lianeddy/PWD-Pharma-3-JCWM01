@@ -76,14 +76,14 @@ class Home extends React.Component{
 
     })
   }
+
   nextPageHandler =()=>{
-    
     if(this.state.page < this.state.maxPage){
       this.setState({page:this.state.page+1})
     }
     
   }
- 
+
   previousPageHandler =()=>{
     if(this.state.page >1 ){
     this.setState({page:this.state.page-1})
@@ -91,7 +91,6 @@ class Home extends React.Component{
   }
 
   inputHandler =(event)=>{
-    //const name = event.target.name
     const value = event.target.value
     this.setState({ name : value })
   }
@@ -156,9 +155,6 @@ class Home extends React.Component{
                 <FormControl variant="standard" >
                     <InputLabel id="demo-simple-select-standard-label">Urutkan Produk</InputLabel>
                     <Select
-                    //labelId="demo-simple-select-standard-label"
-                    //id="demo-simple-select-standard"
-                    //value={age}
                     onChange= {this.inputSortHandler}
                     label="Urutkan Produk"
                     >
@@ -174,10 +170,6 @@ class Home extends React.Component{
                     
             </GridItem>
 
-            {/* <GridItem xs={12} sm={6} md={3}>
-           
-                    
-           </GridItem> */}
             <GridItem xs={12} sm={6} md={2}>
             <CustomButtons color="info" size="md" onClick={this.searchBtnHandler} ><Search/> </CustomButtons >
                     
@@ -185,11 +177,9 @@ class Home extends React.Component{
             </GridContainer>
             
             <GridContainer>
-            <GridItem xs={12} sm={12} md={4}>
-            {this.renderProducts()}
-            </GridItem>
-        
-       
+                <div style={{display:"flex",flexWrap:"wrap", justifyContent:"spaceBetween"}}>
+                {this.renderProducts()}
+                </div>
             </GridContainer>
             
             <GridContainer>
