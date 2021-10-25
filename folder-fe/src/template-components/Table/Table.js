@@ -19,7 +19,7 @@ export default function CustomTable(props) {
   const [data, setData] = useState([]);
   const [dataFiltered, setDataFiltered] = useState([]);
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(5);
+  const [limit, setLimit] = useState(10);
   const [totalPage, setTotalPage] = useState(0);
   const [inputSearch, setSearch] = useState("");
   useEffect(() => {

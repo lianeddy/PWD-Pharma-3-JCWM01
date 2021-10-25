@@ -30,10 +30,10 @@ const checkRawInv = async (req, res) => {
 const lockInventories = async (req, res) => {
   const { order_id, status_id } = req.body;
   const { user_id } = req.user;
-  let qCheck = `select OI.quantity, i.* 
-  from order_items OI join inventories i on 
-  OI.product_id = i.product_id  
-  where order_id = ${db.escape(order_id)} and 
+  let qCheck = `select OI.quantity, i.*
+  from order_items OI join inventories i on
+  OI.product_id = i.product_id
+  where order_id = ${db.escape(order_id)} and
   ((oi.quantity > i.quantity AND i.total_volume is NULL) or (oi.quantity > i.total_volume AND i.total_volume is not NULL))
   `;
   db.query(qCheck, async (err, result) => {
@@ -47,9 +47,9 @@ const lockInventories = async (req, res) => {
           .send({ message: "Not enough stock!", success: false, data: result });
         return false;
       } else {
-        let qProduct = `UPDATE inventories i join order_items oi on i.product_id = oi.product_id SET i.quantity = i.quantity - oi.quantity WHERE 
+        let qProduct = `UPDATE inventories i join order_items oi on i.product_id = oi.product_id SET i.quantity = i.quantity - oi.quantity WHERE
         order_id = ${db.escape(order_id)} and i.total_volume is NULL `;
-        let qRawProduct = `UPDATE inventories i join order_items oi on i.product_id = oi.product_id 
+        let qRawProduct = `UPDATE inventories i join order_items oi on i.product_id = oi.product_id
         SET i.TOTAL_VOLUME = i.TOTAL_VOLUME - oi.quantity WHERE order_id = ${db.escape(
           order_id
         )} and i.total_volume is NOT NULL `;
@@ -63,10 +63,10 @@ const lockInventories = async (req, res) => {
 module.exports = {
   getTransaction: (req, res) => {
     const order_id = req.params ? req.params.id : null;
-    let qGetOrder_ID = `select O.order_id as id, S.status_id, S.status_name, CASE WHEN O.payment_proof LIKE '0' THEN 'No payment proof' ELSE O.payment_proof END as payment_proof, 
+    let qGetOrder_ID = `select O.order_id as id, S.status_id, S.status_name, CASE WHEN O.payment_proof LIKE '0' THEN 'No payment proof' ELSE O.payment_proof END as payment_proof,
     O.total, U.full_name, U.phone_no, U.email, U.gender, O.prescription from orders O left join status S on o.status_id = S.status_id LEFT JOIN USERS U ON O.USER_ID = U.USER_ID  ${
       order_id ? "where o.order_id =" + order_id : ""
-    }`;
+    } ORDER BY o.MODIFIED_DATE desc`;
     db.query(qGetOrder_ID, (err, result) => {
       if (err) {
         console.log(err);
@@ -80,7 +80,7 @@ module.exports = {
   },
   getTransactionDetail: (req, res) => {
     const { id } = req.params;
-    let qGet = `SELECT OI.PRODUCT_ID, OI.QUANTITY, P.NAME, P.IMAGE, P.PRICE  
+    let qGet = `SELECT OI.PRODUCT_ID, OI.QUANTITY, P.NAME, P.IMAGE, P.PRICE
     FROM ORDER_ITEMS OI LEFT JOIN PRODUCTS P ON OI.PRODUCT_ID = P.PRODUCT_ID where order_id = ${id}`;
     db.query(qGet, (err, result) => {
       if (err) {

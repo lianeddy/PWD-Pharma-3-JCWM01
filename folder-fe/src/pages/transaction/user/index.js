@@ -13,7 +13,7 @@ import { URL_API } from "helper/helper";
 import Table from "template-components/Table/Table.js";
 import { Link } from "react-router-dom";
 import { VpnKeySharp } from "@material-ui/icons";
-
+import Chip from '@mui/material/Chip';
 const styles = {
   cardCategoryWhite: {
     "&,& a,& a:hover,& a:focus": {
@@ -43,10 +43,11 @@ const styles = {
     },
   },
 };
-
+const chipColor = ['', 'primary', 'warning', 'info', 'success', 'secondary', 'error']
 const useStyles = makeStyles(styles);
 
 export default function UserTransaction() {
+
   const [data, setData] = useState();
   useEffect(() => {
     axios
@@ -60,7 +61,7 @@ export default function UserTransaction() {
           let temp = res.data.DATA.map((val) => {
             return {
               id: val.id,
-              status_name: val.status_name,
+              status_name: <Chip label={val.status_name} color={chipColor[val.status_id]}/>,
               total: val.total,
               payment_proof: val.payment_proof,
               action: (
