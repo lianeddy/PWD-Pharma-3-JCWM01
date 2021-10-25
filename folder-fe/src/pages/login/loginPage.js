@@ -66,7 +66,6 @@ const Signin = (props) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  console.log("-------");
   // Test password eyes
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword(!showPassword);
@@ -204,7 +203,11 @@ const Signin = (props) => {
             />
             {/*LUPA PASSWORD*/}
             <Typography variant="body2">
-              <Link onClick={goToForgetPassword} variant="body2">
+              <Link
+                onClick={goToForgetPassword}
+                variant="body2"
+                component="button"
+              >
                 Lupa Password
               </Link>
             </Typography>
@@ -221,7 +224,7 @@ const Signin = (props) => {
             <div>
               <Typography variant="body2">
                 Belum punya akun?{" "}
-                <Link onClick={goToSignup} variant="body2">
+                <Link onClick={goToSignup} variant="body2" component="button">
                   Daftar di sini.
                 </Link>
               </Typography>

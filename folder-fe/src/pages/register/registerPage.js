@@ -232,7 +232,7 @@ export default function RegisterPage() {
           <div>
             <Typography variant="body2">
               Sudah punya akun?{" "}
-              <Link onClick={goToSignin} variant="body2">
+              <Link onClick={goToSignin} variant="body2"  component="button">
                 Masuk di sini.
               </Link>
             </Typography>
