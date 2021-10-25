@@ -3,7 +3,7 @@ import axios from "axios";
 import { URL_API } from "helper/helper";
 import { Button } from "@material-ui/core";
 import { maxHeight } from "@mui/system";
-
+import Chip from '@mui/material/Chip';
 const Payment = ({ id, payment_proof }) => {
   const [payment, setPayment] = useState(payment_proof);
   const hdnUploadPayment = () => {
@@ -25,7 +25,7 @@ const Payment = ({ id, payment_proof }) => {
   };
   return (
     <div>
-      <h2>Payment</h2>
+    <Chip style={{fontSize:'28px', height:'46px'}} label="Payment" color='info' size='large'/>;
       <p>Please upload your payment</p>
       <img
         style={{ width: "400px", maxHeight: "600px", display: "block" }}
