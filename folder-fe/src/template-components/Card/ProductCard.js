@@ -21,13 +21,13 @@ function ProductCard(props) {
      const classes = useStyles();
     
     return (
-        <div style={{width:"200px"}}>
-                    <Card>
+        <div style={{width:"280px"}}>
+                    <Card style={{height:"480px"}}>
                         <img
                             className={classes.cardImgTop}
                             data-src="holder.js/100px180/"
                             alt="100%x160"
-                            style={{ height: "160px", width: "120px", display: "block" }}
+                            style={{ height: "160px", width: "120px", display: "block" ,margin:"auto"}}
                             src={props.productData.image}
                             data-holder-rendered="true"
                         />
