@@ -8,7 +8,7 @@ module.exports = {
     let qGetOrder_ID = `select O.order_id as id, S.status_name, S.status_id, CASE WHEN O.payment_proof LIKE '0' THEN 'No payment proof' ELSE O.payment_proof END as payment_proof,
     O.total from orders O left join status S on o.status_id = S.status_id where o.user_id = ${user_id} ${
       order_id ? "&& o.order_id =" + order_id : ""
-    } ORDER BY O.MODIFIED_DATE DESC`;
+    } ORDER BY O.order_id DESC`;
     db.query(qGetOrder_ID, (err, result) => {
       if (err) {
         console.log(err);

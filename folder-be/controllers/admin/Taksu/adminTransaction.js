@@ -66,7 +66,7 @@ module.exports = {
     let qGetOrder_ID = `select O.order_id as id, S.status_id, S.status_name, CASE WHEN O.payment_proof LIKE '0' THEN 'No payment proof' ELSE O.payment_proof END as payment_proof,
     O.total, U.full_name, U.phone_no, U.email, U.gender, O.prescription from orders O left join status S on o.status_id = S.status_id LEFT JOIN USERS U ON O.USER_ID = U.USER_ID  ${
       order_id ? "where o.order_id =" + order_id : ""
-    } ORDER BY o.MODIFIED_DATE desc`;
+    } ORDER BY o.order_id desc`;
     db.query(qGetOrder_ID, (err, result) => {
       if (err) {
         console.log(err);
@@ -145,7 +145,7 @@ module.exports = {
             }
           });
         } else {
-          if (status_id == 3) {
+          if (status_id == 3 && req.body.process) {
             lockInventories(req, res);
           } else {
             res

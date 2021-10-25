@@ -281,7 +281,7 @@ export default function AdminTransactionDetail() {
   };
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const hdnChangeStatus = (order_id, status_id) => {
+  const hdnChangeStatus = (order_id, status_id, process = false) => {
     console.log({ order_id, status_id }, "Status");
     axios
       .post(
@@ -289,6 +289,7 @@ export default function AdminTransactionDetail() {
         {
           order_id,
           status_id,
+          process,
         },
         {
           headers: {
