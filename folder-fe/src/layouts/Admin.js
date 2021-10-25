@@ -65,7 +65,7 @@ export function Admin({ users, ...rest }) {
         <Sidebar
           role_id={users.role_id}
           routes={routes}
-          logoText={"Pharmacy group 3"}
+          logoText={"Klinik-ku"}
           logo={logo}
           bg={image}
           handleDrawerToggle={handleDrawerToggle}

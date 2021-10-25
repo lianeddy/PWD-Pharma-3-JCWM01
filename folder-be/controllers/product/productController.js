@@ -9,6 +9,7 @@ const getCategories = require("./Pram/getCategories");
 const editProducts = require("./Pram/editProducts");
 const deleteProducts = require("./Pram/deleteProducts");
 const rawMaterialUsage = require("./Pram/rawMaterialUsage");
+const getBottleStock = require("./Pram/bottleStock")
 
 
 module.exports = {
@@ -21,6 +22,7 @@ module.exports = {
   editProducts,
   deleteProducts,
   rawMaterialUsage,
+  getBottleStock,
 
 
 };

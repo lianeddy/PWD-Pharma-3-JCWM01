@@ -16,7 +16,6 @@ module.exports = (req, res) => {
         if(err2){
             res.status(500).send(err2);
           }
-          console.log('results2 =====', results2)
             res.status(200).send({ data: results, revenue: results2 });
 
         })

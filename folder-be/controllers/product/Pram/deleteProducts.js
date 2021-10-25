@@ -9,6 +9,7 @@ module.exports = (req, res) => {
         if (results) {
             let delQuery = `DELETE FROM inventories where product_id = ${db.escape(idProduct)};`;
             db.query(delQuery, (err2, results2) => {
+                
                 if (err2) {
                     console.log(err2);
                     return res.status(500).send(err2);

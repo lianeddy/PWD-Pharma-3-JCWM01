@@ -21,6 +21,9 @@ import Typography from '@material-ui/core/Typography';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import BentoIcon from '@mui/icons-material/Bento';
+import ListAltIcon from '@mui/icons-material/ListAlt';
+import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
 
 
 
@@ -42,7 +45,6 @@ const useStyles = makeStyles((theme) => ({
   title: {
     color: "#03989e",
     fontSize: 24,
-  
   },
   table: {
     border: '1px solid "#03989e"',
@@ -50,7 +52,11 @@ const useStyles = makeStyles((theme) => ({
   titleTable: {
     color: "#03989e",
     fontSize: 20,
-    marginBottom: 20,
+    marginLeft: 8,
+  },
+  icon : {
+    color: "#03989e",
+
   }
 }));
 
@@ -58,6 +64,8 @@ const useStyles = makeStyles((theme) => ({
 const RawMaterialUsage = () => {
 
   const classes = useStyles();
+
+  const [dataBottle, setDataBottle] = useState([])
 
   const [isLoading, setIsLoading] = useState(false)
 
@@ -80,9 +88,7 @@ const RawMaterialUsage = () => {
 
   }
 
-
-  console.log('rawMaterialUsage', rawMaterialUsage)
-
+  // Fetching data product
   const fetchRawMaterialUsage = () => {
     setIsLoading(true)
     axios.get(`${URL_API}/products/rawmaterialusage?page=${page}&limit=${limit}`,)
@@ -97,8 +103,20 @@ const RawMaterialUsage = () => {
       })
   };
 
+  const fetchBottlesStock = () => {
+    axios.get(`${URL_API}/products/bottlestock`)
+    .then((results) => {
+      setDataBottle(results.data.data)
+      console.log(results.data, "< ini res data ")
+
+    }).catch(() => {
+
+    })
+  }
+
   useEffect(() => {
     fetchRawMaterialUsage()
+    fetchBottlesStock()
   }, []);
 
   useEffect(() => {
@@ -137,15 +155,30 @@ const RawMaterialUsage = () => {
     })
   };
 
+  const renderDataBottle = () => {
+    return dataBottle.map((val, index) => {
+      return <TableRow key={index}>
+      <TableCell component="th" scope="row">
+        {index + 1}
+      </TableCell>
+      <TableCell component="th" scope="row">
+        {val.name}
+      </TableCell>
+      <TableCell align="left">{val.jumlah}</TableCell>
+      <TableCell align="left"></TableCell>
+    </TableRow>
+    })
+  };
+
   return (
     <div>
       <Box p={5} >
-        <Typography className={classes.title} align="center">
-          <b>KLINIK-KU</b>
-        </Typography>
-        <Typography className={classes.titleTable} align="center">
+        <Box display="flex" flexDirection="row" alignItems="center" >
+        <BentoIcon p={2} className={classes.icon} />
+        <Typography className={classes.titleTable}  align="left">
           <b>Total Pemakaian Bahan Mentah</b>
           </Typography>
+          </Box>
         <Box mb={4}>
           <TableContainer component={Paper}>
             <Table className={classes.table} aria-label="caption table">
@@ -158,14 +191,50 @@ const RawMaterialUsage = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {renderSumTotal()}
+              {isLoading && <TableRow>
+                <TableCell colSpan={3} align="left"><Box display="flex" width="100%" justifyContent="center"> <CircularProgress size={18} /></Box></TableCell>
+              </TableRow>}
+              {!isLoading && renderSumTotal()}
               </TableBody>
             </Table>
           </TableContainer>
         </Box>
-        <Typography className={classes.titleTable} align="center">
+
+        <Box display="flex" flexDirection="row" alignItems="center" >
+        <ListAltIcon p={2} className={classes.icon} />
+        <Typography className={classes.titleTable}  align="left">
+          <b>Total Botol</b>
+          </Typography>
+          </Box>
+        <Box mb={4}>
+          <TableContainer component={Paper}>
+            <Table className={classes.table} aria-label="caption table">
+              <TableHead>
+                <TableRow>
+                  <TableCell align="left">No.</TableCell>
+                  <TableCell align="left">Nama Produk</TableCell>
+                  <TableCell align="left">Jumlah Botol</TableCell>
+                  <TableCell align="left"></TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+              {isLoading && <TableRow>
+                <TableCell colSpan={3} align="left"><Box display="flex" width="100%" justifyContent="center"> <CircularProgress size={18} /></Box></TableCell>
+              </TableRow>}
+              {!isLoading && renderDataBottle()}
+                
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Box>
+
+
+        <Box display="flex" flexDirection="row" alignItems="center" >
+        <FormatListNumberedIcon p={2} className={classes.icon} />
+        <Typography className={classes.titleTable}  align="left">
           <b>Daftar Pemakaian Bahan</b>
           </Typography>
+          </Box>
         <TableContainer component={Paper}>
           <Table aria-label="caption table">
             <TableHead>
@@ -184,8 +253,10 @@ const RawMaterialUsage = () => {
               {!isLoading && renderRawMaterialUsage()}
             </TableBody>
           </Table>
+
+          
           <TablePagination
-            rowsPerPageOptions={[2, 10, 25]}
+            rowsPerPageOptions={[2, 10]}
             component="div"
             count={total}
             rowsPerPage={limit}
@@ -195,6 +266,8 @@ const RawMaterialUsage = () => {
             classes={{ spacer: classes.paginationSpacer }}
           />
         </TableContainer>
+
+        
       </Box>
     </div>
   )

@@ -54,13 +54,6 @@ const dashboardRoutes = [
     layout: "/admin",
   },
   {
-    path: "/Report",
-    name: "Report Admin",
-    icon: LibraryBooks,
-    component: TemptLanding,
-    layout: "/admin",
-  },
-  {
     path: "/Transaction",
     name: "Transaksi Admin",
     icon: LibraryBooks,
@@ -113,7 +106,7 @@ const dashboardRoutes = [
   },
   {
     path: "/product/raws",
-    name: "Pemakaian Bahan Mentah",
+    name: "Bahan Mentah",
     icon: LocalPharmacyRoundedIcon,
     component: RawMaterialUsage,
     layout: '/admin',
@@ -121,3 +114,12 @@ const dashboardRoutes = [
 ];
 
 export default dashboardRoutes;
+
+
+// {
+//   path: "/Report",
+//   name: "Report Admin",
+//   icon: LibraryBooks,
+//   component: TemptLanding,
+//   layout: "/admin",
+// },

@@ -9,10 +9,9 @@ module.exports = (req, res) => {
     if (err) return res.status(500).send(err); 
 
     if(results) {
-        const sumQuery = `Select o.quantity, o.created_date, p.name from order_items o join products p on o.product_id = p.product_id where o.product_id = 537 or o.product_id= 536;`;
+        const sumQuery = `Select o.quantity, o.created_date, p.name, p.category_id from order_items o join products p on o.product_id = p.product_id where p.category_id = 5;`;
         db.query(sumQuery, (err2, results2) => {
            if (err2) return res.status(500).send(err);
-            console.log(results, "<<< ini res 1", results2, "<<< ini res 2" )
 
            if (results2) {
              const scriptQuery2 = `SELECT sum(quantity) as Jumlah, p.name as Nama 

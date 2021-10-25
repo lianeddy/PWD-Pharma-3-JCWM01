@@ -52,12 +52,7 @@ const useStyles = makeStyles((theme) => ({
 
 const ProductsAdmin = (props) => {
   const classes = useStyles();
-  // Product yang akan diinput ke dalam table
-  // const [namaProduk, setNamaProduk] = useState('');
-  // const [hargaProduk, setHargaProduk] = useState('');
-  // const [gambarProduk, setGambarProduk] = useState('');
-  // const [deskripsiProduk, setDeskripsiProduk] = useState('');
-  // const [jumlahProduk, setJumlahProduk] = useState('');
+
   const [addOpen, setAddOpen] = useState(false)
 
   // Product list adalah sebuah var yang menampung data produk yg didapat dari database.
@@ -65,70 +60,30 @@ const ProductsAdmin = (props) => {
 
   // Menampung list categories yg didapatkan dari db
   const [categoriesList, setCategoriesList] = useState([]);
-  // Menampung value categories yg dipilih
-  const [selectedCategories, setSelectedCategories] = useState('');
-  // Edit value categories pada produk
-  const [editSelectedCategories, setEditSelectedCategories] = useState('');
-
-  const [editId, setEditID] = useState(0);
 
   // For paginate
   const [page, setPage] = useState(0)
   const [limit, setLimit] = useState(5)
 
   const [total, setTotal] = useState(0)
-  // const [rowsPerPage, setRowPerPage] = useState()
 
   // For Dialog Delete/
   const [open, setOpen] = useState(false);
   const [selectedId, setSelectedId] = useState('')
   const [selectedData, setSelectedData] = useState('')
 
-  // All Handler and toggle
-  // const handleChange = (e) => {
-  //   setSelectedCategories(e.target.value);
-  // }
 
-  // const editHandleChange = (e) => {
-  //   setEditSelectedCategories(e.target.value);
-  // }
-
-  // const editToggle = (product_id) => {
-  //   setEditID(product_id)
-  // }
-
-  const cancleEdit = () => {
-    setEditID(0)
-  }
 
   // For Dialog Edit
   const [openEdit, setOpenEdit] = useState(false);
 
-
   const handleDialogEditOpen = () => {
-    console.log('masuk ===  ', open)
-
     setOpenEdit(true);
   };
 
   const handleDialogEditClose = () => {
     setOpenEdit(false);
   };
-
-
-  // For Dialog Delete
-  const handleDialogOpen = () => {
-    console.log('masuk ===  ', open)
-
-    setOpen(true);
-  };
-
-  const handleDialogClose = () => {
-    setOpen(false);
-    console.log('masuk ', open)
-  };
-
-
 
   // For Paginate
   const handleChangePage = (e, number) => {
@@ -137,7 +92,7 @@ const ProductsAdmin = (props) => {
 
   const handleChangeRowsPerPage = (e) => {
     setLimit(e.target.value);
-
+    setPage(1)
   }
 
   // For Dialog Add
@@ -149,8 +104,14 @@ const ProductsAdmin = (props) => {
     setAddOpen(false)
   }
 
+   // For Dialog Delete
+   const handleDialogOpen = () => {
+    setOpen(true);
+  };
 
-
+  const handleDialogClose = () => {
+    setOpen(false);
+  };
 
   // to GET data
   const fetchProduct = () => {
@@ -162,8 +123,6 @@ const ProductsAdmin = (props) => {
         alert("Server error")
       })
   };
-
-
 
   // to INPUT data
   const handleAddProduct = (payload) => {
@@ -204,27 +163,22 @@ const ProductsAdmin = (props) => {
       })
   };
 
-
-
+  // to Dellete Product
   const deleteBtnHandler = () => {
     axios
       .delete(`${URL_API}/products/deleteproducts`, {
-
         data: {
           idProduct: selectedId
         }
       })
       .then((res) => {
         fetchProduct();
-        cancleEdit();
       })
       .catch((err) => {
-        console.log("ini id dalam delete")
+        throw err
       })
 
     handleDialogClose()
-
-
   }
 
   // to RENDER product automatically after render
@@ -252,7 +206,6 @@ const ProductsAdmin = (props) => {
     </Select>
   }
 
-
   // Merender Produk List
   const renderProductList = () => {
     return productList.map((val, index) => {
@@ -271,7 +224,6 @@ const ProductsAdmin = (props) => {
         <TableCell align="left">{category.category_name}</TableCell>
         <TableCell align="left">
           <IconButton onClick={() => {
-            // editToggle(val.product_id)
             setSelectedData(val)
             handleDialogEditOpen()
           }}
@@ -291,7 +243,6 @@ const ProductsAdmin = (props) => {
 
     })
   }
-
 
   return (
     <Container>
@@ -318,48 +269,42 @@ const ProductsAdmin = (props) => {
         renderItemCategories={renderItemCategories}
         handleAddProduct={handleAddProduct}
       />
-      {/* start from here */}
-
-
-        <TableContainer component={Paper}>
-          <Box display="flex" justifyContent="flex-end" alignItems="center" mr={2}>
-            <Button onClick={() => { handleOpenAdd() }} className={classes.button} size="medium" variant="contained" color="primary" m={2} >Tambah Product <AddIcon fontSize="small" /></Button>
-          </Box>
-          <Table className={classes.table} aria-label="caption table">
-            {/* <caption>A basic table example with a caption</caption> */}
-            <TableHead>
-              <TableRow>
-                <TableCell>No.</TableCell>
-                <TableCell>Nama Produk</TableCell>
-                <TableCell align="left">Harga</TableCell>
-                <TableCell align="left">Gambar</TableCell>
-                <TableCell align="left">Deskripsi</TableCell>
-                <TableCell align="left">Jumlah</TableCell>
-                <TableCell align="left">Kategori</TableCell>
-                <TableCell align="left">Edit Produk</TableCell>
-                <TableCell align="left"></TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {renderProductList()}
-            </TableBody>
-          </Table>
-          <TablePagination
-            rowsPerPageOptions={[5, 10, 25]}
-            component="div"
-            count={total}
-            rowsPerPage={limit}
-            page={page}
-            onChangePage={handleChangePage}
-            onChangeRowsPerPage={handleChangeRowsPerPage}
-            classes={{ spacer: classes.paginationSpacer }}
-          />
-        </TableContainer>
-
-
+   
+      <TableContainer component={Paper}>
+        <Box display="flex" justifyContent="flex-end" alignItems="center" mr={2}>
+          <Button onClick={() => { handleOpenAdd() }} className={classes.button} size="medium" variant="contained" color="primary" m={2} >Tambah Product <AddIcon fontSize="small" /></Button>
+        </Box>
+        <Table className={classes.table} aria-label="caption table">
+          <TableHead>
+            <TableRow>
+              <TableCell>No.</TableCell>
+              <TableCell>Nama Produk</TableCell>
+              <TableCell align="left">Harga</TableCell>
+              <TableCell align="left">Gambar</TableCell>
+              <TableCell align="left">Deskripsi</TableCell>
+              <TableCell align="left">Jumlah</TableCell>
+              <TableCell align="left">Kategori</TableCell>
+              <TableCell align="left">Edit Produk</TableCell>
+              <TableCell align="left"></TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {renderProductList()}
+          </TableBody>
+        </Table>
+        <TablePagination
+          rowsPerPageOptions={[5, 10]}
+          component="div"
+          count={total}
+          rowsPerPage={limit}
+          page={page}
+          onChangePage={handleChangePage}
+          onChangeRowsPerPage={handleChangeRowsPerPage}
+          classes={{ spacer: classes.paginationSpacer }}
+        />
+      </TableContainer>
     </Container>
   );
 }
-
 
 export default ProductsAdmin;
