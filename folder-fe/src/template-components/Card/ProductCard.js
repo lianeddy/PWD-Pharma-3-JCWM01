@@ -32,7 +32,7 @@ function ProductCard(props) {
                             data-holder-rendered="true"
                         />
                         <CardBody>
-                        <Info><a href="/product-detail"><h4 className={classes.cardTitle}>{props.productData.name}</h4></a></Info>
+                        <Info><a href="/ProductDetail"><h4 className={classes.cardTitle}>{props.productData.name}</h4></a></Info>
                         <p className={classes.cardCategory}>
                         {props.productData.description}
                         </p> 
