@@ -275,6 +275,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = {
   getCart,
   recipeCart,
+  addCart
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Cart);

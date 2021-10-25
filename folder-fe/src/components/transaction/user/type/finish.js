@@ -1,7 +1,7 @@
 import React from "react";
-
+import Chip from '@mui/material/Chip';
 const Finish = () => {
-  return <h2>Finish</h2>;
+  return <><Chip style={{fontSize:'33px', height:'44px'}} label="Finish" color='secondary' size='large'/></>;
 };
 
 export default Finish;
