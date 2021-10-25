@@ -74,13 +74,7 @@ const useStyles = makeStyles(styles);
 
   return (
     <Card>
-      <CardHeader color="info">
-        {/* <h4 className={classes.cardTitleWhite}>Notifications</h4>
-        <p className={classes.cardCategoryWhite}>
-          
-          .
-        </p> */}
-      </CardHeader>
+     
       <CardBody>
         <GridContainer>
           <GridItem xs={12} sm={12} md={6}>

@@ -42,7 +42,7 @@ function ProductCard(props) {
                             <LocalOffer /> 
                             {props.productData.price}
                             </div>
-                            <CustomButtons color="info" size="sm"><AddShoppingCartIcon/> Beli </CustomButtons >
+                            <CustomButtons color="info" size="sm"  onClick={this.props.addCart}><AddShoppingCartIcon/> Beli </CustomButtons >
                         </CardFooter>
                     </Card>
           

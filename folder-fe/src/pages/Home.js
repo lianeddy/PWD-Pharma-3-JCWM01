@@ -126,8 +126,6 @@ class Home extends React.Component{
              <GridItem xs={12} sm={6} md={4}>
              <InputLabel htmlFor="standard-adornment-amount">Cari Katalog Obat</InputLabel>
                 <Input
-                    // id="standard-adornment-amount"
-                    // value={values.amount}
                     onChange={this.inputHandler}
                     startAdornment={<InputAdornment position="end"><Search/></InputAdornment>}
                 />
@@ -137,9 +135,6 @@ class Home extends React.Component{
                 <FormControl variant="standard">
                     <InputLabel>Filter Kategori</InputLabel>
                     <Select
-                    //labelId="demo-simple-select-standard-label"
-                    //id="demo-simple-select-standard"
-                    //value={age}
                     onChange={this.inputCategoryHandler}
                     label="Pilih Jenis Obat"
                     >
@@ -193,17 +188,12 @@ class Home extends React.Component{
             <GridItem xs={12} sm={12} md={4}>
             {this.renderProducts()}
             </GridItem>
-            <GridItem xs={12} sm={12} md={4}>
-            {this.renderProducts()}
-            </GridItem>
-            <GridItem xs={12} sm={12} md={4}>
-            {this.renderProducts()}
-            </GridItem>
+        
        
             </GridContainer>
             
             <GridContainer>
-            <GridItem xs={12} sm={8} md={8}>
+            <GridItem xs={12} sm={8} md={8}   alignItems="center" justifyContent="center">
                 <ButtonGroup  variant="contained" aria-label="outlined info button group">
                         <Button color="info" disabled={this.state.page === 1} onClick={this.previousPageHandler} >{"<"}</Button>
                         <Button color="info" variant="outlined"  aria-label="outlined"> {this.state.page} dari {this.state.maxPage} Halaman</Button>
