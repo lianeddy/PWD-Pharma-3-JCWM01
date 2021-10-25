@@ -18,7 +18,7 @@ import TemptLanding from "pages/tempLanding/TemptLanding";
 import Cart from "pages/cart";
 import ProductsAdmin from "pages/products/ManageProduct";
 import RawMaterialUsage from "pages/products/rawMaterialUsage"
-
+import ProductDetail from "pages/ProductDetail";
 import AdminTransaction from "pages/transaction/admin";
 import AdminTransactionDetail from "pages/transaction/admin/detail";
 import UserTransaction from "pages/transaction/user";
@@ -88,6 +88,13 @@ const dashboardRoutes = [
     name: "Cart",
     icon: Category,
     component: Cart,
+    layout: "/user",
+  },
+  {
+    path: "/ProductDetail",
+    name: "Product Detail",
+    icon: Category,
+    component: ProductDetail,
     layout: "/user",
   },
   {
