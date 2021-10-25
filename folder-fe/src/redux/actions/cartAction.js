@@ -38,7 +38,7 @@ export const updateCart = (product_id, qty, cart_id) => {
         cart_id: cart_id,
         product_id: product_id,
         qty: qty,
-        remove: false,
+        remove: qty <= 0 ? true : false,
       },
       {
         headers: {

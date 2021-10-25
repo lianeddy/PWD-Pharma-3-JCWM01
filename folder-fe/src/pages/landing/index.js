@@ -72,8 +72,8 @@ export default function Landing() {
           borderBottom: "solid 1px black",
         }}
       >
-        <img src={Klinik} style={{ width: "25%" }} />
-        <h2>Tagline Pharmacure</h2>
+        <img src={Klinik} style={{ width: "20%" }} />
+        <h2>GREAT MEDICINE IS HERE</h2>
         <p
           style={{
             padding: "0px 100px 100px 100px",
@@ -81,15 +81,11 @@ export default function Landing() {
             fontWeight: "bold",
           }}
         >
-          Lorem Ipsum is simply dummy text of the printing and typesetting
-          industry. Lorem Ipsum has been the industry's standard dummy text ever
-          since the 1500s, when an unknown printer took a galle. Lorem Ipsum is
-          simply dummy text of the printing and typesetting industry. Lorem
-          Ipsum has been the industry's standard dummy text ever since the
-          1500s, when an unknown printer took a galle Lorem Ipsum is simply
-          dummy text of the printing and typesetting industry. Lorem Ipsum has
-          been the industry's standard dummy text ever since the 1500s, when an
-          unknown printer took a galle
+          KLINIK-KU adalah sebuah online Pharmacy yang menyediakan layanan beli
+          produk secara online, layanan kami dari produk barang beli langsung
+          yang bisa dipilih secara online, juga layanan rancang obat dari resep
+          dokter. Tak lagi harus pergi ke apotek untuk mencari apakah obat yang
+          dicari ada atau tidak dengan Pharmacure semua menjadi lebih mudah!
         </p>
       </div>
       <div style={{ marginTop: "100px" }}></div>
@@ -107,11 +103,9 @@ export default function Landing() {
               </CardIcon>
               <h3 className={classes.cardCategory}>Great Medicine</h3>
               <p className={classes.cardTitle}>
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry. Lorem Ipsum has been the industry's standard dummy
-                text ever since the 1500s, when an unknown printer took a galle.
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry.
+                Produk kami 100% produk asli dan dengan harga terjangkau! Kami
+                yakin produk yang kami jual adalah produk yang berkualitas dan
+                aman untuk digunakan.
               </p>
             </CardHeader>
           </Card>
@@ -129,11 +123,9 @@ export default function Landing() {
               </CardIcon>
               <h3 className={classes.cardCategory}>Great Service</h3>
               <p className={classes.cardTitle}>
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry. Lorem Ipsum has been the industry's standard dummy
-                text ever since the 1500s, when an unknown printer took a galle.
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry.
+                Tim kami selalu siap untuk membantu anda! Apapun yang anda
+                butuhkan, obat yang anda inginkan, kami siap untuk membantu anda
+                dalam proses pembelian kebutuhan obat-obat!
               </p>
             </CardHeader>
           </Card>
@@ -151,11 +143,8 @@ export default function Landing() {
               </CardIcon>
               <h3 className={classes.cardCategory}>Great People</h3>
               <p className={classes.cardTitle}>
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry. Lorem Ipsum has been the industry's standard dummy
-                text ever since the 1500s, when an unknown printer took a galle.
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry.
+                Kami yakin dengan menyediakan produk dan servis yang menjangkau
+                kita bisa membuat anda bahagia!
               </p>
             </CardHeader>
           </Card>
@@ -164,7 +153,7 @@ export default function Landing() {
       <div
         style={{ marginTop: "100px", borderBottom: "solid 1px black" }}
       ></div>
-      <div style={{ textAlign: "center" }}>
+      {/* <div style={{ textAlign: "center" }}>
         <h2>Catalogue</h2>
         <GridContainer>
           <GridItem xs={12} sm={12} md={4}>
@@ -246,7 +235,7 @@ export default function Landing() {
             </Card>
           </GridItem>
         </GridContainer>
-      </div>
+      </div> */}
     </div>
   );
 }

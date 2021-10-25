@@ -202,10 +202,10 @@ module.exports = {
     if (item.remove) {
       qItem = `DELETE FROM CART_ITEMS WHERE CART_ID = ${db.escape(
         item.cart_id
-      )} && product_id = ${db.escape(item.productId)}`;
+      )} AND product_id = ${db.escape(item.product_id)}`;
     } else {
       qItem = `UPDATE CART_ITEMS SET quantity = ${db.escape(item.qty)} 
-      WHERE CART_ID = ${db.escape(item.cart_id)} && PRODUCT_ID = ${db.escape(
+      WHERE CART_ID = ${db.escape(item.cart_id)} AND PRODUCT_ID = ${db.escape(
         item.product_id
       )}`;
     }
@@ -214,7 +214,7 @@ module.exports = {
         console.log(err);
         res.status(500).send({ message: "failed", success: false });
       }
-      res.status(200).send({ message: "Success", success: true });
+      res.status(200).send({ message: "Success", success: true, DATA: result });
     });
   },
   checkOut: (req, res) => {

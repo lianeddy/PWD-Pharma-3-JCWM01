@@ -106,7 +106,7 @@ export default function AdminTransaction() {
           <CardBody>
             {data ? (
               <Table
-                tableHeaderColor="primary"
+                tableHeaderColor="warning"
                 tableHead={[
                   "Order id",
                   "Status",

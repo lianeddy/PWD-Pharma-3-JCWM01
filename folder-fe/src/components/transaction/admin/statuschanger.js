@@ -62,86 +62,98 @@ const StatusChanger = ({
   return (
     <div>
       <h2>{status}</h2>
-
-      <GridItem xs={12} sm={12} md={4}>
-        <Card>
-          <CardHeader color="success" style={{ margin: "auto" }}>
-            {prescription ? (
-              <img src={prescription} style={{ width: "200px" }} />
-            ) : (
-              <h4>Order has no prescription</h4>
-            )}
-          </CardHeader>
-          {status_id != 5 ? (
-            <>
-              <CardBody>
-                {status_options ? (
-                  <>
-                    <Select
-                      id="status_id"
-                      value={statusChange}
-                      style={{ width: "100%" }}
-                      onChange={(e) => setStatusChange(e.target.value)}
-                    >
-                      {status_options.map((val) => {
-                        return (
-                          <MenuItem
-                            value={val.STATUS_ID}
-                            disabled={val.STATUS_NAME == status ? true : false}
-                          >
-                            {val.STATUS_NAME}
-                          </MenuItem>
-                        );
-                      })}
-                    </Select>
-                  </>
-                ) : null}
-              </CardBody>
-              <CardFooter style={{ margin: "auto", paddingBottom: "10px" }}>
+      <GridContainer>
+        <GridItem xs={4} sm={4} md={4}>
+          <Card>
+            <CardHeader color="success" style={{ margin: "auto" }}>
+              {prescription ? (
+                <img src={prescription} style={{ width: "200px" }} />
+              ) : (
+                <h4>Order has no prescription</h4>
+              )}
+            </CardHeader>
+            {status_id != 5 ? (
+              <>
+                <CardBody>
+                  {status_options ? (
+                    <>
+                      <Select
+                        id="status_id"
+                        value={statusChange}
+                        style={{ width: "100%" }}
+                        onChange={(e) => setStatusChange(e.target.value)}
+                      >
+                        {status_options.map((val) => {
+                          return (
+                            <MenuItem
+                              value={val.STATUS_ID}
+                              disabled={
+                                val.STATUS_NAME == status ? true : false
+                              }
+                            >
+                              {val.STATUS_NAME}
+                            </MenuItem>
+                          );
+                        })}
+                      </Select>
+                    </>
+                  ) : null}
+                </CardBody>
+                <CardFooter style={{ margin: "auto", paddingBottom: "10px" }}>
+                  <Button
+                    color="primary"
+                    variant="contained"
+                    onClick={() => {
+                      console.log({
+                        order_id,
+                        test: statusChange,
+                      });
+                      return window.confirm(
+                        `Are sure you want to change this order status?`
+                      )
+                        ? hdnChangeStatus(order_id, statusChange)
+                        : null;
+                    }}
+                  >
+                    Change Status
+                  </Button>
+                </CardFooter>
+              </>
+            ) : null}
+          </Card>
+        </GridItem>
+        <GridItem xs={8} sm={8} md={8}>
+          <div style={{ float: "right" }}>
+            {status_id != 5 ? (
+              <>
+                {" "}
+                <h2>
+                  Total: Rp.{" "}
+                  <input
+                    type="text"
+                    style={{
+                      color: "green",
+                      fontWeight: "bold",
+                      fontSize: "24px",
+                    }}
+                    value={totals}
+                    onChange={(e) => setTotal(e.target.value)}
+                  />
+                </h2>
                 <Button
-                  color="primary"
                   variant="contained"
-                  onClick={() => {
-                    console.log({
-                      order_id,
-                      test: statusChange,
-                    });
-                    return window.confirm(
-                      `Are sure you want to change this order status?`
-                    )
-                      ? hdnChangeStatus(order_id, statusChange)
-                      : null;
-                  }}
+                  color="primary"
+                  onClick={(e) => hdnChangeTotal(totals)}
                 >
-                  Change Status
-                </Button>
-              </CardFooter>
-            </>
-          ) : null}
-        </Card>
-      </GridItem>
-      <Card></Card>
-      <div style={{ float: "right" }}>
-        {status_id != 5 ? (
-          <>
-            {" "}
-            <h2>
-              Total: Rp.{" "}
-              <input
-                type="text"
-                style={{ color: "green", fontWeight: "bold", fontSize: "24px" }}
-                value={totals}
-                onChange={(e) => setTotal(e.target.value)}
-              />
-            </h2>
-            <Button onClick={(e) => hdnChangeTotal(totals)}>
-              Change Total
-            </Button>{" "}
-          </>
-        ) : (
-          <h2>Total: Rp. {totals} </h2>
-        )}
-      </div>
+                  Change Total
+                </Button>{" "}
+              </>
+            ) : (
+              <h2>Total: Rp. {totals} </h2>
+            )}
+          </div>
+        </GridItem>
+      </GridContainer>
     </div>
   );
 };

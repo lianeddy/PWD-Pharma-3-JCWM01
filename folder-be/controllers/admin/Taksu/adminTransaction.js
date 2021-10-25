@@ -1,4 +1,4 @@
-const { db } = require("../../../database");
+const { db, dbDir } = require("../../../database");
 const insertCart = (req, res, order_id) => {
   const { user_id } = req.user;
   let itemsInsert = req.body.items.map((val) => {
@@ -16,7 +16,50 @@ const insertCart = (req, res, order_id) => {
     res.status(200).send({ message: result_3, success: true });
   });
 };
-
+const checkRawInv = async (req, res) => {
+  let qSelect = `select * from inventories where total_volume is not null`;
+  let [inventories] = await dbDir.promise().query(qSelect);
+  for (let val of inventories) {
+    let qUpdateInv = `UPDATE INVENTORIES SET quantity = ${Math.ceil(
+      val.total_volume / val.per_bottle
+    )} where total_volume is not null`;
+    await dbDir.promise().query(qUpdateInv);
+  }
+  res.status(200).send({ message: "Pesanan telah di proses!", success: true });
+};
+const lockInventories = async (req, res) => {
+  const { order_id, status_id } = req.body;
+  const { user_id } = req.user;
+  let qCheck = `select OI.quantity, i.* 
+  from order_items OI join inventories i on 
+  OI.product_id = i.product_id  
+  where order_id = ${db.escape(order_id)} and 
+  ((oi.quantity > i.quantity AND i.total_volume is NULL) or (oi.quantity > i.total_volume AND i.total_volume is not NULL))
+  `;
+  db.query(qCheck, async (err, result) => {
+    if (err) {
+      res.status(500).send({ success: false });
+      return false;
+    } else {
+      if (result.length > 0) {
+        res
+          .status(200)
+          .send({ message: "Not enough stock!", success: false, data: result });
+        return false;
+      } else {
+        let qProduct = `UPDATE inventories i join order_items oi on i.product_id = oi.product_id SET i.quantity = i.quantity - oi.quantity WHERE 
+        order_id = ${db.escape(order_id)} and i.total_volume is NULL `;
+        let qRawProduct = `UPDATE inventories i join order_items oi on i.product_id = oi.product_id 
+        SET i.TOTAL_VOLUME = i.TOTAL_VOLUME - oi.quantity WHERE order_id = ${db.escape(
+          order_id
+        )} and i.total_volume is NOT NULL `;
+        await dbDir.promise().query(qProduct);
+        await dbDir.promise().query(qRawProduct);
+        checkRawInv(req, res);
+      }
+    }
+  });
+};
 module.exports = {
   getTransaction: (req, res) => {
     const order_id = req.params ? req.params.id : null;
@@ -102,16 +145,20 @@ module.exports = {
             }
           });
         } else {
-          res
-            .status(200)
-            .send({ message: "Order Status change!", success: true });
+          if (status_id == 3) {
+            lockInventories(req, res);
+          } else {
+            res
+              .status(200)
+              .send({ message: "Order Status change!", success: true });
+          }
         }
       }
     });
   },
   getRawMedicine: (req, res) => {
     let qGet =
-      "SELECT p.product_id, p.name, p.description, p.image, p.price, I.quantity as quantity_inventory, I.measurement_ml, I.measurement_mg FROM PRODUCTS P LEFT JOIN INVENTORIES I ON P.PRODUCT_ID = I.PRODUCT_ID WHERE P.CATEGORY_id = 5";
+      "SELECT p.product_id, p.name, p.description, p.image, p.price, I.total_volume as quantity_inventory, I.measurement_ml, I.measurement_mg FROM PRODUCTS P LEFT JOIN INVENTORIES I ON P.PRODUCT_ID = I.PRODUCT_ID WHERE P.CATEGORY_id = 5";
     db.query(qGet, (err, result) => {
       if (err) {
         console.log(err);
