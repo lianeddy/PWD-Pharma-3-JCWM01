@@ -76,14 +76,14 @@ class Home extends React.Component{
 
     })
   }
+
   nextPageHandler =()=>{
-    
     if(this.state.page < this.state.maxPage){
       this.setState({page:this.state.page+1})
     }
     
   }
- 
+
   previousPageHandler =()=>{
     if(this.state.page >1 ){
     this.setState({page:this.state.page-1})
@@ -91,7 +91,6 @@ class Home extends React.Component{
   }
 
   inputHandler =(event)=>{
-    //const name = event.target.name
     const value = event.target.value
     this.setState({ name : value })
   }
@@ -132,9 +131,9 @@ class Home extends React.Component{
                     
             </GridItem>
             <GridItem xs={12} sm={6} md={3}>
-                <FormControl variant="standard">
+                <FormControl variant="standard"style={{width:"100%"}} >
                     <InputLabel>Filter Kategori</InputLabel>
-                    <Select
+                    <Select 
                     onChange={this.inputCategoryHandler}
                     label="Pilih Jenis Obat"
                     >
@@ -153,12 +152,9 @@ class Home extends React.Component{
                     
             </GridItem>
             <GridItem xs={12} sm={6} md={3}>
-                <FormControl variant="standard" >
+                <FormControl variant="standard" style={{width:"100%"}} >
                     <InputLabel id="demo-simple-select-standard-label">Urutkan Produk</InputLabel>
                     <Select
-                    //labelId="demo-simple-select-standard-label"
-                    //id="demo-simple-select-standard"
-                    //value={age}
                     onChange= {this.inputSortHandler}
                     label="Urutkan Produk"
                     >
@@ -174,10 +170,6 @@ class Home extends React.Component{
                     
             </GridItem>
 
-            {/* <GridItem xs={12} sm={6} md={3}>
-           
-                    
-           </GridItem> */}
             <GridItem xs={12} sm={6} md={2}>
             <CustomButtons color="info" size="md" onClick={this.searchBtnHandler} ><Search/> </CustomButtons >
                     
@@ -185,19 +177,19 @@ class Home extends React.Component{
             </GridContainer>
             
             <GridContainer>
-            <GridItem xs={12} sm={12} md={4}>
-            {this.renderProducts()}
+            <GridItem xs={12} sm={12} md={12}>
+                <div style={{display:"flex",flexWrap:"wrap", justifyContent:"space-between"}}>
+                {this.renderProducts()}
+                </div>
             </GridItem>
-        
-       
             </GridContainer>
             
             <GridContainer>
             <GridItem xs={12} sm={8} md={8}   alignItems="center" justifyContent="center">
                 <ButtonGroup  variant="contained" aria-label="outlined info button group">
-                        <Button color="info" disabled={this.state.page === 1} onClick={this.previousPageHandler} >{"<"}</Button>
-                        <Button color="info" variant="outlined"  aria-label="outlined"> {this.state.page} dari {this.state.maxPage} Halaman</Button>
-                        <Button  color="info" disabled={this.state.page === this.state.maxPage} onClick={this.nextPageHandler}>{">"}</Button>
+                        <Button style={{backgroundColor:"#00ACC1", color:"#FFFFFF"}} color="primary" disabled={this.state.page === 1} onClick={this.previousPageHandler} >{"<"}</Button>
+                        <Button style={{color:"#00ACC1"}}  color="primary" variant="outlined"  aria-label="outlined"> {this.state.page} dari {this.state.maxPage} Halaman</Button>
+                        <Button style={{backgroundColor:"#00ACC1", color:"#FFFFFF"}}  color="primary" disabled={this.state.page === this.state.maxPage} onClick={this.nextPageHandler}>{">"}</Button>
                 </ButtonGroup>
             </GridItem>
             </GridContainer>

@@ -41,11 +41,20 @@ export default function CustomTable(props) {
 
   const hdnSearch = (e) => {
     let temp = data.filter((x) =>
-      x.find((v) =>
-        typeof v == "string"
-          ? v.toLowerCase().includes(e.target.value.toLowerCase())
-          : false
-      )
+      x.find((v) => {
+        if (typeof v == "object") {
+          console.log(v);
+          return (
+            v?.props?.label
+              ?.toLowerCase()
+              ?.includes(e.target.value.toLowerCase()) ?? false
+          );
+        }
+        return v
+          .toString()
+          .toLowerCase()
+          .includes(e.target.value.toLowerCase());
+      })
     );
     temp = temp.slice((page - 1) * limit, page * limit);
     setDataFiltered([...temp]);

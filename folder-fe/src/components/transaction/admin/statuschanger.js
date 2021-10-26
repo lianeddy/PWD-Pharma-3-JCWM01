@@ -117,6 +117,25 @@ const StatusChanger = ({
                   >
                     Change Status
                   </Button>
+                  {status_id == 3 ? (
+                    <Button
+                      color="primary"
+                      variant="contained"
+                      onClick={() => {
+                        console.log({
+                          order_id,
+                          test: statusChange,
+                        });
+                        return window.confirm(
+                          `Are sure you want to process this order?`
+                        )
+                          ? hdnChangeStatus(order_id, 3, true)
+                          : null;
+                      }}
+                    >
+                      Proses Order
+                    </Button>
+                  ) : null}
                 </CardFooter>
               </>
             ) : null}

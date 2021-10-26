@@ -55,6 +55,7 @@ export const updateCart = (product_id, qty, cart_id) => {
 };
 
 export const addCart = (product_id, qty = 1) => {
+  console.log(product_id,"ini produk id")
   return (dispatch) => {
     let items = [
       {
