@@ -1,5 +1,5 @@
 /*eslint-disable*/
-import React from "react";
+import  React,{useState} from "react";
 // nodejs library to set properties for components
 import PropTypes from "prop-types";
 // @material-ui/core components
@@ -7,7 +7,7 @@ import { makeStyles } from "@material-ui/core/styles";
 // @material-ui/icons
 import AddAlert from "@material-ui/icons/AddAlert";
 import LocalOffer from "@material-ui/icons/LocalOffer";
-import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 // core components
 import GridItem from "../template-components/Grid/GridItem.js";
 import GridContainer from "../template-components/Grid/GridContainer.js";
@@ -20,6 +20,8 @@ import CardBody from "../template-components/Card/CardBody.js";
 import CardFooter from "../template-components/Card/CardFooter.js";
 import CustomButtons from "../template-components/CustomButtons/Button";
 import Info from "../template-components/Typography/Info.js";
+import Axios from 'axios';
+
 
 const styles = {
   cardCategoryWhite: {
@@ -53,71 +55,104 @@ const styles = {
 
 const useStyles = makeStyles(styles);
 
- function ProductDetail() {
-  const classes = useStyles();
-  const [tl, setTL] = React.useState(false);
-  const [tc, setTC] = React.useState(false);
-  const [tr, setTR] = React.useState(false);
-  const [bl, setBL] = React.useState(false);
-  const [bc, setBC] = React.useState(false);
-  const [br, setBR] = React.useState(false);
-  React.useEffect(() => {
-    // Specify how to clean up after this effect:
-    return function cleanup() {
-      // to stop the warning of calling setState of unmounted component
-      var id = window.setTimeout(null, 0);
-      while (id--) {
-        window.clearTimeout(id);
+function ProductDetail(props) {
+ const classes = useStyles();
+ const [productNotFound, setProductNotFound] = useState()
+ const [productData, setProductData] = useState()
+ const [productQty, setQty]=useState()
+
+ const  fetchProduct = () => {
+    Axios.get("http://localhost:3300/products/getData",{
+      params:{
+        id:props.match.params.productId
       }
-    };
-  });
+    })
+    .then((result) => {
+    if(result.data.length){
+      setProductData({ productData: result.data[0]})
+    }else{
+      setProductNotFound({ productNotFound:true})
+    }
+    })
+    .catch(() => {
+    alert("Terjadi kesalahan di server")
+    })
+  }
+
+ const  qtyBtnHandler=(action)=>{
+    if(action === "increment"){
+      setQty({quantity:productQty+1})
+    }else if(action === "decrement" && productQty>1) {
+      setQty({quantity:productQty-1})
+    }
+  }
+  
 
   return (
+   
     <Card>
-      <CardHeader color="info">
-        {/* <h4 className={classes.cardTitleWhite}>Notifications</h4>
-        <p className={classes.cardCategoryWhite}>
-          
-          .
-        </p> */}
-      </CardHeader>
       <CardBody>
-        <GridContainer>
+          {
+          props.productNotFound?
+          <Info>
+          <h3 className={classes.cardTitle}>
+            {props.match.params.productId}
+          </h3>
+          </Info>
+          :
+          <GridContainer>
           <GridItem xs={12} sm={12} md={6}>
-          <Card>
-                        <img
-                            className={classes.cardImgTop}
-                            data-src="holder.js/100px180/"
-                            alt="100%x160"
-                            style={{ height: "60vh", width: "100%", display: "block" }}
-                            src="https://hdmall.id/system/image_attachments/images/000/036/664/medium/Azithromycin_KF.jpeg"
-                            data-holder-rendered="true"
-                        />
+            <Card>
+              <img
+                className={classes.cardImgTop}
+                data-src="holder.js/100px180/"
+                alt="100%x160"
+                style={{ height: "60vh", width: "100%", display: "block" }}
+                src={props.productData.image}
+                data-holder-rendered="true"
+              />
             </Card>
-     
           </GridItem>
           <GridItem xs={12} sm={12} md={6}>
-           <Card>
-                <CardBody>
-                <Info><h3 className={classes.cardTitle}>Azithromycin KF</h3></Info>
+            <Card>
+              <CardBody>
+                <Info>
+                  <h3 className={classes.cardTitle}>
+                    {props.productData.name}
+                  </h3>
+                </Info>
                 <p className={classes.cardCategory}>
-                    Azithromycin is an antibiotic. It\'s widely used to treat chest infections such as pneumonia, infections 
-                </p> 
-                <LocalOffer /> 
-                            70000
-                </CardBody>
-                <CardFooter stats>
-                    <CustomButtons color="info" size="sm"><AddShoppingCartIcon/> Beli </CustomButtons >
-                </CardFooter>
-           </Card>
+                  {props.productData.description}
+                </p>
+                <ButtonGroup  variant="contained" aria-label="outlined info button group">
+                        <Button onClick={qtyBtnHandler("decrement")} color="info"  >{"-"}</Button>
+                        <Button color="info" variant="outlined"  aria-label="outlined"> </Button>
+                        <Button onClick={qtyBtnHandler("increment")}color="info" >{"+"}</Button>
+                </ButtonGroup>
+                <LocalOffer />
+                {props.productData.price}
+
+              </CardBody>
+              <CardFooter stats>
+                <CustomButtons
+                  color="info"
+                  size="sm"
+                  onChange={props.addCart(props.productData.product_id)}
+                >
+                  <AddShoppingCartIcon /> Beli{" "}
+                </CustomButtons>
+              </CardFooter>
+              
+            </Card>
           </GridItem>
-        </GridContainer>
+          </GridContainer>
+        }
+       
         <br />
         <br />
-     
       </CardBody>
     </Card>
   );
 }
 
-export default ProductDetail
+export default ProductDetail;

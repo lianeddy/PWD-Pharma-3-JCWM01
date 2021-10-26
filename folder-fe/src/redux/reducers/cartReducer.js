@@ -16,12 +16,22 @@ export const cartReducer = (state = INITIAL_STATE, action) => {
       state.recipe_image = action.payloads;
       return { ...state };
     case "UPDATE_CART":
-      const updatedCart = state.cart_item.map((x) => {
+      let updatedCart = state.cart_item.map((x) => {
         return x.product_id == action.payloads.product_id
           ? { ...x, quantity: action.payloads.qty }
           : x;
       });
+      updatedCart = updatedCart.filter((x) => x.quantity > 0);
       state.cart_item = [...updatedCart];
+      return { ...state };
+
+    case "ADD_CART":
+      const addCart = state.cart_item.map((x) => {
+        return x.product_id == action.payloads.product_id
+          ? { ...x, quantity: x.quantity + action.payloads.qty }
+          : x;
+      });
+      state.cart_item = [...addCart];
       return { ...state };
     default:
       return { ...INITIAL_STATE };

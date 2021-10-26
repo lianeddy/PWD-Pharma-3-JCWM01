@@ -1,23 +1,48 @@
-const { db } = require("../../../database");
+const { db, dbDir } = require("../../../database");
 const { uploadRecipe, uploader } = require("../../../helper/upload/upload");
 
-const insertCart = (req, res, cart_id) => {
+const insertCart = async (req, res, cart_id) => {
   const { user_id } = req.user;
-  let itemsInsert = req.body.items.map((val) => {
-    return `(${db.escape(cart_id)}, ${db.escape(val.productId)}, ${db.escape(
-      val.quantity
-    )}, ${db.escape(user_id)}, NOW(), ${db.escape(user_id)}, NOW())`;
-  });
-  console.log(itemsInsert, "items Insert");
-  let qInsertCartItems = `INSERT INTO CART_ITEMS (cart_id, product_id, quantity, created_by, created_date, modified_by, modified_date)
-      VALUES ${itemsInsert}`;
-  db.query(qInsertCartItems, (err, result_3) => {
-    if (err) {
-      console.log(err);
-      res.status(500).send({ message: "error", success: false });
+  for (let val of req.body.items) {
+    let checkItem = `SELECT * FROM CART_ITEMS WHERE PRODUCT_ID = ${db.escape(
+      val.productId
+    )} && cart_id = ${db.escape(cart_id)}`;
+    let [CART_ITEMS] = await dbDir.promise().query(checkItem);
+    if (CART_ITEMS.length > 0) {
+      let qUpdate = `UPDATE CART_ITEMS SET QUANTITY = QUANTITY+${db.escape(
+        val.quantity
+      )} WHERE PRODUCT_ID = ${db.escape(
+        val.productId
+      )} && cart_id = ${db.escape(cart_id)}`;
+      let body = await dbDir.promise().query(qUpdate);
+    } else {
+      let qInsertCartItems = `INSERT INTO CART_ITEMS (cart_id, product_id, quantity, created_by, created_date, modified_by, modified_date)
+      VALUES (${db.escape(cart_id)}, ${db.escape(val.productId)}, ${db.escape(
+        val.quantity
+      )}, ${db.escape(user_id)}, NOW(), ${db.escape(user_id)}, NOW())`;
+      await dbDir.promise().query(qInsertCartItems);
     }
-    res.status(200).send({ message: result_3, success: true });
-  });
+  }
+  res
+    .status(200)
+    .send({ message: "SUCCEES", success: true, DATA: { cart_id } });
+  // let itemsInsert = req.body.items.map((val) => {
+  //   return `(${db.escape(cart_id)}, ${db.escape(val.productId)}, ${db.escape(
+  //     val.quantity
+  //   )}, ${db.escape(user_id)}, NOW(), ${db.escape(user_id)}, NOW())`;
+  // });
+
+  // let qInsertCartItems = `INSERT INTO CART_ITEMS (cart_id, product_id, quantity, created_by, created_date, modified_by, modified_date)
+  //     VALUES ${itemsInsert}`;
+  // db.query(qInsertCartItems, (err, result_3) => {
+  //   if (err) {
+  //     console.log(err);
+  //     res.status(500).send({ message: "error", success: false });
+  //   }
+  //   res
+  //     .status(200)
+  //     .send({ message: result_3, success: true, DATA: { cart_id } });
+  // });
 };
 const insertCartNew = (req, res) => {
   const { user_id } = req.user;
@@ -32,13 +57,21 @@ const insertCartNew = (req, res) => {
       return false;
     }
     let cart_id = result_1.insertId;
-    console.log(cart_id, "Id");
-    insertCart(req, res, cart_id);
+    if (req.body.items) {
+      console.log(cart_id, "Id");
+      insertCart(req, res, cart_id);
+    } else {
+      res.status(200).send({
+        message: "success ",
+        success: true,
+        DATA: { cart_id },
+      });
+    }
   });
 };
 const insertOrderNew = (req, res) => {
   const { user_id } = req.user;
-  const { total } = req.body;
+  const { total, cart_id } = req.body;
   let qInsert = `INSERT INTO ORDERS (user_id, status_id, prescription, payment_proof, total, created_by, created_date, modified_by, modified_date) 
   VALUES(${db.escape(user_id)}, 1, false, false, ${db.escape(
     total
@@ -51,7 +84,11 @@ const insertOrderNew = (req, res) => {
     }
     let order_id = result_1.insertId;
     console.log(order_id, "Id");
-    insertOrderItems(req, res, order_id);
+    if (req.body.items) {
+      insertOrderItems(req, res, order_id);
+    } else {
+      deleteCart(req, res, cart_id, order_id);
+    }
   });
 };
 const insertOrderItems = (req, res, order_id) => {
@@ -135,12 +172,23 @@ module.exports = {
       });
     });
   },
-  addCart: (req, res) => {
+  addCart: async (req, res) => {
     const { user_id } = req.user;
     let qCheck = `SELECT * FROM CARTS WHERE user_id = ${db.escape(user_id)}`;
+    let check = await db.query(qCheck, (err, result) => {
+      console.log(result);
+    });
     db.query(qCheck, (err, result) => {
       if (result.length > 0) {
-        insertCart(req, res, result[0].cart_id);
+        if (req.body.items) {
+          insertCart(req, res, result[0].cart_id);
+        } else {
+          res.status(200).send({
+            message: "Success",
+            success: true,
+            DATA: { cart_id: result[0].cart_id },
+          });
+        }
       } else {
         insertCartNew(req, res);
       }
@@ -154,10 +202,10 @@ module.exports = {
     if (item.remove) {
       qItem = `DELETE FROM CART_ITEMS WHERE CART_ID = ${db.escape(
         item.cart_id
-      )} && product_id = ${db.escape(item.productId)}`;
+      )} AND product_id = ${db.escape(item.product_id)}`;
     } else {
       qItem = `UPDATE CART_ITEMS SET quantity = ${db.escape(item.qty)} 
-      WHERE CART_ID = ${db.escape(item.cart_id)} && PRODUCT_ID = ${db.escape(
+      WHERE CART_ID = ${db.escape(item.cart_id)} AND PRODUCT_ID = ${db.escape(
         item.product_id
       )}`;
     }
@@ -166,7 +214,7 @@ module.exports = {
         console.log(err);
         res.status(500).send({ message: "failed", success: false });
       }
-      res.status(200).send({ message: "Success", success: true });
+      res.status(200).send({ message: "Success", success: true, DATA: result });
     });
   },
   checkOut: (req, res) => {

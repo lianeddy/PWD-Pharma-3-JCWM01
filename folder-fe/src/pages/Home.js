@@ -32,29 +32,29 @@ class Home extends React.Component{
   fetchProducts = () => {
     Axios.get("http://localhost:3300/products/getData")
     .then((result) => {
-    alert("Berhasil") 
-    this.setState({ productList: result.data, maxPage:Math.ceil(result.data.length/this.state.itemPerPage), filterProductList:result.data})
+    this.setState({ productList: result.data, maxPage:Math.ceil(result.data.length/this.state.itemPerPage), 
+      filterProductList:result.data})
     })
     .catch(() => {
     alert("Terjadi kesalahan di server")
     })
   }
   renderProducts = () => { 
-    console.log("render")
     const beginningIndex =(this.state.page -1)*this.state.itemPerPage
     const compareString =(a,b)=>{
-      if(a.productName < b.productName){
+      if(a.name < b.name){
         return -1;
       }
-      if(a.productName > b.productName){
+      if(a.name > b.name){
         return 1;
       }
       return 0;
     }
     let rawData = [...this.state.filterProductList]
+    console.log(rawData, "ini raw data")
     switch (this.state.sortBy){
       case "lowestPrice":
-        rawData.sort((a,b)=> a.price - b.price);
+          rawData.sort((a,b)=> a.price - b.price);
         break
         case "highestPrice":
           rawData.sort((a,b)=> b.price - a.price);
@@ -76,30 +76,44 @@ class Home extends React.Component{
 
     })
   }
+
   nextPageHandler =()=>{
-    
     if(this.state.page < this.state.maxPage){
       this.setState({page:this.state.page+1})
     }
     
   }
- 
+
   previousPageHandler =()=>{
     if(this.state.page >1 ){
     this.setState({page:this.state.page-1})
     }
   }
+
   inputHandler =(event)=>{
-    const name = event.target.name
     const value = event.target.value
-    this.setState({ [name] : value })
+    this.setState({ name : value })
+  }
+
+  inputCategoryHandler =(event)=>{
+   
+    const value = event.target.value
+    this.setState({ searchCategory : value })
+  }
+  inputSortHandler =(event)=>{
+    const value = event.target.value
+    this.setState({ sortBy : value })
   }
   searchBtnHandler = ()=>{
     const filterProductList = this.state.productList.filter((val)=>{
-      return val.productName.toLowerCase().includes(this.state.searchProductName.toLowerCase()) && val.category_id.includes(this.state.searchCategory.toLowerCase());
+    
+      return val.name.toLowerCase().includes(this.state.searchProductName.toLowerCase()) &&
+       val.category_id === parseInt(this.state.searchCategory);
+      
     })
     
     this.setState({ filterProductList,  maxPage:Math.ceil(filterProductList.length/this.state.itemPerPage), page:1 })
+
   }
   componentDidMount() {
     this.fetchProducts();
@@ -107,24 +121,20 @@ class Home extends React.Component{
   render(){
     return(
         <div>
+            <GridContainer>
              <GridItem xs={12} sm={6} md={4}>
              <InputLabel htmlFor="standard-adornment-amount">Cari Katalog Obat</InputLabel>
                 <Input
-                    // id="standard-adornment-amount"
-                    // value={values.amount}
                     onChange={this.inputHandler}
                     startAdornment={<InputAdornment position="end"><Search/></InputAdornment>}
                 />
                     
             </GridItem>
             <GridItem xs={12} sm={6} md={3}>
-                <FormControl variant="standard">
+                <FormControl variant="standard"style={{width:"100%"}} >
                     <InputLabel>Filter Kategori</InputLabel>
-                    <Select
-                    //labelId="demo-simple-select-standard-label"
-                    //id="demo-simple-select-standard"
-                    //value={age}
-                    onChange={this.inputHandler}
+                    <Select 
+                    onChange={this.inputCategoryHandler}
                     label="Pilih Jenis Obat"
                     >
                     <MenuItem value="">
@@ -142,20 +152,17 @@ class Home extends React.Component{
                     
             </GridItem>
             <GridItem xs={12} sm={6} md={3}>
-                <FormControl variant="standard" >
+                <FormControl variant="standard" style={{width:"100%"}} >
                     <InputLabel id="demo-simple-select-standard-label">Urutkan Produk</InputLabel>
                     <Select
-                    //labelId="demo-simple-select-standard-label"
-                    //id="demo-simple-select-standard"
-                    //value={age}
-                    onChange={this.inputHandler}
+                    onChange= {this.inputSortHandler}
                     label="Urutkan Produk"
                     >
                     <MenuItem value="">
                         <em>Default</em>
                     </MenuItem>
                     <MenuItem value="lowestPrice">Harga Terendah</MenuItem>
-                    <MenuItem value="highestPrice">Harga Tertinngi</MenuItem>
+                    <MenuItem value="highestPrice">Harga Tertinggi</MenuItem>
                     <MenuItem value="az">A-Z</MenuItem>
                     <MenuItem value="za">z-A</MenuItem>
                     </Select>
@@ -163,26 +170,26 @@ class Home extends React.Component{
                     
             </GridItem>
 
-            {/* <GridItem xs={12} sm={6} md={3}>
-           
-                    
-           </GridItem> */}
             <GridItem xs={12} sm={6} md={2}>
             <CustomButtons color="info" size="md" onClick={this.searchBtnHandler} ><Search/> </CustomButtons >
                     
             </GridItem>
-            <GridContainer>
-            <GridItem xs={12} sm={12} md={4}>
-            {this.renderProducts()}
-            </GridItem>
-       
             </GridContainer>
+            
             <GridContainer>
-            <GridItem xs={12} sm={8} md={8}>
+            <GridItem xs={12} sm={12} md={12}>
+                <div style={{display:"flex",flexWrap:"wrap", justifyContent:"space-between"}}>
+                {this.renderProducts()}
+                </div>
+            </GridItem>
+            </GridContainer>
+            
+            <GridContainer>
+            <GridItem xs={12} sm={8} md={8}   alignItems="center" justifyContent="center">
                 <ButtonGroup  variant="contained" aria-label="outlined info button group">
-                        <Button color="info" disabled={this.state.page === 1} onClick={this.previousPageHandler} >{"<"}</Button>
-                        <Button color="info" variant="outlined"  aria-label="outlined"> {this.state.page} dari {this.state.maxPage} Halaman</Button>
-                        <Button  color="info" disabled={this.state.page === this.state.maxPage} onClick={this.nextPageHandler}>{">"}</Button>
+                        <Button style={{backgroundColor:"#00ACC1", color:"#FFFFFF"}} color="primary" disabled={this.state.page === 1} onClick={this.previousPageHandler} >{"<"}</Button>
+                        <Button style={{color:"#00ACC1"}}  color="primary" variant="outlined"  aria-label="outlined"> {this.state.page} dari {this.state.maxPage} Halaman</Button>
+                        <Button style={{backgroundColor:"#00ACC1", color:"#FFFFFF"}}  color="primary" disabled={this.state.page === this.state.maxPage} onClick={this.nextPageHandler}>{">"}</Button>
                 </ButtonGroup>
             </GridItem>
             </GridContainer>

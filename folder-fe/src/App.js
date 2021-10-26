@@ -17,8 +17,8 @@ import ChangePassword from "./pages/changePassword/ChangePassPage";
 import TemptLanding from "pages/tempLanding/TemptLanding";
 import ErrorPage from "pages/errorPage/ErrorPage";
 import Authentication from "pages/authentication";
-import ProductsAdmin from "pages/products/ManageProduct"
 import Landing from "./pages/landing/";
+import Guest from "../src/layouts/Guest";
 
 import "assets/css/material-dashboard-react.css?v=1.10.0";
 
@@ -68,6 +68,12 @@ function App(props) {
       role: [roles.Admin, roles.User],
     },
     {
+        component: Guest,
+        needAuth: false,
+        path: "/guest",
+        role: [roles.User, roles.Admin],
+      },
+    {
       component: Authentication,
       path: "/authentication/:token",
       needAuth: false,
@@ -98,12 +104,6 @@ function App(props) {
       role: [roles.Admin, roles.User],
     },
     {
-      component: ProductsAdmin,
-      path: '/admin/products',
-      needAuth: true,
-      role: [roles.Admin],
-    },
-    {
       component: Admin,
       needAuth: true,
       path: "/",
@@ -127,7 +127,9 @@ function App(props) {
         {routes.map((route, i) => {
           // ISALLOWTOACCESSPAGE UNTUK MENDAPATKAN TRUE ATAU FALSE VALUE ROLE ID YANG SEDANG LOGIN BOLEH MENGAKSES INDEX ROUTE
           if (!isFetchProfile && !roleId && route.needAuth) {
-            return <Redirect key={i} from={routes.component} to="/login" />;
+              console.log(!isFetchProfile && !roleId && route.needAuth)
+            return (<> <Route component={LoginPage} path="/login" /> 
+                     <Route component={Guest} path="/" /> </>)
           }
 
           if (roleId) {

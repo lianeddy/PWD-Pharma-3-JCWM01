@@ -12,5 +12,7 @@ routers.post("/inputproducts", productControllers.inputProducts);
 routers.get("/getcategories", productControllers.getCategories);
 routers.patch("/editproducts", productControllers.editProducts);
 routers.delete("/deleteproducts", productControllers.deleteProducts);
+routers.get("/rawmaterialusage", productControllers.rawMaterialUsage);
+routers.get("/bottlestock", productControllers.getBottleStock)
 
 module.exports = routers;

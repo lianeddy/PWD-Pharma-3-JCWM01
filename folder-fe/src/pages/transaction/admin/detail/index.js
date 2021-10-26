@@ -200,6 +200,7 @@ export default function AdminTransactionDetail() {
       })
       .catch((err) => console.error(err));
   };
+
   const classes = useStyles();
   function hdnAdd(id) {
     let valtemp = { ...rawItems.find((x) => x.product_id == id) };
@@ -255,9 +256,32 @@ export default function AdminTransactionDetail() {
     dataParseRaw(temp);
     setCustomMed([...customF]);
   }
+  const hdnChangeTotal = (total) => {
+    axios
+      .post(
+        `${URL_API}/admins/changeTotal`,
+        {
+          order_id: dataOrder.id,
+          total,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      )
+      .then((res) => {
+        if (res.data.success) {
+          alert(res.data.message);
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const hdnChangeStatus = (order_id, status_id) => {
+  const hdnChangeStatus = (order_id, status_id, process = false) => {
     console.log({ order_id, status_id }, "Status");
     axios
       .post(
@@ -265,6 +289,7 @@ export default function AdminTransactionDetail() {
         {
           order_id,
           status_id,
+          process,
         },
         {
           headers: {
@@ -293,10 +318,25 @@ export default function AdminTransactionDetail() {
     let newTotal =
       newCustomMeds.reduce((prev, next) => prev + next.TOTAL, 0) +
       dataOrder.total;
-    alert(newTotal);
-    setDataOrder({ ...dataOrder, total: newTotal });
-    setDataItem([...dataItem, ...newCustomMeds]);
-    dataParse([...dataItem, ...newCustomMeds]);
+    axios
+      .post(
+        `${URL_API}/admins/insertItems`,
+        {
+          items: [...newCustomMeds],
+          order_id: dataOrder.id,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      )
+      .then((res) => {
+        setDataOrder({ ...dataOrder, total: newTotal });
+        setDataItem([...dataItem, ...newCustomMeds]);
+        dataParse([...dataItem, ...newCustomMeds]);
+      })
+      .catch((err) => console.error(err));
     handleClose();
   }
 
@@ -341,6 +381,7 @@ export default function AdminTransactionDetail() {
                         : null
                     }
                     total={dataOrder.total}
+                    hdnChangeTotal={hdnChangeTotal}
                   />{" "}
                 </>
               ) : null}

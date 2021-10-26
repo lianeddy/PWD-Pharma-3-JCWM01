@@ -12,7 +12,7 @@ import axios from "axios";
 import { URL_API } from "helper/helper";
 import Table from "template-components/Table/Table.js";
 import { Link } from "react-router-dom";
-
+import Chip from '@mui/material/Chip';
 const styles = {
   cardCategoryWhite: {
     "&,& a,& a:hover,& a:focus": {
@@ -42,20 +42,21 @@ const styles = {
     },
   },
 };
-
+const chipColor = ['', 'primary', 'warning', 'info', 'success', 'secondary', 'error']
 const useStyles = makeStyles(styles);
 
 export default function AdminTransaction() {
+
   const [data, setData] = useState();
   const transactionFetch = (res) => {
     if (res.data.success) {
       let temp = res.data.DATA.map((val) => {
         return {
           id: val.id,
-          status: val.status_name,
+          status:  <Chip label={val.status_name} color={chipColor[val.status_id]}/>,
           payment_proof:
             val.payment_proof != "No payment proof" ? (
-              <a href={URL_API + val.payment_proof} target="_blank">
+              <a href={URL_API + val.payment_proof} target="_blank" rel="noreferrer">
                 {val.payment_proof == "No payment proof"
                   ? "No payment proof"
                   : "Payment proof available"}
@@ -106,7 +107,7 @@ export default function AdminTransaction() {
           <CardBody>
             {data ? (
               <Table
-                tableHeaderColor="primary"
+                tableHeaderColor="warning"
                 tableHead={[
                   "Order id",
                   "Status",

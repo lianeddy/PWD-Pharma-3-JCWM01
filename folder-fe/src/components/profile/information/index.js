@@ -5,10 +5,12 @@ import AddAlert from "@material-ui/icons/AddAlert";
 // core components
 
 import { makeStyles } from "@material-ui/core/styles";
+import { useHistory } from "react-router";
 import GridItem from "template-components/Grid/GridItem.js";
 import GridContainer from "template-components/Grid/GridContainer.js";
 import CustomInput from "template-components/CustomInput/CustomInput.js";
 import Button from "template-components/CustomButtons/Button.js";
+import Box from "@material-ui/core/Box";
 import Card from "template-components/Card/Card.js";
 import CardHeader from "template-components/Card/CardHeader.js";
 import CardBody from "template-components/Card/CardBody.js";
@@ -16,13 +18,12 @@ import CardFooter from "template-components/Card/CardFooter.js";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import { DatePicker } from "@material-ui/pickers";
-import { alpha } from "@material-ui/core/styles";
-import SnackbarContent from "template-components/Snackbar/SnackbarContent.js";
 import Snackbar from "template-components/Snackbar/Snackbar.js";
 import axios from "axios";
 import { URL_API } from "helper/helper";
 import { color } from "@mui/system";
 import CardAvatar from "template-components/Card/CardAvatar.js";
+
 import avatar from "assets/img/faces/marc.jpg";
 
 const styles = {
@@ -46,6 +47,7 @@ const styles = {
 
 const useStyles = makeStyles(styles);
 const Profile_Information = ({ infoRes }) => {
+  const history = useHistory()
   const [edit, setEdit] = useState(true);
   const [message, setMessage] = useState({
     state: false,
@@ -81,8 +83,8 @@ const Profile_Information = ({ infoRes }) => {
   const hdnInputChange = (e) => {
     console.log(e);
     const key = e.target.name;
-    const val = key == "image" ? e.target.files[0] : e.target.value;
-    if (key == "image") {
+    const val = key === "image" ? e.target.files[0] : e.target.value;
+    if (key === "image") {
       document.getElementById("profile_picture").src = URL.createObjectURL(
         e.target.files[0]
       );
@@ -162,6 +164,10 @@ const Profile_Information = ({ infoRes }) => {
         });
       });
   };
+
+  const goToChangePasswordPage = () => {
+    history.push('/changepassword')
+}
 
   return (
     <GridItem xs={12} sm={12} md={12}>
@@ -316,11 +322,16 @@ const Profile_Information = ({ infoRes }) => {
               Update Profile
             </Button>
           ) : null}
-          <div>
+          <div style = {{width: "100%"}}>
             {edit ? (
-              <Button onClick={() => setEdit(!edit)} color="primary">
-                Edit Profile
-              </Button>
+
+              
+              <Box display="flex" flexDirection="row" justifyContent="space-between">
+              <Button onClick={() => setEdit(!edit)} color="primary" >Edit Profile</Button>
+              <Button color="primary" onClick={goToChangePasswordPage}>Ganti Sandi</Button>
+              </Box>
+              
+          
             ) : (
               <Button onClick={() => setEdit(!edit)} color="primary">
                 Cancel Edit Profile

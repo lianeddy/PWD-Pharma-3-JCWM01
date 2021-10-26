@@ -81,7 +81,7 @@ export default function Guest({ ...rest }) {
       {localStorage.getItem("role_id") ? (
         <Sidebar
           routes={routes}
-          logoText={"Pharmacy group 3"}
+          logoText={"Klinik-ku"}
           logo={logo}
           image={image}
           handleDrawerToggle={handleDrawerToggle}

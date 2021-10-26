@@ -83,7 +83,7 @@ const ChangePassword = (props) => {
 
     // GO BACK TO LANDING PAGE OR HOME HANDLER
     const goToLandingPage = () => {
-        history.push('/temptlanding')
+        history.push('/')
     }
 
 
@@ -132,19 +132,7 @@ const ChangePassword = (props) => {
                     type: "success"
 
                 });
-
-                if (props.users.role_id === 1) {
-                    console.log('ini admin')
-                    return history.push("/");
-
-                };
-
-                if (props.users.role_id === 2) {
-                    console.log('ini admin')
-                    return history.push("/temptlanding");
-                }
-
-
+                
             }).catch((err) => {
                 setAlertData({
                     isOpen: true,

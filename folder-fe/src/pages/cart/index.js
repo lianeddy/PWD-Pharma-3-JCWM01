@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
-import { getCart, recipeCart } from "redux/actions/cartAction";
+import { getCart, recipeCart, addCart } from "redux/actions/cartAction";
 import { Button } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useHistory } from "react-router";
@@ -57,18 +57,18 @@ const Cart = (props) => {
         quantity: Math.ceil(Math.random() * 10),
       },
     ];
-
-    axios.post(
-      `${URL_API}/users/cart`,
-      {
-        items,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      }
-    );
+    props.addCart(5, Math.ceil(Math.random() * 10));
+    // axios.post(
+    //   `${URL_API}/users/cart`,
+    //   {
+    //     items,
+    //   },
+    //   {
+    //     headers: {
+    //       Authorization: `Bearer ${localStorage.getItem("token")}`,
+    //     },
+    //   }
+    // );
   };
   const hdnSubmitOrder = () => {
     let form = new FormData();
@@ -77,31 +77,68 @@ const Cart = (props) => {
       "data",
       JSON.stringify({ cart_id: props.cart_id, cart: props.cart })
     );
-    axios
-      .post(
-        `${URL_API}/users/checkOut`,
-        {
-          cart_id: props.cart_id,
-          items: props.cart,
-          total: props.cart.reduce(
-            (prev, curr) => prev + curr.quantity * curr.price,
-            0
-          ),
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+    if (props.cart.length > 0) {
+      axios
+        .post(
+          `${URL_API}/users/checkOut`,
+          {
+            cart_id: props.cart_id,
+            items: props.cart,
+            total: props.cart.reduce(
+              (prev, curr) => prev + curr.quantity * curr.price,
+              0
+            ),
           },
-        }
-      )
-      .then((res) => {
-        console.log(res);
-        if (props.recipe) {
-          hdnSubmitRecipe(res.data.order_id);
-        }
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        )
+        .then((res) => {
+          console.log(res);
+          if (props.recipe) {
+            hdnSubmitRecipe(res.data.order_id);
+          }
 
-        props.getCart(props.users);
-      });
+          props.getCart(props.users);
+        });
+    } else if (props.recipe) {
+      axios
+        .post(
+          `${URL_API}/users/cart`,
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        )
+        .then((res) => {
+          props.getCart(props.users);
+          axios
+            .post(
+              `${URL_API}/users/checkOut`,
+              {
+                cart_id: res.data.DATA.cart_id,
+                total: 0,
+              },
+              {
+                headers: {
+                  Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+              }
+            )
+            .then((res) => {
+              console.log(res);
+              if (props.recipe) {
+                hdnSubmitRecipe(res.data.order_id);
+              }
+
+              props.getCart(props.users);
+            });
+        });
+    }
   };
   const hdnSubmitRecipe = (id) => {
     let form = new FormData();
@@ -123,6 +160,9 @@ const Cart = (props) => {
         console.log(err);
       });
   };
+  useEffect(() => {
+    props.getCart(props.users);
+  }, []);
   useEffect(() => {
     props.getCart(props.users);
   }, []);
@@ -235,6 +275,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = {
   getCart,
   recipeCart,
+  addCart
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Cart);

@@ -122,7 +122,7 @@ const ResetPassword = (props) => {
         setAlertData({
           isOpen: true,
           message: 'Terjadi kesalahan ',
-          type: 'success'
+          type: 'error'
         })
 
       })

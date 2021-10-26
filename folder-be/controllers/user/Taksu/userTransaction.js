@@ -5,10 +5,10 @@ module.exports = {
   getTransaction: (req, res) => {
     const { user_id } = req.user;
     const order_id = req.params ? req.params.id : null;
-    let qGetOrder_ID = `select O.order_id as id, S.status_name, S.status_id, CASE WHEN O.payment_proof LIKE '0' THEN 'No payment proof' ELSE O.payment_proof END as payment_proof, 
+    let qGetOrder_ID = `select O.order_id as id, S.status_name, S.status_id, CASE WHEN O.payment_proof LIKE '0' THEN 'No payment proof' ELSE O.payment_proof END as payment_proof,
     O.total from orders O left join status S on o.status_id = S.status_id where o.user_id = ${user_id} ${
       order_id ? "&& o.order_id =" + order_id : ""
-    }`;
+    } ORDER BY O.order_id DESC`;
     db.query(qGetOrder_ID, (err, result) => {
       if (err) {
         console.log(err);
@@ -22,7 +22,7 @@ module.exports = {
   },
   getTransactionDetail: (req, res) => {
     const { id } = req.params;
-    let qGet = `SELECT OI.PRODUCT_ID, OI.QUANTITY, P.NAME, P.IMAGE, P.PRICE  
+    let qGet = `SELECT OI.PRODUCT_ID, OI.QUANTITY, P.NAME, P.IMAGE, P.PRICE
     FROM ORDER_ITEMS OI LEFT JOIN PRODUCTS P ON OI.PRODUCT_ID = P.PRODUCT_ID where order_id = ${id}`;
 
     db.query(qGet, (err, result) => {

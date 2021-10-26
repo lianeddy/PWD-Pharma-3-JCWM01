@@ -7,8 +7,11 @@ const {
   getStatus,
   changeStatus,
   getRawMedicine,
+  insertItems,
+  changeTotal,
 } = require("./Taksu/adminTransaction");
 
+const adminRevenue = require("./Pram/adminRevenue");
 //----
 module.exports = {
   //Taksu
@@ -17,4 +20,9 @@ module.exports = {
   getStatus,
   changeStatus,
   getRawMedicine,
+  insertItems,
+  changeTotal,
+
+  //Pram
+  adminRevenue,
 };

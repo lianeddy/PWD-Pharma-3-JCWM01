@@ -206,7 +206,7 @@ export default function RegisterPage() {
             onChange={(event) => {
               setPassword(event.target.value);
             }}
-            InputProps={{ 
+            InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
                   <IconButton
@@ -232,7 +232,7 @@ export default function RegisterPage() {
           <div>
             <Typography variant="body2">
               Sudah punya akun?{" "}
-              <Link onClick={goToSignin} variant="body2">
+              <Link onClick={goToSignin} variant="body2"  component="button">
                 Masuk di sini.
               </Link>
             </Typography>

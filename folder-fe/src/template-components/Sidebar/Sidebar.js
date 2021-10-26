@@ -96,9 +96,23 @@ export default function Sidebar(props) {
       style={{ backgroundColor: "white", color: "black" }}
     >
       <div className={classes.logoImage}>
-        <img src={logo} alt="logo" className={classes.img} />
+        <img
+          src={logo}
+          alt="logo"
+          className={classes.img}
+          styles={{ top: "12px" }}
+        />
       </div>
-      <h4 style={{ display: "inline" }}>{logoText}</h4>
+      <h3
+        style={{
+          display: "inline",
+          paddingLeft: "10px",
+          color: "#03989e",
+          fontWeight: "bold",
+        }}
+      >
+        {logoText}
+      </h3>
     </div>
   );
   return (
