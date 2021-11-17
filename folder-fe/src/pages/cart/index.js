@@ -219,14 +219,14 @@ const Cart = (props) => {
           />
         </Card>
       </GridContainer>
-      <Button
+      {/* <Button
         color="primary"
         variant="contained"
         onClick={hdnCreateCart}
         style={{ margin: "10px" }}
       >
         Create Cart
-      </Button>
+      </Button> */}
       {/* <Button
         color="primary"
         variant="contained"
@@ -235,14 +235,14 @@ const Cart = (props) => {
       >
         Modify Cart
       </Button> */}
-      <Button
+      {/* <Button
         color="primary"
         variant="contained"
         onClick={(e) => props.getCart(props.users)}
         style={{ margin: "10px" }}
       >
         Get Cart
-      </Button>
+      </Button> */}
       <Button
         color="primary"
         variant="contained"
@@ -275,7 +275,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = {
   getCart,
   recipeCart,
-  addCart
+  addCart,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Cart);
