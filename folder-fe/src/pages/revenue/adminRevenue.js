@@ -91,7 +91,7 @@ const AdminRevenue = () => {
   return (
     <Box p={5}>
       <CardHeader className={classes.cardHeader} >
-        <h4 className={classes.cardTitleWhite}>Admin Revenue</h4>
+        <h4 className={classes.cardTitleWhite}>Pendapatan</h4>
       </CardHeader>
 
       <Box p={5}>

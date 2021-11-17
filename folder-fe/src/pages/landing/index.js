@@ -72,8 +72,8 @@ export default function Landing() {
           borderBottom: "solid 1px black",
         }}
       >
-        <img src={Klinik} style={{ width: "20%" }} />
-        <h2>GREAT MEDICINE IS HERE</h2>
+        <img src={Klinik} style={{ width: "20%", marginTop: "20px" }} />
+        <h2>APOTEK UNTUK KITA SEMUA</h2>
         <p
           style={{
             padding: "0px 100px 100px 100px",
@@ -81,11 +81,11 @@ export default function Landing() {
             fontWeight: "bold",
           }}
         >
-          KLINIK-KU adalah sebuah online Pharmacy yang menyediakan layanan beli
+          KLINIK-KU adalah sebuah apotek yang menyediakan layanan beli
           produk secara online, layanan kami dari produk barang beli langsung
           yang bisa dipilih secara online, juga layanan rancang obat dari resep
           dokter. Tak lagi harus pergi ke apotek untuk mencari apakah obat yang
-          dicari ada atau tidak dengan Pharmacure semua menjadi lebih mudah!
+          dicari tersedia atau tidak, dengan KLINIK-KU semua menjadi lebih mudah!
         </p>
       </div>
       <div style={{ marginTop: "100px" }}></div>

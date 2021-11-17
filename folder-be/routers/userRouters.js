@@ -14,8 +14,6 @@ routers.get("/users", userControllers.getData);
 routers.post("/login", userControllers.login);
 routers.post("/register", userControllers.register);
 routers.post("/forgetpassword", userControllers.forgetPassword);
-routers.patch("/resetpassword", userControllers.resetPassword);
-routers.patch("/changepassword", userControllers.changePassword);
 routers.patch("/resetpassword", auth, userControllers.resetPassword);
 routers.patch("/changepassword", auth, userControllers.changePassword);
 routers.post("/getuserdata", auth, userControllers.getUserProfile);

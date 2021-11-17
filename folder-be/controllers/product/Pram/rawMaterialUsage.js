@@ -3,7 +3,7 @@ const { db } = require("../../../database");
 module.exports = (req, res) => {
   const { page, limit } = req.query
   let queryOffset = parseInt(page) * parseInt(limit)
-  let scriptQuery = `Select o.quantity, o.created_date, p.name from order_items o join products p on o.product_id = p.product_id where o.product_id = 537 or o.product_id= 536  LIMIT ${queryOffset}, ${limit};`;
+  let scriptQuery = `Select o.quantity, o.created_date, p.name from order_items o join products p on o.product_id = p.product_id where p.category_id = 5 LIMIT ${queryOffset}, ${limit};`;
   
   db.query(scriptQuery, (err, results) => {
     if (err) return res.status(500).send(err); 
@@ -16,7 +16,7 @@ module.exports = (req, res) => {
            if (results2) {
              const scriptQuery2 = `SELECT sum(quantity) as Jumlah, p.name as Nama 
              FROM order_items o join products p on o.product_id = p.product_id
-             where o.product_id = 537 or o.product_id= 536 group by p.product_id;`;
+             where p.category_id = 5 group by p.product_id;`;
              db.query(scriptQuery2, (err3, results3) => {
               if (err3) return res.status(500).send(err);
 
@@ -32,3 +32,4 @@ module.exports = (req, res) => {
 });
 };
 
+// where measurement_mg = 1 or measurement_ml = 1

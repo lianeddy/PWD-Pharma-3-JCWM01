@@ -59,6 +59,7 @@ function ProductDetail(props) {
  const classes = useStyles();
  const [productNotFound, setProductNotFound] = useState()
  const [productData, setProductData] = useState()
+ const [productQty, setQty]=useState()
 
  const  fetchProduct = () => {
     Axios.get("http://localhost:3300/products/getData",{
@@ -68,9 +69,9 @@ function ProductDetail(props) {
     })
     .then((result) => {
     if(result.data.length){
-      setProduct({ productData: result.data[0]})
+      setProductData({ productData: result.data[0]})
     }else{
-      setProduct({ productNotFound:true})
+      setProductNotFound({ productNotFound:true})
     }
     })
     .catch(() => {
@@ -80,9 +81,9 @@ function ProductDetail(props) {
 
  const  qtyBtnHandler=(action)=>{
     if(action === "increment"){
-      setState({quantity:state.quantity+1})
-    }else if(action === "decrement" && state.quantity>1) {
-      setState({quantity:state.quantity-1})
+      setQty({quantity:productQty+1})
+    }else if(action === "decrement" && productQty>1) {
+      setQty({quantity:productQty-1})
     }
   }
   
@@ -92,7 +93,7 @@ function ProductDetail(props) {
     <Card>
       <CardBody>
           {
-          state.productNotFound?
+          props.productNotFound?
           <Info>
           <h3 className={classes.cardTitle}>
             {props.match.params.productId}
@@ -136,7 +137,7 @@ function ProductDetail(props) {
                 <CustomButtons
                   color="info"
                   size="sm"
-                  onChange={props.addCart()}
+                  onChange={props.addCart(props.productData.product_id)}
                 >
                   <AddShoppingCartIcon /> Beli{" "}
                 </CustomButtons>
