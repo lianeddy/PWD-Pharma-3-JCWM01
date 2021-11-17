@@ -3,18 +3,12 @@ import Dashboard from "@material-ui/icons/Dashboard";
 import Person from "@material-ui/icons/Person";
 import AlignVerticalBottomTwoToneIcon from '@mui/icons-material/AlignVerticalBottomTwoTone';
 import LibraryBooks from "@material-ui/icons/LibraryBooks";
-import BubbleChart from "@material-ui/icons/BubbleChart";
-import LocationOn from "@material-ui/icons/LocationOn";
-import Notifications from "@material-ui/icons/Notifications";
-import Unarchive from "@material-ui/icons/Unarchive";
-import Language from "@material-ui/icons/Language";
 import Category from "@material-ui/icons/Category";
 import LocalPharmacyRoundedIcon from '@material-ui/icons/LocalPharmacyRounded';
 
 //Route to App
 import Home from "pages/Home";
 import Profile from "pages/profile";
-import TemptLanding from "pages/tempLanding/TemptLanding";
 import Cart from "pages/cart";
 import ProductsAdmin from "pages/products/ManageProduct";
 import RawMaterialUsage from "pages/products/rawMaterialUsage"

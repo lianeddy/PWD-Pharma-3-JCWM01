@@ -2,12 +2,10 @@ const { Router } = require("express");
 const express = require("express");
 const { userControllers } = require("../controllers/");
 const routers = express.Router();
-// const {auth} = require("../helper/authToken")
 const { auth } = require("../helper/authToken");
 const multer = require("multer");
 const upload = multer();
 // Pram
-// routers.post('login', userControllers.getData)
 routers.get("/username", userControllers.getUsername);
 routers.get("/users", userControllers.getData);
 

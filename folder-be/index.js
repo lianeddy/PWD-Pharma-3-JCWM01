@@ -18,5 +18,5 @@ app.use("/admins", adminRouter);
 app.use("/products", productRouter);
 
 app.listen(PORT, () => {
-  console.log(`Server Runnin on PORT: ${PORT}`);
+  console.log(`Server Running on PORT: ${PORT}`);
 });

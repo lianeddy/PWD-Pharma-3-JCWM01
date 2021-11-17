@@ -108,6 +108,33 @@ const ChangePassword = (props) => {
             })
         }
 
+        if (password.length < 8 || confirmPassword.length < 8) {
+            return setAlertData({
+                isOpen: true,
+                message: "Sandi tidak boleh kurang dari 8 karakter",
+                type: "error",
+            })
+
+        }
+
+        const upperCaseLetters = /[A-Z]/g;
+        if (!password.match(upperCaseLetters) || !confirmPassword.match(upperCaseLetters)) {
+            return setAlertData({
+                isOpen: true,
+                message: "Sandi harus menggunakan setidaknya 1 huruf besar",
+                type: "error",
+            })
+        }
+
+        const numbers = /[0-9]/g;
+        if (!password.match(numbers) || !confirmPassword.match(numbers)) {
+            return setAlertData({
+                isOpen: true,
+                message: "Sandi harus menggunakan setidaknya 1 angka",
+                type: "error",
+            })
+        }
+
         const user_id = props.users.user_id;
         const token = localStorage.getItem('token')
         console.log("=============> ini ", user_id)
@@ -124,15 +151,16 @@ const ChangePassword = (props) => {
             })
             .then((res) => {
                 console.log("success");
-                console.log(res);
-                console.log(props.users.role_id.toString(), "=======================================aa=a=a=")
+                setConfirmPassword("");
+                setCurrentPassword("");
+                setPassword("");
                 setAlertData({
                     isOpen: true,
                     message: "Sukses mengganti sandi",
                     type: "success"
 
                 });
-                
+
             }).catch((err) => {
                 setAlertData({
                     isOpen: true,

@@ -111,6 +111,7 @@ const Signin = (props) => {
           message: "Username atau sandi salah",
           type: "error",
         });
+        console.log(err, "<< ini err")
       });
   };
 

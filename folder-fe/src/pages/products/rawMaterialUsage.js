@@ -134,7 +134,7 @@ const RawMaterialUsage = () => {
         <TableCell component="th" scope="row">
           {val.name}
         </TableCell>
-        <TableCell align="left">{val.quantity}</TableCell>
+        <TableCell align="left">{`${val.quantity} ${val.measurement_ml ? "ml" : "mg"}`}</TableCell>
         <TableCell align="left">{val.created_date}</TableCell>
       </TableRow>
     })
@@ -149,7 +149,7 @@ const RawMaterialUsage = () => {
         <TableCell component="th" scope="row">
           {val.Nama}
         </TableCell>
-        <TableCell align="left">{val.Jumlah}</TableCell>
+        <TableCell align="left">{`${val.Jumlah} ${val.measurement_ml ? "ml" : "mg"} `}</TableCell>
         <TableCell align="left"></TableCell>
       </TableRow>
     })

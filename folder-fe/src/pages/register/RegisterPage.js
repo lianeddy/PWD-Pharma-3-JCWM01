@@ -53,6 +53,9 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: "#03989e",
     },
   },
+  text: {
+    fontSize: 10,
+  }
 }));
 
 export default function RegisterPage() {
@@ -84,6 +87,34 @@ export default function RegisterPage() {
       });
     }
 
+   
+      if (password.length < 8) {
+        return setAlertData({
+          isOpen:true,
+          message: "Sandi tidak boleh kurang dari 8 karakter",
+          type: "error",
+        })
+      
+    }
+
+    const upperCaseLetters = /[A-Z]/g;
+    if(!password.match(upperCaseLetters)){
+      return setAlertData({
+        isOpen:true,
+        message: "Sandi harus menggunakan setidaknya 1 huruf besar",
+        type: "error",
+      })
+    }
+
+    const numbers = /[0-9]/g;
+    if(!password.match(numbers)){
+      return setAlertData({
+        isOpen:true,
+        message: "Sandi harus menggunakan setidaknya 1 angka",
+        type: "error",
+      })
+    }
+
     axios
       .post("http://localhost:3300/users/register", {
         full_name: full_name,
@@ -92,19 +123,24 @@ export default function RegisterPage() {
         email: email,
       })
       .then((res) => {
+        if(!res.data.success) {
+          setAlertData({
+            isOpen: true,
+            message: res.data.message,
+            type: "error",
+          });
+        } else {
+          setAlertData({
+            isOpen: true,
+            message: res.data.message,
+            type: "success",
+          });
+
         setFullName("");
         setEmail("");
         setPassword("");
         setUsername("");
-
-        setAlertData({
-          isOpen: true,
-          message: "Register Success",
-          type: "success",
-        });
-
-        console.log("sukses");
-        // history.push("/");
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -137,7 +173,7 @@ export default function RegisterPage() {
       <Container component="main" maxWidth="xs">
         <Paper elevation={3} className={classes.paper}>
           <Box p={2} textAlign="center">
-            <img src={Logo} width="96px" alt="logo" />
+            <img src={Logo} width="80px" alt="logo" />
             <Box mt={1}>
               <Typography className={classes.title}>
                 <b>KLINIK-KU</b>
@@ -219,6 +255,7 @@ export default function RegisterPage() {
               )
             }}
           />
+          <Typography  variant="caption">*sandi setidaknya harus menggunakan 1 huruf kapital, 1 angka, dan minimal 8 karakter</Typography> 
           <Button
             type="submit"
             fullWidth

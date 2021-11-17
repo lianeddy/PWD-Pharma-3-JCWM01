@@ -13,7 +13,7 @@ module.exports = (req, res) => {
     // res.status(200).send(results)
     if (results) {
       let insertQuantity = `Insert into inventories values (null, ${results.insertId}, ${db.escape(jumlahProduk)},
-       null, null, 'Admin1', NOW(), 'Admin1', NOW());`;
+       null, null, 'Admin1', NOW(), 'Admin1', NOW(), null, null);`;
       db.query(insertQuantity, (err2, results2) => {
         if (err2) {
           console.log(err2);

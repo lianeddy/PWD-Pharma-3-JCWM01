@@ -86,6 +86,7 @@ const ResetPassword = (props) => {
     history.push('/login')
   }
 
+  
   // create function to handle button login
   const handlerResetPassword = () => {
     // Condition for password form field
@@ -97,6 +98,42 @@ const ResetPassword = (props) => {
 
       })
     };
+
+    if (password.length < 8) {
+      return setAlertData({
+        isOpen: true,
+        message: "Sandi harus lebih dari 8 karakter",
+        type: "error"
+
+      })
+    };
+
+    if (password !== confirmPassword) {
+      return setAlertData({
+        isOpen: true,
+        message: "Sandi Tidak cocok",
+        type: "error"
+
+      })
+    };
+
+    const upperCaseLetters = /[A-Z]/g;
+    if (!password.match(upperCaseLetters) || !confirmPassword.match(upperCaseLetters)) {
+        return setAlertData({
+            isOpen: true,
+            message: "Sandi harus menggunakan setidaknya 1 huruf besar",
+            type: "error",
+        })
+    }
+
+    const numbers = /[0-9]/g;
+    if (!password.match(numbers) || !confirmPassword.match(numbers)) {
+        return setAlertData({
+            isOpen: true,
+            message: "Sandi harus menggunakan setidaknya 1 angka",
+            type: "error",
+        })
+    }
 
     // Axios patch to change one specific data from table
     axios
